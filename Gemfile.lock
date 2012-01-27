@@ -1,0 +1,10 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    elo (0.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  elo (= 0.1.0)
