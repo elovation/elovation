@@ -25,7 +25,8 @@ gem 'jquery-rails'
 
 group :test, :development do
   gem 'rspec-rails', '2.8.1'
-  gem 'mocha'
+  gem 'mocha', '0.10.3'
+  gem 'heroku', '2.19.0'
 end
 
 # To use ActiveModel has_secure_password
