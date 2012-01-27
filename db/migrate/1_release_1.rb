@@ -4,6 +4,10 @@ class Release1 < ActiveRecord::Migration
     end
 
     create_table :games do |t|
+      t.string :name
+      t.text :description
+
+      t.timestamps
     end
   end
 

@@ -28,6 +28,7 @@ group :test, :development do
   gem 'rspec-rails', '2.8.1'
   gem 'mocha', '0.10.3'
   gem 'factory_girl_rails', '1.6.0'
+  gem 'faker', '1.0.1'
   gem 'heroku', '2.19.0'
 end
 
