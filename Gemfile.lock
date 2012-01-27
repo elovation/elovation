@@ -133,7 +133,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
-  heroku
+  heroku (= 2.19.0)
   jquery-rails
   json
   mocha (= 0.10.3)
