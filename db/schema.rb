@@ -11,6 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 1000) do
+
+  create_table "games", :force => true do |t|
+  end
+
+  create_table "players", :force => true do |t|
+  end
 
 end
