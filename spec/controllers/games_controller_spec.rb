@@ -17,5 +17,11 @@ describe GamesController, :type => :controller do
 
       Game.where(:name => "Go", :description => "Best game ever.").first.should_not be_nil
     end
+
+    it "renders new given invalid params" do
+      post :create, :game => {:name => nil, :description => nil}
+
+      response.should render_template(:new)
+    end
   end
 end

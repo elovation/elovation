@@ -8,6 +8,8 @@ class GamesController < ApplicationController
 
     if @game.save
       redirect_to dashboard_path
+    else
+      render :new
     end
   end
 end
