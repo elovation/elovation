@@ -20,29 +20,39 @@ describe GamesController do
   end
 
   describe "create" do
-    it "creates a game given valid params" do
-      post :create, :game => {:name => "Go", :description => "Best game ever."}
+    context "with valid params" do
+      it "creates a game" do
+        post :create, :game => {:name => "Go", :description => "Best game ever."}
 
-      response.should redirect_to(dashboard_path)
+        Game.where(:name => "Go", :description => "Best game ever.").first.should_not be_nil
+      end
 
-      Game.where(:name => "Go", :description => "Best game ever.").first.should_not be_nil
+      it "redirects to the game's show page" do
+        post :create, :game => {:name => "Go", :description => "Best game ever."}
+
+        game = Game.where(:name => "Go", :description => "Best game ever.").first
+
+        response.should redirect_to(game_path(game))
+      end
     end
 
-    it "renders new given invalid params" do
-      post :create, :game => {:name => nil, :description => nil}
+    context "with invalid params" do
+      it "renders new given invalid params" do
+        post :create, :game => {:name => nil, :description => nil}
 
-      response.should render_template(:new)
+        response.should render_template(:new)
+      end
     end
   end
 
   describe "update" do
     context "with valid params" do
-      it "redirects to the dashboard page" do
+      it "redirects to the game's show page" do
         game = FactoryGirl.create(:game, :name => "First name")
 
         put :update, :id => game, :game => {:name => "Second name"}
 
-        response.should redirect_to(dashboard_path)
+        response.should redirect_to(game_path(game))
       end
 
       it "updates the game with the provided attributes" do
@@ -80,6 +90,16 @@ describe GamesController do
       delete :destroy, :id => game
 
       Game.find_by_id(game.id).should be_nil
+    end
+  end
+
+  describe "show" do
+    it "exposes the game" do
+      game = FactoryGirl.create(:game)
+
+      get :show, :id => game
+
+      assigns(:game).should == game
     end
   end
 end
