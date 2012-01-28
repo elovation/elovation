@@ -1,9 +1,15 @@
 <%= form_for @game do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
+  <%= f.error_messages %>
 
-  <%= f.label :description %>
-  <%= f.text_area :description %>
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <p><%= f.label :description %></p>
+    <%= f.text_area :description %>
+  </div>
 
   <%= f.submit %>
 <% end %>

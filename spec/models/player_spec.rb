@@ -11,6 +11,13 @@ describe Player do
 
   describe "validations" do
     context "name" do
+      it "is required" do
+        player = FactoryGirl.build(:player, :name => nil)
+
+        player.should_not be_valid
+        player.errors[:name].should == ["can't be blank"]
+      end
+
       it "must be unique" do
         FactoryGirl.create(:player, :name => "Drew")
         player = FactoryGirl.build(:player, :name => "Drew")

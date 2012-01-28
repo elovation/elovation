@@ -1,6 +1,10 @@
 <%= form_for @player do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
+  <%= f.error_messages %>
+
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
 
   <%= f.submit %>
 <% end %>
