@@ -1,0 +1,10 @@
+<%= form_for @player do |f| %>
+  <%= f.error_messages %>
+
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <%= f.submit %>
+<% end %>
