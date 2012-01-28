@@ -46,7 +46,10 @@ Elovation::Application.routes.draw do
   #     resources :products
   #   end
 
-  resources :games
+  resources :games do
+    resources :results, :only => [:new]
+  end
+
   resources :players, :only => [:create, :destroy, :edit, :new, :update]
 
   match '/dashboard' => 'dashboard#show', :as => :dashboard

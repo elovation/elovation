@@ -1,4 +1,4 @@
-class Release1 < ActiveRecord::Migration
+class Release100 < ActiveRecord::Migration
   def up
     create_table :players do |t|
       t.string :name
@@ -10,6 +10,10 @@ class Release1 < ActiveRecord::Migration
       t.string :name
       t.text :description
 
+      t.timestamps
+    end
+
+    create_table :results do |t|
       t.timestamps
     end
   end
