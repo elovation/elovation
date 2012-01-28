@@ -6,6 +6,7 @@
 development:
   adapter: postgresql
   database: elovation_development
+  host: localhost
   min_messages: WARNING
 
 # Warning: The database defined as "test" will be erased and
@@ -14,4 +15,5 @@ development:
 test:
   adapter: postgresql
   database: elovation_test
+  host: localhost
   min_messages: WARNING
