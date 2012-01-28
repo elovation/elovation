@@ -8,7 +8,6 @@ class Release100 < ActiveRecord::Migration
 
     create_table :games do |t|
       t.string :name
-      t.text :description
 
       t.timestamps
     end

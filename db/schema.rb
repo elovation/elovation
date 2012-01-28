@@ -15,9 +15,8 @@ ActiveRecord::Schema.define(:version => 100) do
 
   create_table "games", :force => true do |t|
     t.string   "name"
-    t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "players", :force => true do |t|

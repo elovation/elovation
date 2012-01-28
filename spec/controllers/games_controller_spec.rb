@@ -22,15 +22,15 @@ describe GamesController do
   describe "create" do
     context "with valid params" do
       it "creates a game" do
-        post :create, :game => {:name => "Go", :description => "Best game ever."}
+        post :create, :game => {:name => "Go"}
 
-        Game.where(:name => "Go", :description => "Best game ever.").first.should_not be_nil
+        Game.where(:name => "Go").first.should_not be_nil
       end
 
       it "redirects to the game's show page" do
-        post :create, :game => {:name => "Go", :description => "Best game ever."}
+        post :create, :game => {:name => "Go"}
 
-        game = Game.where(:name => "Go", :description => "Best game ever.").first
+        game = Game.where(:name => "Go").first
 
         response.should redirect_to(game_path(game))
       end
@@ -38,7 +38,7 @@ describe GamesController do
 
     context "with invalid params" do
       it "renders new given invalid params" do
-        post :create, :game => {:name => nil, :description => nil}
+        post :create, :game => {:name => nil}
 
         response.should render_template(:new)
       end
