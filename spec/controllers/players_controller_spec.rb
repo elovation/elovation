@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe PlayersController, :type => :controller do
+describe PlayersController do
   describe "new" do
     it "exposes a new player" do
       get :new

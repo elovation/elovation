@@ -1,7 +1,5 @@
 class GamesController < ApplicationController
-  def new
-    @game = Game.new
-  end
+  before_filter :_find_game, :only => [:destroy, :edit, :update]
 
   def create
     @game = Game.new(params[:game])
@@ -11,5 +9,30 @@ class GamesController < ApplicationController
     else
       render :new
     end
+  end
+
+  def destroy
+    @game.destroy
+
+    redirect_to dashboard_path
+  end
+
+  def edit
+  end
+
+  def new
+    @game = Game.new
+  end
+
+  def update
+    if @game.update_attributes(params[:game])
+      redirect_to dashboard_path
+    else
+      render :edit
+    end
+  end
+
+  def _find_game
+    @game = Game.find(params[:id])
   end
 end

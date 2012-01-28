@@ -1,0 +1,15 @@
+<%= form_for @game do |f| %>
+  <%= f.error_messages %>
+
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <p><%= f.label :description %></p>
+    <%= f.text_area :description %>
+  </div>
+
+  <%= f.submit %>
+<% end %>

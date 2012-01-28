@@ -2,10 +2,14 @@
 
 <%= render :partial => "game", :collection => @games %>
 
-<%= link_to "Add a new game", new_game_path %>
+<div>
+  <%= link_to "Add a new game", new_game_path %>
+</div>
 
 <h2>Players</h2>
 
 <%= render :partial => "player", :collection => @players %>
 
-<%= link_to "Add a new player", new_player_path %>
+<div>
+  <%= link_to "Add a new player", new_player_path %>
+</div>

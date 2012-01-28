@@ -1,1 +1,5 @@
-<p><%= game.name %>: <%= game.description %></p>
+<div>
+  <span><%= game.name %>: <%= game.description %></span>
+  <span><%= link_to 'Edit', edit_game_path(game) %></span>
+  <span><%= link_to 'Delete', game_path(game), :method => :delete %></span>
+</div>
