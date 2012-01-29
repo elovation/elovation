@@ -2,9 +2,9 @@ class ResultsController < ApplicationController
   before_filter :_find_game
 
   def create
-    @result = ResultService.build_result(@game, params[:result])
+    response = ResultService.create(@game, params[:result])
 
-    if @result.save
+    if response.success?
       redirect_to game_path(@game)
     end
   end
