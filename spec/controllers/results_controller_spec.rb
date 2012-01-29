@@ -7,9 +7,7 @@ describe ResultsController do
 
       get :new, :game_id => game
 
-      result = assigns(:result)
-      result.should_not be_nil
-      result.players.size.should == 2
+      assigns(:result).should_not be_nil
     end
 
     it "exposes the game" do

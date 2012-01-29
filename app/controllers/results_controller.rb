@@ -10,9 +10,7 @@ class ResultsController < ApplicationController
   end
 
   def new
-    @result = Result.new(
-      :players => [Player.new, Player.new]
-    )
+    @result = Result.new
   end
 
   def _find_game
