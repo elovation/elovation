@@ -11,6 +11,11 @@ class ResultService
         :success? => true,
         :result => result
       )
+    else
+      OpenStruct.new(
+        :success? => false,
+        :result => result
+      )
     end
   end
 end

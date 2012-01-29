@@ -6,6 +6,9 @@ class ResultsController < ApplicationController
 
     if response.success?
       redirect_to game_path(@game)
+    else
+      @result = response.result
+      render :new
     end
   end
 

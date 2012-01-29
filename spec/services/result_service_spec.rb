@@ -20,5 +20,18 @@ describe ResultService do
       result.loser.should == player2
       result.game.should == game
     end
+
+    it "returns success as false if there are validation errors" do
+      game = FactoryGirl.create(:game)
+      player = FactoryGirl.create(:player)
+
+      response = ResultService.create(
+        game,
+        :winner_id => player.id.to_s,
+        :loser_id => player.id.to_s
+      )
+
+      response.should_not be_success
+    end
   end
 end

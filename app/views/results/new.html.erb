@@ -1,4 +1,6 @@
 <%= form_for [@game, @result] do |f| %>
+  <%= f.error_messages %>
+
   <div>
     <%= f.label :winner_id %>
     <%= f.select :winner_id, player_options %>
