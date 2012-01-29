@@ -7,3 +7,12 @@
 <div>
   <%= link_to 'Add a result', new_game_result_path(@game) %>
 </div>
+
+<h3>Recent results</h3>
+<% if @game.recent_results.any? %>
+  <ul>
+    <%= render :partial => 'result', :collection => @game.recent_results %>
+  </ul>
+<% else %>
+  <span>No results, play some games!</span>
+<% end %>

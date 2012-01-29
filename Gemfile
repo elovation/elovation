@@ -29,4 +29,5 @@ group :test, :development do
   gem 'factory_girl_rails', '1.6.0'
   gem 'faker', '1.0.1'
   gem 'heroku', '2.19.0'
+  gem 'timecop', '0.3.5'
 end
