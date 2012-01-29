@@ -1,21 +1,16 @@
 <%= form_for [@game, @result] do |f| %>
   <div>
-    <%= f.label :player_1_id %>
-    <%= f.select :player_1_id, player_options %>
-  </div>
-
-  <div>
-    <b>VS</b>
-  </div>
-
-  <div>
-    <%= f.label :player_2_id %>
-    <%= f.select :player_2_id, player_options %>
-  </div>
-
-  <div>
     <%= f.label :winner_id %>
     <%= f.select :winner_id, player_options %>
+  </div>
+
+  <div>
+    <b>Beats</b>
+  </div>
+
+  <div>
+    <%= f.label :loser_id %>
+    <%= f.select :loser_id, player_options %>
   </div>
 
   <%= f.submit %>

@@ -28,9 +28,8 @@ describe ResultsController do
       player_2 = FactoryGirl.create(:player)
 
       post :create, :game_id => game, :result => {
-        :player_1_id => player_1.id,
-        :player_2_id => player_2.id,
-        :winner_id => player_1.id
+        :winner_id => player_1.id,
+        :loser_id => player_2.id
       }
 
       result = game.reload.results.first
@@ -38,6 +37,7 @@ describe ResultsController do
       result.should_not be_nil
       result.players.map(&:id).sort.should == [player_1.id, player_2.id].sort
       result.winner.should == player_1
+      result.loser.should == player_2
     end
   end
 end

@@ -31,8 +31,9 @@ ActiveRecord::Schema.define(:version => 100) do
   end
 
   create_table "results", :force => true do |t|
-    t.integer  "winner_id",  :null => false
     t.integer  "game_id",    :null => false
+    t.integer  "loser_id",   :null => false
+    t.integer  "winner_id",  :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

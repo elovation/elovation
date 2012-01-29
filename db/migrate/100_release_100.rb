@@ -13,8 +13,9 @@ class Release100 < ActiveRecord::Migration
     end
 
     create_table :results do |t|
-      t.integer :winner_id, :null => false
       t.integer :game_id, :null => false
+      t.integer :loser_id, :null => false
+      t.integer :winner_id, :null => false
 
       t.timestamps
     end
