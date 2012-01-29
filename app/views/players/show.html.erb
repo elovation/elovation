@@ -1,3 +1,14 @@
 <h2><%= @player.name %></h2>
-<span><%= link_to 'Edit', edit_player_path(@player) %></span>
-<span><%= link_to 'Delete', player_path(@player), :method => :delete, :confirm => "Are you sure you want to delete #{@player.name}?" %></span>
+<div>
+  <span><%= link_to 'Edit', edit_player_path(@player) %></span>
+  <span><%= link_to 'Delete', player_path(@player), :method => :delete, :confirm => "Are you sure you want to delete #{@player.name}?" %></span>
+</div>
+
+<h3>Recent Results</h3>
+<% if @player.recent_results.any? %>
+  <ul>
+    <%= render :partial => 'result', :collection => @player.recent_results %>
+  </ul>
+<% else %>
+  <span>No results, play some games!</span>
+<% end %>
