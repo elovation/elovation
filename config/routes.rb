@@ -50,7 +50,7 @@ Elovation::Application.routes.draw do
     resources :results, :only => [:create, :new]
   end
 
-  resources :players, :only => [:create, :destroy, :edit, :new, :update]
+  resources :players
 
   match '/dashboard' => 'dashboard#show', :as => :dashboard
   root :to => 'dashboard#show'

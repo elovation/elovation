@@ -1,11 +1,11 @@
 class PlayersController < ApplicationController
-  before_filter :_find_player, :only => [:destroy, :edit, :update]
+  before_filter :_find_player, :only => [:destroy, :edit, :show, :update]
 
   def create
     @player = Player.new(params[:player])
 
     if @player.save
-      redirect_to dashboard_path
+      redirect_to player_path(@player)
     else
       render :new
     end
@@ -24,9 +24,12 @@ class PlayersController < ApplicationController
     @player = Player.new
   end
 
+  def show
+  end
+
   def update
     if @player.update_attributes(params[:player])
-      redirect_to dashboard_path
+      redirect_to player_path(@player)
     else
       render :edit
     end

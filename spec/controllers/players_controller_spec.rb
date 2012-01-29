@@ -10,12 +10,13 @@ describe PlayersController do
   end
 
   describe "create" do
-    it "creates a player and redirects to the dashboard given valid params" do
+    it "creates a player and redirects to the player show page" do
       post :create, :player => {:name => "Drew"}
 
-      response.should redirect_to(dashboard_path)
+      player = Player.where(:name => "Drew").first
 
-      Player.where(:name => "Drew").first.should_not be_nil
+      player.should_not be_nil
+      response.should redirect_to(player_path(player))
     end
 
     it "renders new given invalid params" do
@@ -39,12 +40,12 @@ describe PlayersController do
 
   describe "update" do
     context "with valid params" do
-      it "redirects to the dashboard page" do
+      it "redirects to the player show page" do
         player = FactoryGirl.create(:player, :name => "First name")
 
         put :update, :id => player, :player => {:name => "Second name"}
 
-        response.should redirect_to(dashboard_path)
+        response.should redirect_to(player_path(player))
       end
 
       it "updates the player with the provided attributes" do
@@ -82,6 +83,16 @@ describe PlayersController do
       delete :destroy, :id => player
 
       Player.find_by_id(player.id).should be_nil
+    end
+  end
+
+  describe "show" do
+    it "exposes the player" do
+      player = FactoryGirl.create(:player)
+
+      get :show, :id => player
+
+      assigns(:player).should == player
     end
   end
 end
