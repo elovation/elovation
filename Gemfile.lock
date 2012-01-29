@@ -40,6 +40,7 @@ GEM
     coffee-script-source (1.2.0)
     diff-lcs (1.1.3)
     dynamic_form (1.1.4)
+    elo (0.1.0)
     erubis (2.7.0)
     execjs (1.3.0)
       multi_json (~> 1.0)
@@ -144,6 +145,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   dynamic_form (= 1.1.4)
+  elo (= 0.1.0)
   factory_girl_rails (= 1.6.0)
   faker (= 1.0.1)
   heroku (= 2.19.0)
