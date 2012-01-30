@@ -10,10 +10,10 @@ class ResultService
     )
 
     if result.valid?
-      RatingService.update(game, winner, loser)
-      result.save!
-
       Result.transaction do
+        RatingService.update(game, winner, loser)
+        result.save!
+
         OpenStruct.new(
           :success? => true,
           :result => result
