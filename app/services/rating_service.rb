@@ -8,14 +8,8 @@ class RatingService
 
     winner_elo.wins_from(loser_elo)
 
-    winner_rating.update_attributes!(
-      :value => winner_elo.rating,
-      :pro => winner_elo.pro?
-    )
-    loser_rating.update_attributes!(
-      :value => loser_elo.rating,
-      :pro => winner_elo.pro?
-    )
+    _update_rating_from_elo(winner_rating, winner_elo)
+    _update_rating_from_elo(loser_rating, loser_elo)
   end
 
   def self._find_or_create_rating(game, player)
@@ -28,5 +22,9 @@ class RatingService
         :pro => false
       )
     end
+  end
+
+  def self._update_rating_from_elo(rating, elo)
+    rating.update_attributes!(:value => elo.rating, :pro => elo.pro?)
   end
 end
