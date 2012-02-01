@@ -1,7 +1,7 @@
 class RatingService
   def self.update(game, winner, loser)
-    winner_rating = winner.ratings.create(:game => game, :value => Rating::DefaultValue)
-    loser_rating = loser.ratings.create(:game => game, :value => Rating::DefaultValue)
+    winner_rating = _find_or_create_rating(game, winner)
+    loser_rating = _find_or_create_rating(game, loser)
 
     winner_elo = winner_rating.to_elo
     loser_elo = loser_rating.to_elo
@@ -10,5 +10,13 @@ class RatingService
 
     winner_rating.update_attributes!(:value => winner_elo.rating)
     loser_rating.update_attributes!(:value => loser_elo.rating)
+  end
+
+  def self._find_or_create_rating(game, player)
+    if player.ratings.where(:game_id => game.id).any?
+      player.ratings.where(:game_id => game.id).first
+    else
+      player.ratings.create(:game => game, :value => Rating::DefaultValue)
+    end
   end
 end
