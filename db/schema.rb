@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 100) do
     t.integer  "player_id",  :null => false
     t.integer  "game_id",    :null => false
     t.integer  "value",      :null => false
+    t.boolean  "pro",        :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

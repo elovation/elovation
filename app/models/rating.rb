@@ -7,7 +7,8 @@ class Rating < ActiveRecord::Base
   def to_elo
     Elo::Player.new(
       :rating => value,
-      :games_played => player.results.where(:game_id => game.id).count
+      :games_played => player.results.where(:game_id => game.id).count,
+      :pro => pro?
     )
   end
 end

@@ -35,5 +35,24 @@ describe RatingService do
       rating1.reload.value.should > Rating::DefaultValue
       rating2.reload.value.should < Rating::DefaultValue
     end
+
+    it "persists the value of the pro flag" do
+      game = FactoryGirl.create(:game)
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+      rating1 = FactoryGirl.create(
+        :rating,
+        :game => game,
+        :player => player1,
+        :value => Rating::DefaultValue,
+        :pro => false
+      )
+
+      Rating.any_instance.stubs(:to_elo).returns(Elo::Player.new(:pro => true))
+
+      RatingService.update(game, player1, player2)
+
+      rating1.reload.pro?.should be_true
+    end
   end
 end
