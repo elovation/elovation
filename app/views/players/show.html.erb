@@ -12,3 +12,8 @@
 <% else %>
   <span>No results, play some games!</span>
 <% end %>
+
+<h3>Ratings</h3>
+<ol>
+  <%= render :partial => 'rating', :collection => @player.ratings %>
+</ol>

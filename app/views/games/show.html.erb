@@ -8,7 +8,7 @@
   <%= link_to 'Add a result', new_game_result_path(@game) %>
 </div>
 
-<h3>Recent results</h3>
+<h3>Recent Results</h3>
 <% if @game.recent_results.any? %>
   <ul>
     <%= render :partial => 'result', :collection => @game.recent_results %>
@@ -16,3 +16,8 @@
 <% else %>
   <span>No results, play some games!</span>
 <% end %>
+
+<h3>Top Rated</h3>
+<ol>
+  <%= render :partial => 'rating', :collection => @game.top_ratings %>
+</ol>

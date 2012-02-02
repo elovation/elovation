@@ -48,6 +48,24 @@ describe Game do
     end
   end
 
+  describe "top_ratings" do
+    it "returns 5 ratings associated with the game" do
+      game = FactoryGirl.create(:game)
+      10.times { FactoryGirl.create(:rating, :game => game) }
+
+      game.top_ratings.count.should == 5
+    end
+
+    it "orders ratings by value, descending" do
+      game = FactoryGirl.create(:game)
+      rating2 = FactoryGirl.create(:rating, :game => game, :value => 2)
+      rating3 = FactoryGirl.create(:rating, :game => game, :value => 3)
+      rating1 = FactoryGirl.create(:rating, :game => game, :value => 1)
+
+      game.top_ratings.should == [rating3, rating2, rating1]
+    end
+  end
+
   describe "validations" do
     context "name" do
       it "must be present" do
