@@ -24,7 +24,7 @@ group :assets do
 end
 
 group :test, :development do
-  gem 'rake_commit', '0.11.0'
+  gem 'rake_commit', '0.12.0'
   gem 'rspec-rails', '2.8.1'
   gem 'mocha', '0.10.3'
   gem 'factory_girl_rails', '1.6.0'

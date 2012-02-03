@@ -25,13 +25,19 @@
       <div class="span3">
         <div class="well sidebar-nav">
           <ul class="nav nav-list">
-            <li class="nav-header">Games</li>
+            <li class="nav-header">
+              <span>Games</span>
+              <span><%= link_to "Add", new_game_path, :class => "btn btn-small btn-sidebar" %></span>
+            </li>
             <% Game.all.each do |game| %>
               <li class="<%= "active" if @game == game %>">
                 <%= link_to game.name, game_path(game) %>
               </li>
             <% end %>
-            <li class="nav-header">Players</li>
+            <li class="nav-header">
+              <span>Players</span>
+              <span><%= link_to "Add", new_player_path, :class => "btn btn-small btn-sidebar" %></span>
+            </li>
             <% Player.all.each do |player| %>
               <li class="<%= "active" if @player == player %>">
                 <%= link_to player.name, player_path(player) %>
@@ -46,7 +52,6 @@
         </div>
       </div>
     </div>
-    <hr>
   </div>
 </body>
 </html>
