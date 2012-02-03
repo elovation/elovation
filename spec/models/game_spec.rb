@@ -66,6 +66,27 @@ describe Game do
     end
   end
 
+  describe "all_ratings" do
+    it "orders all ratings by value, descending" do
+      game = FactoryGirl.create(:game)
+      rating2 = FactoryGirl.create(:rating, :game => game, :value => 2)
+      rating3 = FactoryGirl.create(:rating, :game => game, :value => 3)
+      rating1 = FactoryGirl.create(:rating, :game => game, :value => 1)
+      rating4 = FactoryGirl.create(:rating, :game => game, :value => 4)
+      rating5 = FactoryGirl.create(:rating, :game => game, :value => 5)
+      rating6 = FactoryGirl.create(:rating, :game => game, :value => 6)
+
+      game.all_ratings.should == [
+        rating6,
+        rating5,
+        rating4,
+        rating3,
+        rating2,
+        rating1
+      ]
+    end
+  end
+
   describe "validations" do
     context "name" do
       it "must be present" do

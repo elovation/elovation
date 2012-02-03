@@ -4,6 +4,10 @@ class Game < ActiveRecord::Base
 
   validates :name, :presence => true
 
+  def all_ratings
+    ratings.order("value DESC")
+  end
+
   def recent_results
     results.order("created_at DESC").limit(5)
   end
