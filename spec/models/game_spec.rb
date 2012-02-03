@@ -76,4 +76,17 @@ describe Game do
       end
     end
   end
+
+  describe "destroy" do
+    it "deletes related ratings and results" do
+      game = FactoryGirl.create(:game)
+      rating = FactoryGirl.create(:rating, :game => game)
+      result = FactoryGirl.create(:result, :game => game)
+
+      game.destroy
+
+      Rating.find_by_id(rating.id).should be_nil
+      Result.find_by_id(result.id).should be_nil
+    end
+  end
 end

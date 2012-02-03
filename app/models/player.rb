@@ -1,6 +1,10 @@
 class Player < ActiveRecord::Base
+  has_many :ratings, :order => "value DESC", :dependent => :destroy
   has_and_belongs_to_many :results
-  has_many :ratings, :order => "value DESC"
+
+  before_destroy do
+    results.each { |result| result.destroy }
+  end
 
   validates :name, :uniqueness => true, :presence => true
 

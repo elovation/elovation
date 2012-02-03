@@ -1,6 +1,6 @@
 class Game < ActiveRecord::Base
-  has_many :ratings
-  has_many :results
+  has_many :ratings, :dependent => :destroy
+  has_many :results, :dependent => :destroy
 
   validates :name, :presence => true
 

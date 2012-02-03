@@ -70,4 +70,17 @@ describe Player do
       player.recent_results.should == [new, old]
     end
   end
+
+  describe "destroy" do
+    it "deletes related ratings and results" do
+      player = FactoryGirl.create(:player)
+      rating = FactoryGirl.create(:rating, :player => player)
+      result = FactoryGirl.create(:result, :winner => player)
+
+      player.destroy
+
+      Rating.find_by_id(rating.id).should be_nil
+      Result.find_by_id(result.id).should be_nil
+    end
+  end
 end
