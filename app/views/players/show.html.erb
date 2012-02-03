@@ -2,7 +2,6 @@
   <h1><%= @player.name %></h1>
   <section class="action-buttons">
     <span><%= link_to 'Edit Player', edit_player_path(@player), :class => "btn btn-primary" %></span>
-    <span><%= link_to 'Delete Player', player_path(@player), :method => :delete, :confirm => "Are you sure you want to delete #{@player.name}?", :class => "btn btn-danger" %></span>
   </section>
 </div>
 
