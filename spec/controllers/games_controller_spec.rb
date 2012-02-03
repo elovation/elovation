@@ -101,5 +101,37 @@ describe GamesController do
 
       assigns(:game).should == game
     end
+
+    it "returns a json response" do
+      game = FactoryGirl.create(:game)
+
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+      player3 = FactoryGirl.create(:player)
+
+      rating1 = FactoryGirl.create(:rating, :game => game, :value => 1003, :player => player1)
+      rating2 = FactoryGirl.create(:rating, :game => game, :value => 1002, :player => player2)
+      rating3 = FactoryGirl.create(:rating, :game => game, :value => 1001, :player => player3)
+
+      result1 = FactoryGirl.create(:result, :game => game, :winner => player1, :loser => player2, :created_at => 1.days.ago)
+      result2 = FactoryGirl.create(:result, :game => game, :winner => player2, :loser => player3, :created_at => 2.days.ago)
+      result3 = FactoryGirl.create(:result, :game => game, :winner => player3, :loser => player1, :created_at => 3.days.ago)
+
+      get :show, :id => game, :format => :json
+
+      response.body.should == {
+        "name" => game.name,
+        "ratings" => [
+          {"player" => player1.name, "value" => 1003},
+          {"player" => player2.name, "value" => 1002},
+          {"player" => player3.name, "value" => 1001}
+        ],
+        "results" => [
+          {"winner" => player1.name, "loser" => player2.name},
+          {"winner" => player2.name, "loser" => player3.name},
+          {"winner" => player3.name, "loser" => player1.name}
+        ]
+      }.to_json
+    end
   end
 end

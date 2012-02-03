@@ -9,4 +9,11 @@ class Result < ActiveRecord::Base
       errors.add(:base, "Winner and loser can't be the same player")
     end
   end
+
+  def as_json(options = {})
+    {
+      :winner => winner.name,
+      :loser => loser.name
+    }
+  end
 end

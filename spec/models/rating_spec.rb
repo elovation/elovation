@@ -1,6 +1,18 @@
 require "spec_helper"
 
-describe Result do
+describe Rating do
+  describe "as_json" do
+    it "returns the json representation of the result" do
+      player = FactoryGirl.build(:player, :name => "John")
+      rating = FactoryGirl.build(:rating, :value => 1000, :player => player)
+
+      rating.as_json.should == {
+        :player => player.name,
+        :value => 1000
+      }
+    end
+  end
+
   describe "to_elo" do
     it "returns an elo player with the correct value" do
       rating = FactoryGirl.build(:rating, :value => 1000)

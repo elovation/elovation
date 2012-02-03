@@ -1,6 +1,19 @@
 require "spec_helper"
 
 describe Result do
+  describe "as_json" do
+    it "returns the json representation of the result" do
+      winner = FactoryGirl.build(:player, :name => "Jane")
+      loser = FactoryGirl.build(:player, :name => "John")
+      result = FactoryGirl.build(:result, :winner => winner, :loser => loser)
+
+      result.as_json.should == {
+        :winner => winner.name,
+        :loser => loser.name
+      }
+    end
+  end
+
   describe "validations" do
     context "base validations" do
       it "doesn't allow winner and loser to be the same player" do

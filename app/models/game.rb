@@ -8,6 +8,14 @@ class Game < ActiveRecord::Base
     ratings.order("value DESC")
   end
 
+  def as_json(options = {})
+    {
+      :name => name,
+      :ratings => top_ratings.map(&:as_json),
+      :results => recent_results.map(&:as_json)
+    }
+  end
+
   def recent_results
     results.order("created_at DESC").limit(5)
   end

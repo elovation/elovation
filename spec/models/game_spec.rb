@@ -1,6 +1,11 @@
 require "spec_helper"
 
 describe Game do
+  describe "as_json" do
+    it "returns the json representation of the game" do
+    end
+  end
+
   describe "name" do
     it "has a name" do
       game = FactoryGirl.create(:game, :name => "Go")

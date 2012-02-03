@@ -4,6 +4,13 @@ class Rating < ActiveRecord::Base
   belongs_to :game
   belongs_to :player
 
+  def as_json(option = {})
+    {
+      :player => player.name,
+      :value => value
+    }
+  end
+
   def to_elo
     Elo::Player.new(
       :rating => value,
