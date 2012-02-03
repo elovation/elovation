@@ -1,17 +1,13 @@
-<%= form_for [@game, @result] do |f| %>
+<%= form_for [@game, @result], :html => {:class => "well form-search"} do |f| %>
   <%= f.error_messages %>
 
-  <div>
-    <%= f.select :winner_id, player_options %>
-  </div>
+  <%= f.select :winner_id, player_options %>
 
-  <div>
-    <b>Beats</b>
-  </div>
+  <span class="defeats"><strong>Defeats</strong></span>
 
-  <div>
-    <%= f.select :loser_id, player_options %>
-  </div>
+  <%= f.select :loser_id, player_options %>
 
-  <%= f.submit :class => "btn btn-primary" %>
+  <span class="inline-submit">
+    <%= f.submit :class => "btn btn-primary" %>
+  </span>
 <% end %>
