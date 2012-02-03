@@ -1,10 +1,19 @@
-<%= form_for @game do |f| %>
+<%= form_for @game, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
 
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
+  <fieldset>
+    <legend>Game</legend>
 
-  <%= f.submit :class => "btn btn-primary" %>
+    <div class="control-group">
+      <%= f.label :name, :class => "control-label" %>
+      <div class="controls">
+        <%= f.text_field :name, :class => "input-xlarge" %>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit :class => "btn btn-primary" %>
+      <%= link_to "Cancel", root_path, :class => "btn btn-warning" %>
+    </div>
+  </fieldset>
 <% end %>
