@@ -1,19 +1,26 @@
-<h2><%= @player.name %></h2>
-<div>
-  <span><%= link_to 'Edit', edit_player_path(@player) %></span>
-  <span><%= link_to 'Delete', player_path(@player), :method => :delete, :confirm => "Are you sure you want to delete #{@player.name}?" %></span>
+<div class="hero-unit">
+  <h1><%= @player.name %></h1>
+  <section class="action-buttons">
+    <span><%= link_to 'Edit Player', edit_player_path(@player), :class => "btn btn-primary" %></span>
+    <span><%= link_to 'Delete Player', player_path(@player), :method => :delete, :confirm => "Are you sure you want to delete #{@player.name}?", :class => "btn btn-danger" %></span>
+  </section>
 </div>
 
-<h3>Recent Results</h3>
-<% if @player.recent_results.any? %>
-  <ul>
-    <%= render :partial => 'result', :collection => @player.recent_results %>
-  </ul>
-<% else %>
-  <span>No results, play some games!</span>
-<% end %>
-
-<h3>Ratings</h3>
-<ol>
-  <%= render :partial => 'rating', :collection => @player.ratings %>
-</ol>
+<div class="row-fluid">
+  <div class="span6">
+    <h2>Recent Results</h2>
+    <% if @player.recent_results.any? %>
+      <ul>
+        <%= render :partial => 'result', :collection => @player.recent_results %>
+      </ul>
+    <% else %>
+      <span>No results, play some games!</span>
+    <% end %>
+  </div>
+  <div class="span6">
+    <h2>Ratings</h2>
+    <ol>
+      <%= render :partial => 'rating', :collection => @player.ratings %>
+    </ol>
+  </div>
+</div>

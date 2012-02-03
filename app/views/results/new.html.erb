@@ -2,7 +2,6 @@
   <%= f.error_messages %>
 
   <div>
-    <%= f.label :winner_id %>
     <%= f.select :winner_id, player_options %>
   </div>
 
@@ -11,9 +10,8 @@
   </div>
 
   <div>
-    <%= f.label :loser_id %>
     <%= f.select :loser_id, player_options %>
   </div>
 
-  <%= f.submit %>
+  <%= f.submit :class => "btn btn-primary" %>
 <% end %>
