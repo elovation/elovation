@@ -27,4 +27,5 @@ group :test, :development do
   gem 'faker', '1.0.1'
   gem 'heroku', '2.19.0'
   gem 'timecop', '0.3.5'
+  gem 'taps', '0.3.23'
 end
