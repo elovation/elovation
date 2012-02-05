@@ -56,5 +56,11 @@ module Elovation
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    if ENV['BASIC_AUTH'] == "true"
+      config.middleware.insert_after(::Rack::Lock, "::Rack::Auth::Basic", "Elovation") do |u, p|
+        [u, p] == [ENV['BASIC_AUTH_USER'], ENV['BASIC_AUTH_PASSWORD']]
+      end
+    end
   end
 end
