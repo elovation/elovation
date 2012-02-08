@@ -103,35 +103,37 @@ describe GamesController do
     end
 
     it "returns a json response" do
-      game = FactoryGirl.create(:game)
+      Timecop.freeze(Time.now) do
+        game = FactoryGirl.create(:game)
 
-      player1 = FactoryGirl.create(:player)
-      player2 = FactoryGirl.create(:player)
-      player3 = FactoryGirl.create(:player)
+        player1 = FactoryGirl.create(:player)
+        player2 = FactoryGirl.create(:player)
+        player3 = FactoryGirl.create(:player)
 
-      rating1 = FactoryGirl.create(:rating, :game => game, :value => 1003, :player => player1)
-      rating2 = FactoryGirl.create(:rating, :game => game, :value => 1002, :player => player2)
-      rating3 = FactoryGirl.create(:rating, :game => game, :value => 1001, :player => player3)
+        rating1 = FactoryGirl.create(:rating, :game => game, :value => 1003, :player => player1)
+        rating2 = FactoryGirl.create(:rating, :game => game, :value => 1002, :player => player2)
+        rating3 = FactoryGirl.create(:rating, :game => game, :value => 1001, :player => player3)
 
-      result1 = FactoryGirl.create(:result, :game => game, :winner => player1, :loser => player2, :created_at => 1.days.ago)
-      result2 = FactoryGirl.create(:result, :game => game, :winner => player2, :loser => player3, :created_at => 2.days.ago)
-      result3 = FactoryGirl.create(:result, :game => game, :winner => player3, :loser => player1, :created_at => 3.days.ago)
+        result1 = FactoryGirl.create(:result, :game => game, :winner => player1, :loser => player2)
+        result2 = FactoryGirl.create(:result, :game => game, :winner => player2, :loser => player3)
+        result3 = FactoryGirl.create(:result, :game => game, :winner => player3, :loser => player1)
 
-      get :show, :id => game, :format => :json
+        get :show, :id => game, :format => :json
 
-      response.body.should == {
-        "name" => game.name,
-        "ratings" => [
-          {"player" => player1.name, "value" => 1003},
-          {"player" => player2.name, "value" => 1002},
-          {"player" => player3.name, "value" => 1001}
-        ],
-        "results" => [
-          {"winner" => player1.name, "loser" => player2.name},
-          {"winner" => player2.name, "loser" => player3.name},
-          {"winner" => player3.name, "loser" => player1.name}
-        ]
-      }.to_json
+        response.body.should == {
+          "name" => game.name,
+          "ratings" => [
+            {"player" => player1.name, "value" => 1003},
+            {"player" => player2.name, "value" => 1002},
+            {"player" => player3.name, "value" => 1001}
+          ],
+          "results" => [
+            {"winner" => player1.name, "loser" => player2.name, "created_at" => Time.now.utc.to_s},
+            {"winner" => player2.name, "loser" => player3.name, "created_at" => Time.now.utc.to_s},
+            {"winner" => player3.name, "loser" => player1.name, "created_at" => Time.now.utc.to_s}
+          ]
+        }.to_json
+      end
     end
   end
 end

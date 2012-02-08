@@ -3,13 +3,16 @@ require "spec_helper"
 describe Result do
   describe "as_json" do
     it "returns the json representation of the result" do
+      created_at = Time.now
+
       winner = FactoryGirl.build(:player, :name => "Jane")
       loser = FactoryGirl.build(:player, :name => "John")
-      result = FactoryGirl.build(:result, :winner => winner, :loser => loser)
+      result = FactoryGirl.build(:result, :winner => winner, :loser => loser, :created_at => created_at)
 
       result.as_json.should == {
         :winner => winner.name,
-        :loser => loser.name
+        :loser => loser.name,
+        :created_at => created_at.utc.to_s
       }
     end
   end

@@ -13,7 +13,8 @@ class Result < ActiveRecord::Base
   def as_json(options = {})
     {
       :winner => winner.name,
-      :loser => loser.name
+      :loser => loser.name,
+      :created_at => created_at.utc.to_s
     }
   end
 end
