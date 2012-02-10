@@ -3,6 +3,7 @@ class Rating < ActiveRecord::Base
 
   belongs_to :game
   belongs_to :player
+  has_many :history_events, :class_name => "RatingHistoryEvent"
 
   def as_json(option = {})
     {

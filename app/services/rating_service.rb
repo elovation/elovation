@@ -25,6 +25,9 @@ class RatingService
   end
 
   def self._update_rating_from_elo(rating, elo)
-    rating.update_attributes!(:value => elo.rating, :pro => elo.pro?)
+    Rating.transaction do
+      rating.update_attributes!(:value => elo.rating, :pro => elo.pro?)
+      rating.history_events.create!(:value => elo.rating)
+    end
   end
 end

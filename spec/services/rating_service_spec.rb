@@ -54,5 +54,31 @@ describe RatingService do
 
       rating1.reload.pro?.should be_true
     end
+
+    it "creates rating history events" do
+      game = FactoryGirl.create(:game)
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+      rating1 = FactoryGirl.create(
+        :rating,
+        :game => game,
+        :player => player1,
+        :value => Rating::DefaultValue
+      )
+      rating2 = FactoryGirl.create(
+        :rating,
+        :game => game,
+        :player => player2,
+        :value => Rating::DefaultValue
+      )
+
+      RatingService.update(game, player1, player2)
+
+      new_rating1 = rating1.reload.value
+      new_rating2 = rating2.reload.value
+
+      rating1.history_events.first.value.should == new_rating1
+      rating2.history_events.first.value.should == new_rating2
+    end
   end
 end
