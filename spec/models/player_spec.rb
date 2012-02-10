@@ -83,4 +83,28 @@ describe Player do
       Result.find_by_id(result.id).should be_nil
     end
   end
+
+  describe "ratings" do
+    describe "find_or_create" do
+      it "returns the rating if it exists" do
+        player = FactoryGirl.create(:player)
+        game = FactoryGirl.create(:game)
+        rating = FactoryGirl.create(:rating, :game => game, :player => player)
+
+        expect do
+          found_rating = player.ratings.find_or_create(game)
+          found_rating.should == rating
+        end.to_not change { player.ratings.count }
+      end
+
+      it "creates a rating and returns it if it doesn't exist" do
+        player = FactoryGirl.create(:player)
+        game = FactoryGirl.create(:game)
+
+        expect do
+          player.ratings.find_or_create(game).should_not be_nil
+        end.to change { player.ratings.count }.by(1)
+      end
+    end
+  end
 end
