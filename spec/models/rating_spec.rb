@@ -34,4 +34,15 @@ describe Rating do
       rating.to_elo.should be_pro
     end
   end
+
+  describe "destroy" do
+    it "removes history events" do
+      rating = FactoryGirl.create(:rating)
+      history_event = FactoryGirl.create(:rating_history_event, :rating => rating)
+
+      rating.destroy
+
+      RatingHistoryEvent.find_by_id(history_event.id).should be_nil
+    end
+  end
 end
