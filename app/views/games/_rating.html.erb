@@ -1,1 +1,1 @@
-<li><%= rating.player.name %> - <%= rating.value %></li>
+<li><%= rating.player.name %> - <%= rating.value %> (<%= rating.player.results.for_game(rating.game).wins.size %> - <%= rating.player.results.for_game(rating.game).losses.size %>)</li>

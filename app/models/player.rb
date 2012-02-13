@@ -5,7 +5,15 @@ class Player < ActiveRecord::Base
     end
   end
 
-  has_and_belongs_to_many :results
+  has_and_belongs_to_many :results do
+    def losses
+      where(:loser_id => proxy_association.owner.id)
+    end
+
+    def wins
+      where(:winner_id => proxy_association.owner.id)
+    end
+  end
 
   before_destroy do
     results.each { |result| result.destroy }
