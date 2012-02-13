@@ -4,6 +4,8 @@ class Result < ActiveRecord::Base
   belongs_to :loser, :class_name => "Player"
   belongs_to :game
 
+  scope :for_game, lambda { |game| where(:game_id => game.id) }
+
   validate do |result|
     if result.winner == result.loser
       errors.add(:base, "Winner and loser can't be the same player")

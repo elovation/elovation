@@ -107,4 +107,26 @@ describe Player do
       end
     end
   end
+
+  describe "wins" do
+    it "finds wins" do
+      player = FactoryGirl.create(:player)
+      game = FactoryGirl.create(:game)
+      win = FactoryGirl.create(:result, :game => game, :winner => player)
+      loss = FactoryGirl.create(:result, :game => game, :loser => player)
+      player.results.for_game(game).size.should == 2
+      player.results.for_game(game).wins.should == [win]
+    end
+  end
+
+  describe "losses" do
+    it "finds losses" do
+      player = FactoryGirl.create(:player)
+      game = FactoryGirl.create(:game)
+      win = FactoryGirl.create(:result, :game => game, :winner => player)
+      loss = FactoryGirl.create(:result, :game => game, :loser => player)
+      player.results.for_game(game).size.should == 2
+      player.results.for_game(game).losses.should == [loss]
+    end
+  end
 end

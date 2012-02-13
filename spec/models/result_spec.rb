@@ -17,6 +17,18 @@ describe Result do
     end
   end
 
+  describe "for_game" do
+    it "finds results for the given game" do
+      player = FactoryGirl.create(:player)
+      game1 = FactoryGirl.create(:game)
+      game2 = FactoryGirl.create(:game)
+      result_for_game1 = FactoryGirl.create(:result, :game => game1, :winner => player)
+      result_for_game2 = FactoryGirl.create(:result, :game => game2, :winner => player)
+      player.results.for_game(game1).should == [result_for_game1]
+      player.results.for_game(game2).should == [result_for_game2]
+    end
+  end
+
   describe "validations" do
     context "base validations" do
       it "doesn't allow winner and loser to be the same player" do
