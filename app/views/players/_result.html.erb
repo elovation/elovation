@@ -1,3 +1,9 @@
 <li>
-  <b><%= result.winner.name %></b> beat <b><%= result.loser.name %></b> on <%= result.created_at.to_s(:short) %>
+  <%= result.created_at.to_s(:short) %>
+  -
+  <%= result.winner.name %>
+  beat
+  <%= result.loser.name %>
+  in
+  <%= result.game.name %>
 </li>

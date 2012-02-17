@@ -29,7 +29,7 @@
               <span>Games</span>
               <span><%= link_to "Add", new_game_path, :class => "btn btn-small btn-sidebar" %></span>
             </li>
-            <% Game.all.each do |game| %>
+            <% Game.all.sort_by(&:name).each do |game| %>
               <li class="<%= "active" if @game == game %>">
                 <%= link_to game.name, game_path(game) %>
               </li>
@@ -38,7 +38,7 @@
               <span>Players</span>
               <span><%= link_to "Add", new_player_path, :class => "btn btn-small btn-sidebar" %></span>
             </li>
-            <% Player.all.each do |player| %>
+            <% Player.all.sort_by(&:name).each do |player| %>
               <li class="<%= "active" if @player == player %>">
                 <%= link_to player.name, player_path(player) %>
               </li>
