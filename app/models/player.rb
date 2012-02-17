@@ -20,6 +20,7 @@ class Player < ActiveRecord::Base
   end
 
   validates :name, :uniqueness => true, :presence => true
+  validates :gravatar, :format => /\Ahttp:\/\/www.gravatar.com\/avatar\/[0-9a-f]+\z/, :allow_blank => true
 
   def recent_results
     results.order("created_at DESC").limit(5)

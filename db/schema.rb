@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 2) do
+ActiveRecord::Schema.define(:version => 3) do
 
   create_table "games", :force => true do |t|
     t.string   "name",       :null => false
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 2) do
     t.string   "name",       :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "gravatar"
   end
 
   create_table "players_results", :force => true do |t|
