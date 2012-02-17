@@ -18,6 +18,23 @@ describe Player do
         player.errors[:name].should == ["has already been taken"]
       end
     end
+
+    context "gravatar" do
+      it "can be blank" do
+        player = FactoryGirl.build(:player, :gravatar => "")
+        player.should be_valid
+      end
+
+      it "must be a gravatar url" do
+        player = Player.new
+        player.gravatar = "http://www.not-a-gravatar.com"
+        player.should_not be_valid
+        player.errors[:gravatar].should == ["is invalid"]
+        player.gravatar = "http://www.gravatar.com/avatar/be7d15ba4b1908e9441a72ebcaa0bf09"
+        player.valid?
+        player.errors[:gravatar].should == []
+      end
+    end
   end
 
   describe "name" do

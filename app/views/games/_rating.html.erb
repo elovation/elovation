@@ -1,1 +1,5 @@
-<li><%= rating.player.name %> - <%= rating.value %> (<%= rating.player.results.for_game(rating.game).wins.size %> - <%= rating.player.results.for_game(rating.game).losses.size %>)</li>
+<li>
+  <%= image_tag(gravatar_url(rating.player, :size => 32)) %>
+  <%= rating.player.name %> - <%= rating.value %>
+  (<%= rating.player.results.for_game(rating.game).wins.size %> - <%= rating.player.results.for_game(rating.game).losses.size %>)
+</li>

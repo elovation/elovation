@@ -1,5 +1,6 @@
 <div class="hero-unit">
   <h1><%= @player.name %></h1>
+  <div><%= image_tag(gravatar_url(@player, :size => 80)) %></div>
   <section class="action-buttons">
     <span><%= link_to 'Edit Player', edit_player_path(@player), :class => "btn btn-primary" %></span>
   </section>
