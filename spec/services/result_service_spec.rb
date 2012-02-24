@@ -57,4 +57,38 @@ describe ResultService do
       end
     end
   end
+
+  describe "destroy" do
+    it "returns a successful response if the result is destroyed" do
+      game = FactoryGirl.create(:game)
+      player_1 = FactoryGirl.create(:player)
+      player_2 = FactoryGirl.create(:player)
+
+      result = ResultService.create(
+        game,
+        :winner_id => player_1.id.to_s,
+        :loser_id => player_2.id.to_s
+      ).result
+
+      response = ResultService.destroy(result)
+
+      response.should be_success
+      Result.find_by_id(result.id).should be_nil
+    end
+
+    it "returns an unsuccessful response and does not destroy the result if it is not the most recent for both players" do
+      game = FactoryGirl.create(:game)
+      player_1 = FactoryGirl.create(:player)
+      player_2 = FactoryGirl.create(:player)
+      player_3 = FactoryGirl.create(:player)
+
+      old_result = FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_2, :players => [player_1, player_2])
+      FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_3, :players => [player_1, player_3])
+
+      response = ResultService.destroy(old_result)
+
+      response.should_not be_success
+      Result.find_by_id(old_result.id).should_not be_nil
+    end
+  end
 end

@@ -29,6 +29,30 @@ describe Result do
     end
   end
 
+  describe "most_recent?" do
+    it "returns true if the result is the most recent for both players" do
+      player_1 = FactoryGirl.create(:player)
+      player_2 = FactoryGirl.create(:player)
+      game = FactoryGirl.create(:game)
+
+      result = FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_2, :players => [player_1, player_2])
+
+      result.should be_most_recent
+    end
+
+    it "returns false if the result is not the most recent for both players" do
+      player_1 = FactoryGirl.create(:player)
+      player_2 = FactoryGirl.create(:player)
+      player_3 = FactoryGirl.create(:player)
+      game = FactoryGirl.create(:game)
+
+      old_result = FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_2, :players => [player_1, player_2])
+      FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_3, :players => [player_1, player_3])
+
+      old_result.should_not be_most_recent
+    end
+  end
+
   describe "validations" do
     context "base validations" do
       it "doesn't allow winner and loser to be the same player" do

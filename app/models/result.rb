@@ -19,4 +19,10 @@ class Result < ActiveRecord::Base
       :created_at => created_at.utc.to_s
     }
   end
+
+  def most_recent?
+    players.all? do |player|
+      player.results.where(:game_id => game.id).order("created_at DESC").first == self
+    end
+  end
 end
