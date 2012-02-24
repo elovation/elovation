@@ -75,24 +75,6 @@ describe GamesController do
     end
   end
 
-  describe "destroy" do
-    it "redirects to the dashboard path" do
-      game = FactoryGirl.create(:game)
-
-      delete :destroy, :id => game
-
-      response.should redirect_to(dashboard_path)
-    end
-
-    it "deletes the given game" do
-      game = FactoryGirl.create(:game)
-
-      delete :destroy, :id => game
-
-      Game.find_by_id(game.id).should be_nil
-    end
-  end
-
   describe "show" do
     it "exposes the game" do
       game = FactoryGirl.create(:game)

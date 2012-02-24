@@ -68,24 +68,6 @@ describe PlayersController do
     end
   end
 
-  describe "destroy" do
-    it "redirects to the dashboard path" do
-      player = FactoryGirl.create(:player)
-
-      delete :destroy, :id => player
-
-      response.should redirect_to(dashboard_path)
-    end
-
-    it "deletes the given player" do
-      player = FactoryGirl.create(:player)
-
-      delete :destroy, :id => player
-
-      Player.find_by_id(player.id).should be_nil
-    end
-  end
-
   describe "show" do
     it "exposes the player" do
       player = FactoryGirl.create(:player)
