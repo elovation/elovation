@@ -125,6 +125,20 @@ describe Player do
     end
   end
 
+  describe "rewind_rating!" do
+    it "resets the player's rating to the previous rating" do
+      player = FactoryGirl.create(:player)
+      game = FactoryGirl.create(:game)
+      rating = FactoryGirl.create(:rating, :game => game, :player => player, :value => 1002)
+      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1001)
+      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1002)
+
+      player.rewind_rating!(game)
+
+      player.ratings.where(:game_id => game.id).first.value.should == 1001
+    end
+  end
+
   describe "wins" do
     it "finds wins" do
       player = FactoryGirl.create(:player)

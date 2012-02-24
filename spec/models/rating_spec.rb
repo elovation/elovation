@@ -45,4 +45,36 @@ describe Rating do
       RatingHistoryEvent.find_by_id(history_event.id).should be_nil
     end
   end
+
+  describe "rewind!" do
+    it "resets the rating to the previous rating" do
+      rating = FactoryGirl.create(:rating, :value => 1002)
+      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1001)
+      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1002)
+
+      rating.rewind!
+
+      rating.reload.value.should == 1001
+    end
+
+    it "deletes the most recent history event" do
+      rating = FactoryGirl.create(:rating, :value => 1002)
+      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1001)
+      history_event = FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1002)
+
+      rating.rewind!
+
+      RatingHistoryEvent.find_by_id(history_event.id).should be_nil
+    end
+
+    it "destroys the rating if there is only one history event" do
+      rating = FactoryGirl.create(:rating, :value => 1002)
+      history_event = FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1002)
+
+      rating.rewind!
+
+      Rating.find_by_id(rating.id).should be_nil
+      RatingHistoryEvent.find_by_id(history_event.id).should be_nil
+    end
+  end
 end

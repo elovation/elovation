@@ -47,7 +47,7 @@ Elovation::Application.routes.draw do
   #   end
 
   resources :games, :except => [:destroy] do
-    resources :results, :only => [:create, :new]
+    resources :results, :only => [:create, :destroy, :new]
   end
 
   resources :players, :except => [:destroy]

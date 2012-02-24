@@ -12,6 +12,14 @@ class ResultsController < ApplicationController
     end
   end
 
+  def destroy
+    result = @game.results.find_by_id(params[:id])
+
+    response = ResultService.destroy(result)
+
+    redirect_to game_path(@game)
+  end
+
   def new
     @result = Result.new
   end

@@ -26,4 +26,14 @@ class ResultService
       )
     end
   end
+
+  def self.destroy(result)
+    Result.transaction do
+      [result.winner, result.loser].each do |player|
+        player.rewind_rating!(result.game)
+      end
+
+      result.destroy
+    end
+  end
 end
