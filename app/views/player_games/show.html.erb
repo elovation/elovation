@@ -8,7 +8,7 @@
       <% @game.players.sort.each do |opponent| %>
         <% next if opponent == @player %>
         <% wins = @player.results.wins.for_game(@game).against(opponent).size %>
-        <% losses = @player.results.wins.for_game(@game).against(opponent).size %>
+        <% losses = @player.results.losses.for_game(@game).against(opponent).size %>
         <% next if wins.zero? && losses.zero? %>
         <li>
           <%= opponent.name %>
