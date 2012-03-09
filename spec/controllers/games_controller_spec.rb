@@ -37,10 +37,10 @@ describe GamesController do
 
       it "protects against mass assignment" do
         Timecop.freeze(Time.now) do
-          post :create, :game => {:created_at => 5.days.ago, :name => "Go"}
+          post :create, :game => {:created_at => 3.days.ago, :name => "Go"}
 
           game = Game.where(:name => "Go").first
-          game.created_at.should == Time.now
+          game.created_at.should > 3.days.ago
         end
       end
     end
@@ -99,7 +99,7 @@ describe GamesController do
 
           put :update, :id => game, :game => {:created_at => 3.days.ago}
 
-          game.reload.created_at.should == Time.now
+          game.created_at.should > 3.days.ago
         end
       end
     end

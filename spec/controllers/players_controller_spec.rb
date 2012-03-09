@@ -26,6 +26,15 @@ describe PlayersController do
 
       response.should render_template(:new)
     end
+
+    it "protects against mass assignment" do
+      Timecop.freeze(Time.now) do
+        post :create, :player => {:created_at => 3.days.ago, :name => "Drew"}
+
+        player = Player.where(:name => "Drew").first
+        player.created_at.should > 3.days.ago
+      end
+    end
   end
 
   describe "destroy" do
@@ -75,6 +84,16 @@ describe PlayersController do
         put :update, :id => player, :player => {:name => "Second name"}
 
         player.reload.name.should == "Second name"
+      end
+
+      it "protects against mass assignment" do
+        Timecop.freeze(Time.now) do
+          player = FactoryGirl.create(:player, :name => "First name")
+
+          put :update, :id => player, :player => {:created_at => 3.days.ago}
+
+          player.reload.created_at.should > 3.days.ago
+        end
       end
     end
 

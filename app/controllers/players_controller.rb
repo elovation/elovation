@@ -1,8 +1,12 @@
 class PlayersController < ApplicationController
+  include ParamsCleaner
+
+  allowed_params :player => [:name, :gravatar]
+
   before_filter :_find_player, :only => [:edit, :destroy, :show, :update]
 
   def create
-    @player = Player.new(params[:player])
+    @player = Player.new(clean_params(:player))
 
     if @player.save
       redirect_to player_path(@player)
@@ -27,7 +31,7 @@ class PlayersController < ApplicationController
   end
 
   def update
-    if @player.update_attributes(params[:player])
+    if @player.update_attributes(clean_params(:player))
       redirect_to player_path(@player)
     else
       render :edit
