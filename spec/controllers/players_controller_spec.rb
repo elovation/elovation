@@ -11,9 +11,9 @@ describe PlayersController do
 
   describe "create" do
     it "creates a player and redirects to the player show page" do
-      post :create, :player => {:name => "Drew"}
+      post :create, :player => {:name => "Drew", :email => "drew@example.com"}
 
-      player = Player.where(:name => "Drew").first
+      player = Player.where(:name => "Drew", :email => "drew@example.com").first
 
       player.should_not be_nil
       response.should redirect_to(player_path(player))

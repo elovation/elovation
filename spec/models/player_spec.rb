@@ -19,20 +19,20 @@ describe Player do
       end
     end
 
-    context "gravatar" do
+    context "email" do
       it "can be blank" do
-        player = FactoryGirl.build(:player, :gravatar => "")
+        player = FactoryGirl.build(:player, :email => "")
         player.should be_valid
       end
 
-      it "must be a gravatar url" do
+      it "must be a valid email format" do
         player = Player.new
-        player.gravatar = "http://www.not-a-gravatar.com"
+        player.email = "invalid-email-address"
         player.should_not be_valid
-        player.errors[:gravatar].should == ["is invalid"]
-        player.gravatar = "http://www.gravatar.com/avatar/be7d15ba4b1908e9441a72ebcaa0bf09"
+        player.errors[:email].should == ["is invalid"]
+        player.email = "valid@example.com"
         player.valid?
-        player.errors[:gravatar].should == []
+        player.errors[:email].should == []
       end
     end
   end
