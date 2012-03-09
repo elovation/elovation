@@ -34,6 +34,15 @@ describe GamesController do
 
         response.should redirect_to(game_path(game))
       end
+
+      it "protects against mass assignment" do
+        Timecop.freeze(Time.now) do
+          post :create, :game => {:created_at => 5.days.ago, :name => "Go"}
+
+          game = Game.where(:name => "Go").first
+          game.created_at.should == Time.now
+        end
+      end
     end
 
     context "with invalid params" do
@@ -82,6 +91,16 @@ describe GamesController do
         put :update, :id => game, :game => {:name => "Second name"}
 
         game.reload.name.should == "Second name"
+      end
+
+      it "protects against mass assignment" do
+        Timecop.freeze(Time.now) do
+          game = FactoryGirl.create(:game, :name => "First name")
+
+          put :update, :id => game, :game => {:created_at => 3.days.ago}
+
+          game.reload.created_at.should == Time.now
+        end
       end
     end
 
