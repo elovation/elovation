@@ -4,17 +4,19 @@
 <div class="row-fluid">
   <div class="span12">
     <h2>Head-to-Head Records</h2>
-    <ul>
-      <% @game.players.sort.each do |opponent| %>
-        <% next if opponent == @player %>
+    <ol>
+      <% @game.all_ratings.each do |rating| %>
+        <% opponent = rating.player %>
         <% wins = @player.results.wins.for_game(@game).against(opponent).size %>
         <% losses = @player.results.losses.for_game(@game).against(opponent).size %>
-        <% next if wins.zero? && losses.zero? %>
         <li>
           <%= opponent.name %>
-          (<%= wins %> - <%= losses %>)
+          <% unless opponent == @player %>
+            (<%= rating.value %>)
+            (<%= wins %> - <%= losses %>)
+          <% end %>
         </li>
       <% end %>
-    </ul>
+    </ol>
   </div>
 </div>
