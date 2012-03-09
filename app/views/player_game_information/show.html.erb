@@ -1,0 +1,20 @@
+<div class="hero-unit">
+<h1><%= @player.name %> - <%= @game.name %> (<%= @player.ratings.find_by_game_id(@game).value %>)</h1>
+</div>
+<div class="row-fluid">
+  <div class="span12">
+    <h2>Head-to-Head Records</h2>
+    <ul>
+      <% @game.players.sort.each do |opponent| %>
+        <% next if opponent == @player %>
+        <% wins = @player.results.wins.for_game(@game).against(opponent).size %>
+        <% losses = @player.results.wins.for_game(@game).against(opponent).size %>
+        <% next if wins.zero? && losses.zero? %>
+        <li>
+          <%= opponent.name %>
+          (<%= wins %> - <%= losses %>)
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

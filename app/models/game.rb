@@ -16,6 +16,10 @@ class Game < ActiveRecord::Base
     }
   end
 
+  def players
+    ratings.map(&:player)
+  end
+
   def recent_results
     results.order("created_at DESC").limit(5)
   end
