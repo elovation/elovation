@@ -28,6 +28,27 @@ describe PlayersController do
     end
   end
 
+  describe "destroy" do
+    it "deletes a player with no results" do
+      player = FactoryGirl.create(:player)
+
+      delete :destroy, :id => player
+
+      response.should redirect_to(dashboard_path)
+      Player.find_by_id(player.id).should be_nil
+    end
+
+    it "doesn't allow deleting a player with no results" do
+      player = FactoryGirl.create(:player)
+      FactoryGirl.create(:result, :winner => player)
+
+      delete :destroy, :id => player
+
+      response.should redirect_to(dashboard_path)
+      Player.find_by_id(player.id).should == player
+    end
+  end
+
   describe "edit" do
     it "exposes the player for editing" do
       player = FactoryGirl.create(:player)
