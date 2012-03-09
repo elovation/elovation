@@ -45,6 +45,27 @@ describe GamesController do
     end
   end
 
+  describe "destroy" do
+    it "allows deleting games without results" do
+      game = FactoryGirl.create(:game, :name => "First name")
+
+      delete :destroy, :id => game
+
+      response.should redirect_to(dashboard_path)
+      Game.find_by_id(game.id).should be_nil
+    end
+
+    it "doesn't allow deleting games with results" do
+      game = FactoryGirl.create(:game, :name => "First name")
+      FactoryGirl.create(:result, :game => game)
+
+      delete :destroy, :id => game
+
+      response.should redirect_to(dashboard_path)
+      Game.find_by_id(game.id).should == game
+    end
+  end
+
   describe "update" do
     context "with valid params" do
       it "redirects to the game's show page" do
