@@ -160,4 +160,19 @@ describe Player do
       player.results.for_game(game).losses.should == [loss]
     end
   end
+
+  describe "against" do
+    it "finds results against a specific opponent" do
+      player = FactoryGirl.create(:player)
+      game = FactoryGirl.create(:game)
+      opponent1 = FactoryGirl.create(:player)
+      opponent2 = FactoryGirl.create(:player)
+      win_against_opponent1 = FactoryGirl.create(:result, :game => game, :winner => player, :loser => opponent1)
+      loss_against_opponent1 = FactoryGirl.create(:result, :game => game, :winner => opponent1, :loser => player)
+      win_against_opponent2 = FactoryGirl.create(:result, :game => game, :winner => player, :loser => opponent2)
+      opponent2_game_against_different_player = FactoryGirl.create(:result, :game => game, :winner => FactoryGirl.create(:player), :loser => opponent2)
+      player.results.for_game(game).against(opponent1).sort_by(&:id).should == [win_against_opponent1, loss_against_opponent1]
+      player.results.for_game(game).against(opponent2).sort_by(&:id).should == [win_against_opponent2]
+    end
+  end
 end

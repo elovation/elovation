@@ -6,6 +6,16 @@ class Player < ActiveRecord::Base
   end
 
   has_and_belongs_to_many :results do
+    def against(opponent)
+      player = proxy_association.owner.id
+      where(
+        [
+          "(winner_id = ? and loser_id = ?) OR (winner_id = ? and loser_id = ?)",
+          player, opponent, opponent, player
+        ]
+      )
+    end
+
     def losses
       where(:loser_id => proxy_association.owner.id)
     end

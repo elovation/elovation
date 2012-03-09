@@ -9,6 +9,17 @@ describe Game do
     end
   end
 
+  describe "players" do
+    it "returns players who have a rating for the game" do
+      game = FactoryGirl.create(:game)
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+      FactoryGirl.create(:rating, :game => game, :player => player1)
+      FactoryGirl.create(:rating, :game => game, :player => player2)
+      game.players.sort_by(&:id).should == [player1, player2]
+    end
+  end
+
   describe "recent results" do
     it "returns 5 of the games results" do
       game = FactoryGirl.create(:game)

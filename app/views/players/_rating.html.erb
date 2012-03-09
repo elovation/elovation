@@ -1,1 +1,1 @@
-<li><%= rating.game.name %> - <%= rating.value %></li>
+<li><%= link_to rating.game.name, player_game_information_path(@player, rating.game) %> - <%= rating.value %></li>
