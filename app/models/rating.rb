@@ -5,11 +5,23 @@ class Rating < ActiveRecord::Base
   belongs_to :player
   has_many :history_events, :class_name => "RatingHistoryEvent", :dependent => :destroy, :order => "created_at DESC"
 
+  def active?
+    if most_recent_result
+      most_recent_result.created_at >= 4.weeks.ago
+    else
+      false
+    end
+  end
+
   def as_json(option = {})
     {
       :player => player.name,
       :value => value
     }
+  end
+
+  def most_recent_result
+    player.results.for_game(game).most_recent_first.first
   end
 
   def to_elo
