@@ -48,6 +48,7 @@ Elovation::Application.routes.draw do
 
   resources :games do
     resources :results, :only => [:create, :destroy, :new]
+    resources :ratings, :only => [:index]
   end
 
   resources :players do

@@ -1,6 +1,18 @@
 require "spec_helper"
 
 describe Rating do
+  describe "active?" do
+    it "is true if the player as played a game in the past 4 weeks" do
+      player = FactoryGirl.create(:player)
+      game = FactoryGirl.create(:game)
+      rating = FactoryGirl.create(:rating, :player => player, :game => game)
+      result = FactoryGirl.create(:result, :winner => player, :game => game, :created_at => 5.weeks.ago)
+      rating.active?.should == false
+      result = FactoryGirl.create(:result, :winner => player, :game => game, :created_at => 4.weeks.ago + 1.hour)
+      rating.active?.should == true
+    end
+  end
+
   describe "as_json" do
     it "returns the json representation of the result" do
       player = FactoryGirl.build(:player, :name => "John")
@@ -10,6 +22,20 @@ describe Rating do
         :player => player.name,
         :value => 1000
       }
+    end
+  end
+
+  describe "most_recent_result" do
+    it "returns the most recent result for the game and player" do
+      player = FactoryGirl.create(:player)
+      game = FactoryGirl.create(:game)
+      rating = FactoryGirl.create(:rating, :player => player, :game => game)
+      result_5_weeks_ago = FactoryGirl.create(:result, :winner => player, :game => game, :created_at => 5.weeks.ago)
+      rating.most_recent_result.should == result_5_weeks_ago
+      result_4_weeks_ago = FactoryGirl.create(:result, :winner => player, :game => game, :created_at => 4.weeks.ago)
+      rating.most_recent_result.should == result_4_weeks_ago
+      result_6_weeks_ago = FactoryGirl.create(:result, :winner => player, :game => game, :created_at => 6.weeks.ago)
+      rating.most_recent_result.should == result_4_weeks_ago
     end
   end
 
