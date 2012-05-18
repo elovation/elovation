@@ -15,7 +15,7 @@ class Rating < ActiveRecord::Base
 
   def as_json(option = {})
     {
-      :player => player.name,
+      :player => player.as_json,
       :value => value
     }
   end

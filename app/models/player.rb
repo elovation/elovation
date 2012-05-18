@@ -32,6 +32,13 @@ class Player < ActiveRecord::Base
   validates :name, :uniqueness => true, :presence => true
   validates :email, :format => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, :allow_blank => true
 
+  def as_json
+    {
+      :name => name,
+      :email => email
+    }
+  end
+
   def recent_results
     results.order("created_at DESC").limit(5)
   end

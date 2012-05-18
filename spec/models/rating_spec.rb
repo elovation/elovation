@@ -19,7 +19,10 @@ describe Rating do
       rating = FactoryGirl.build(:rating, :value => 1000, :player => player)
 
       rating.as_json.should == {
-        :player => player.name,
+        :player => {
+          :name => player.name,
+          :email => player.email
+        },
         :value => 1000
       }
     end

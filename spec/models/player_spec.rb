@@ -1,6 +1,16 @@
 require "spec_helper"
 
 describe Player do
+  describe "as_json" do
+    it "returns the json representation of the player" do
+      player = FactoryGirl.build(:player, :name => "John Doe", :email => "foo@example.com")
+
+      player.as_json.should == {
+        :name => "John Doe",
+        :email => "foo@example.com"
+      }
+    end
+  end
   describe "validations" do
     context "name" do
       it "is required" do
