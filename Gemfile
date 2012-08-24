@@ -7,7 +7,7 @@ gem 'rails', '3.2.1'
 
 gem 'pg', '0.12.2'
 gem 'json', '1.6.5'
-gem 'jquery-rails', '2.0.0'
+gem 'jquery-rails', '2.1.1'
 gem 'dynamic_form', '1.1.4'
 gem 'elo', '0.1.0'
 gem 'params_cleaner', '0.1.2'
