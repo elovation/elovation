@@ -29,4 +29,5 @@ group :test, :development do
   gem 'heroku', '2.19.0'
   gem 'timecop', '0.3.5'
   gem 'taps', '0.3.23'
+  gem 'json_spec', '1.0.3'
 end

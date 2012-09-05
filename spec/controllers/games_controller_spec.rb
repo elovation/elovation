@@ -142,7 +142,7 @@ describe GamesController do
 
         get :show, :id => game, :format => :json
 
-        response.body.should == {
+        response.body.should be_json_eql({
           "name" => game.name,
           "ratings" => [
             {"player" => {"name" => player1.name, "email" => player1.email}, "value" => 1003},
@@ -154,7 +154,7 @@ describe GamesController do
             {"winner" => player2.name, "loser" => player3.name, "created_at" => Time.now.utc.to_s},
             {"winner" => player3.name, "loser" => player1.name, "created_at" => Time.now.utc.to_s}
           ]
-        }.to_json
+        }.to_json)
       end
     end
   end
