@@ -1,4 +1,5 @@
 require "spec_helper"
+require "json"
 
 describe GamesController do
   describe "new" do
@@ -142,7 +143,8 @@ describe GamesController do
 
         get :show, :id => game, :format => :json
 
-        response.body.should == {
+        json_data = JSON.parse(response.body)
+        json_data.should == {
           "name" => game.name,
           "ratings" => [
             {"player" => {"name" => player1.name, "email" => player1.email}, "value" => 1003},
@@ -154,7 +156,7 @@ describe GamesController do
             {"winner" => player2.name, "loser" => player3.name, "created_at" => Time.now.utc.to_s},
             {"winner" => player3.name, "loser" => player1.name, "created_at" => Time.now.utc.to_s}
           ]
-        }.to_json
+        }
       end
     end
   end
