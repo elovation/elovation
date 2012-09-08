@@ -1,5 +1,4 @@
 require "spec_helper"
-require "json"
 
 describe GamesController do
   describe "new" do
