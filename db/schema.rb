@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 5) do
+ActiveRecord::Schema.define(:version => 6) do
+
+  create_table "challenges", :force => true do |t|
+    t.integer  "challenger_id"
+    t.integer  "challengee_id"
+    t.integer  "game_id"
+    t.integer  "result_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "challenges", ["challengee_id"], :name => "index_challenges_on_challengee_id"
+  add_index "challenges", ["challenger_id"], :name => "index_challenges_on_challenger_id"
+  add_index "challenges", ["game_id"], :name => "index_challenges_on_game_id"
+  add_index "challenges", ["result_id"], :name => "index_challenges_on_result_id"
 
   create_table "games", :force => true do |t|
     t.string   "name",       :null => false
