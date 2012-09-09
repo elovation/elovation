@@ -16,3 +16,17 @@ Elovation is optimized for deployment on [Heroku](http://www.heroku.com). Becaus
 After pushing the app to heroku, just run the migrations and you're all set.
 
 `heroku run rake db:migrate`
+
+
+Notifications
+---------------------------
+
+Email notifications are generated for some events.  This relies on the heroku [SendGrid](https://addons.heroku.com/sendgrid) Add-on.  Install sendgrid with:
+
+`heroku addons:add sendgrid:starter`
+
+
+Maintenance
+---------------------------
+
+The challenge system supports expiring challenges after a period of time.  To expire all eligible challenges, access the url /expire_pending_challenges .  This should be done regularly with a cron job.

@@ -53,6 +53,43 @@ describe ResultsController do
         response.should render_template(:new)
       end
     end
+    context "with active challenge" do
+      it "resolves challenge" do
+        game = FactoryGirl.create(:game)
+        player_1 = FactoryGirl.create(:player)
+        player_2 = FactoryGirl.create(:player)
+
+        FactoryGirl.create(:challenge, :game => game, :challenger => player_1, :challengee => player_2)
+
+        post :create, :game_id => game, :result => {
+          :winner_id => player_2.id,
+          :loser_id => player_1.id
+        }
+
+        game.reload
+
+        result = game.results.first
+        challenge = game.challenges.first
+
+        challenge.result.should == result
+      end
+
+      it "resolves all matching challenges" do
+        game = FactoryGirl.create(:game)
+        player_1 = FactoryGirl.create(:player)
+        player_2 = FactoryGirl.create(:player)
+
+        FactoryGirl.create(:challenge, :game => game, :challenger => player_1, :challengee => player_2)
+        FactoryGirl.create(:challenge, :game => game, :challenger => player_2, :challengee => player_1)
+
+        post :create, :game_id => game, :result => {
+          :winner_id => player_2.id,
+          :loser_id => player_1.id
+        }
+
+        Challenge.active.count.should == 0
+      end
+    end
   end
 
   describe "destroy" do
