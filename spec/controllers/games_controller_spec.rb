@@ -140,6 +140,9 @@ describe GamesController do
         result2 = FactoryGirl.create(:result, :game => game, :winner => player2, :loser => player3)
         result3 = FactoryGirl.create(:result, :game => game, :winner => player3, :loser => player1)
 
+        challenge1 = FactoryGirl.create(:challenge, :game => game, :challenger => player1, :challengee => player2)
+        challenge2 = FactoryGirl.create(:challenge, :game => game, :challenger => player2, :challengee => player3)
+
         get :show, :id => game, :format => :json
 
         json_data = JSON.parse(response.body)
@@ -154,6 +157,10 @@ describe GamesController do
             {"winner" => player1.name, "loser" => player2.name, "created_at" => Time.now.utc.to_s},
             {"winner" => player2.name, "loser" => player3.name, "created_at" => Time.now.utc.to_s},
             {"winner" => player3.name, "loser" => player1.name, "created_at" => Time.now.utc.to_s}
+          ],
+          "challenges" => [
+            {"challenger" => player1.name, "challengee" => player2.name, "expires_at" => 5.days.from_now.utc.to_s },
+            {"challenger" => player2.name, "challengee" => player3.name, "expires_at" => 5.days.from_now.utc.to_s }
           ]
         }
       end

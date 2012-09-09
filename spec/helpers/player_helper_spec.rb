@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe ResultsHelper do
+describe PlayerHelper do
   describe "player_options" do
     it "returns an associative array of player names and ids" do
       player1 = FactoryGirl.create(:player, :name => "First")
