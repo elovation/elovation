@@ -1,0 +1,5 @@
+email:
+  from_address: elovation@example.com
+
+challenges:
+  days_until_expire: 5
