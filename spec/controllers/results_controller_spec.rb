@@ -75,6 +75,8 @@ describe ResultsController do
         player_1_rating.reload.value.should_not == old_rating_1
         player_2_rating.reload.value.should_not == old_rating_2
 
+        request.env['HTTP_REFERER'] = game_path(game)
+
         delete :destroy, :game_id => game, :id => result
 
         response.should redirect_to(game_path(game))

@@ -17,7 +17,7 @@ class ResultsController < ApplicationController
 
     response = ResultService.destroy(result)
 
-    redirect_to game_path(@game)
+    redirect_to :back
   end
 
   def new
