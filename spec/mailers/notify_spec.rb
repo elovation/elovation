@@ -14,7 +14,7 @@ describe Notify do
     end
 
     it "renders the sender email" do
-      mail.from.should == ['elovation@example.com']
+      mail.from.should == [challenge.challenger.email]
     end
 
     it "mentions challenger and game" do

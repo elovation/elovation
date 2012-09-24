@@ -11,7 +11,7 @@
     <%= f.submit :class => "btn btn-primary" %>
   </span>
 
-  <span class="help-text">
-    The challenge will expire in <%= Settings.challenges.days_until_expire %> days, resulting in a victory for the challenger.
-  </span>
+  <div class="description">
+    The challenge will expire in <%= Challenge.expiration_threshold.inspect %>, resulting in a victory for the challenger.
+  </div>
 <% end %>

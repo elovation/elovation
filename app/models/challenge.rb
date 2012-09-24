@@ -34,7 +34,11 @@ class Challenge < ActiveRecord::Base
   end
 
   def expires_at
-    return created_at + Settings.challenges.days_until_expire.days
+    return created_at + self.class.expiration_threshold
+  end
+
+  def self.expiration_threshold
+    return 5.days
   end
 
   def as_json(options = {})

@@ -113,5 +113,42 @@ describe ChallengesController do
         [player_2.id, player_1.id]
       ]
     end
+
+    it "creates results that can be destroyed" do
+      game = FactoryGirl.create(:game)
+      player_1 = FactoryGirl.create(:player)
+      player_2 = FactoryGirl.create(:player)
+
+      Timecop.freeze(6.days.ago) do
+        FactoryGirl.create(:challenge, :game => game, :challenger => player_1, :challengee => player_2)
+      end
+
+      post :expire_pending
+
+      expect{ ResultService.destroy(Result.first) }.not_to raise_error
+    end
+
+    it "updates ratings" do
+      game = FactoryGirl.create(:game)
+      player_1 = FactoryGirl.create(:player)
+      player_2 = FactoryGirl.create(:player)
+
+      ResultService.create(game, :winner_id => player_1.id, :loser_id => player_2.id).result
+
+      player_1_rating = player_1.ratings.where(:game_id => game.id).first
+      player_2_rating = player_2.ratings.where(:game_id => game.id).first
+
+      old_rating_1 = player_1_rating.value
+      old_rating_2 = player_2_rating.value
+
+      Timecop.freeze(6.days.ago) do
+        FactoryGirl.create(:challenge, :game => game, :challenger => player_1, :challengee => player_2)
+      end
+
+      post :expire_pending
+
+      player_1_rating.reload.value.should_not == old_rating_1
+      player_2_rating.reload.value.should_not == old_rating_2
+    end
   end
 end

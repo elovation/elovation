@@ -25,17 +25,28 @@ class ChallengesController < ApplicationController
 
   def expire_pending
     challenges_to_expire = Challenge.active.order(:created_at).select {|c| c.expires_at <= Time.now}
-    challenges_to_expire.each do |challenge|
-      challenge.result = Result.create(
-        :game => challenge.game,
-        :winner => challenge.challenger,
-        :loser => challenge.challengee
-      )
 
-      challenge.save
+    errors = 0
+    challenges_to_expire.each do |challenge|
+
+      response = ResultService.create(
+        challenge.game,
+        {
+          :winner_id => challenge.challenger_id,
+          :loser_id  => challenge.challengee_id
+        }
+      )
+      if response.success?
+        challenge.result = response.result
+        challenge.save
+      else
+        errors = errors + 1
+      end
+
     end
 
-    render :inline => "#{challenges_to_expire.size} challenges expired"
+    error_message = errors > 0 ? " (#{errors} errors" : ""
+    render :inline => "#{challenges_to_expire.size} challenges expired#{error_message}"
   end
 
   def _find_game
