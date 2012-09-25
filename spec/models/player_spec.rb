@@ -185,4 +185,20 @@ describe Player do
       player.results.for_game(game).against(opponent2).sort_by(&:id).should == [win_against_opponent2]
     end
   end
+
+  describe "streak" do
+    it "counts wins" do
+      game = FactoryGirl.create(:game)
+      player = FactoryGirl.create(:player)
+
+      FactoryGirl.create(:result, :game => game, :winner => player)
+      FactoryGirl.create(:result, :game => game, :loser => player)
+
+      FactoryGirl.create(:result, :game => game, :winner => player)
+      FactoryGirl.create(:result, :game => game, :winner => player)
+      FactoryGirl.create(:result, :game => game, :winner => player)
+
+      player.winning_streak(game).should == 3
+    end
+  end
 end

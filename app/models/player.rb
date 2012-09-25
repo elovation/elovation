@@ -47,4 +47,17 @@ class Player < ActiveRecord::Base
     rating = ratings.where(:game_id => game.id).first
     rating.rewind!
   end
+
+  def winning_streak(game)
+    wins = 0
+    results.where(:game_id => game.id).order("created_at DESC").each do |r|
+      if r.winner == self
+        wins = wins + 1
+      else
+        break
+      end
+    end
+
+    return wins
+  end
 end
