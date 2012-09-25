@@ -2,4 +2,7 @@
   <%= image_tag(gravatar_url(rating.player, :size => 32)) %>
   <%= link_to rating.player.name, player_game_path(rating.player, @game) %> - <%= rating.value %>
   (<%= rating.player.results.for_game(rating.game).wins.size %> - <%= rating.player.results.for_game(rating.game).losses.size %>)
+  <% if @streaks[rating.player.id] %>
+    <span class="red"><%= " (#{@streaks[rating.player.id]} straight wins)" %></span>
+  <% end %>
 </li>
