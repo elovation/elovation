@@ -1,17 +1,21 @@
 class ResultService
   def self.create(game, params)
-    winner = Player.find(params[:winner_id])
-    loser = Player.find(params[:loser_id])
+    players = []
+    begin
+      players.push Player.find(params[:winner_id])
+      players.push Player.find(params[:loser_id])
+    rescue ActiveRecord::RecordNotFound
+    end
 
     result = game.results.build(
-      :winner => winner,
-      :loser => loser,
-      :players => [winner, loser]
+      :winner_id => params[:winner_id],
+      :loser_id => params[:loser_id],
+      :players => players
     )
 
     if result.valid?
       Result.transaction do
-        RatingService.update(game, winner, loser)
+        RatingService.update(game, result.winner, result.loser)
         result.save!
 
         OpenStruct.new(

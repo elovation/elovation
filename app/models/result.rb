@@ -8,8 +8,11 @@ class Result < ActiveRecord::Base
   scope :most_recent_first, :order => "created_at desc"
   scope :for_game, lambda { |game| where(:game_id => game.id) }
 
+  validates_presence_of :winner
+  validates_presence_of :loser
+
   validate do |result|
-    if result.winner == result.loser
+    if result.winner == result.loser and not result.winner.nil?
       errors.add(:base, "Winner and loser can't be the same player")
     end
   end

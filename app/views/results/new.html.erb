@@ -1,11 +1,11 @@
 <%= form_for [@game, @result], :html => {:class => "well form-search"} do |f| %>
   <%= f.error_messages %>
 
-  <%= f.select :winner_id, player_options %>
+  <%= f.select :winner_id, player_options, {:include_blank => 'Select a Player'} %>
 
   <span class="acts-on-player"><strong>Defeats</strong></span>
 
-  <%= f.select :loser_id, player_options %>
+  <%= f.select :loser_id, player_options, {:include_blank => 'Select a Player'} %>
 
   <span class="inline-submit">
     <%= f.submit :class => "btn btn-primary" %>

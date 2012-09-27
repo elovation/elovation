@@ -55,6 +55,22 @@ describe Result do
 
   describe "validations" do
     context "base validations" do
+      it "requires a winner" do
+        player = FactoryGirl.build(:player)
+        result = Result.new(:loser => player)
+
+        result.should_not be_valid
+        result.errors[:winner].should == ["can't be blank"]
+      end
+
+      it "requires a loser" do
+        player = FactoryGirl.build(:player)
+        result = Result.new(:winner => player)
+
+        result.should_not be_valid
+        result.errors[:loser].should == ["can't be blank"]
+      end
+
       it "doesn't allow winner and loser to be the same player" do
         player = FactoryGirl.build(:player, :name => nil)
 
@@ -65,6 +81,13 @@ describe Result do
 
         result.should_not be_valid
         result.errors[:base].should == ["Winner and loser can't be the same player"]
+      end
+
+      it "does not complain about similarity when both winner and loser are nil" do
+        result = Result.new()
+
+        result.should_not be_valid
+        result.errors[:base].should_not == ["Winner and loser can't be the same player"]
       end
     end
   end

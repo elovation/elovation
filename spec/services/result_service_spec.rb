@@ -34,6 +34,27 @@ describe ResultService do
       response.should_not be_success
     end
 
+    it "handles nil winner or loser" do
+      game = FactoryGirl.create(:game)
+      player = FactoryGirl.create(:player)
+
+      response = ResultService.create(
+        game,
+        :winner_id => player.id.to_s,
+        :loser_id => nil
+      )
+
+      response.should_not be_success
+
+      response = ResultService.create(
+        game,
+        :winner_id => nil,
+        :loser_id => player.id.to_s
+      )
+
+      response.should_not be_success
+    end
+
     context "ratings" do
       it "builds ratings for both players and increments the winner" do
         game = FactoryGirl.create(:game)
