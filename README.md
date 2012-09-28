@@ -9,7 +9,7 @@ At Braintree, we play ping pong in the office. We wanted a way to track results 
 Deployment
 ---------------------------
 
-Elovation is optimized for deployment on [Herkou](http://www.heroku.com). Because the app doesn't provide any authentication or authorization, you can turn on basic auth by setting some environment variables in your heroku app.
+Elovation is optimized for deployment on [Heroku](http://www.heroku.com). Because the app doesn't provide any authentication or authorization, you can turn on basic auth by setting some environment variables in your heroku app.
 
 `heroku config:add BASIC_AUTH=true BASIC_AUTH_USER=username BASIC_AUTH_PASSWORD=password`
 
