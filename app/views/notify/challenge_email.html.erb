@@ -1,0 +1,5 @@
+<h3>You have been challenged</h3>
+<%= @challenge.challenger.name %> has challenged you to a game of <%= @challenge.game.name %>.  This challenge will expire on <%= @challenge.expires_at.to_s(:short) %>.
+<br/>
+<br/>
+Visit the ladder <a href="<%= @base_url + url_for(@challenge.game) %>">here</a>.
