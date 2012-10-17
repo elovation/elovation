@@ -1,0 +1,10 @@
+<li>
+  <%= challenge.expires_at.to_s(:short) %>
+  -
+  <%= image_tag(gravatar_url(challenge.challenger, :size => 24)) %>
+  <strong><%= challenge.challenger.name %></strong>
+  challenges
+  <%= image_tag(gravatar_url(challenge.challengee, :size => 24)) %>
+  <strong><%= challenge.challengee.name %></strong>
+  <%= link_to "Delete", game_challenge_path(@game, challenge), :class => "btn btn-danger", :method => :delete, :confirm => "Are you sure?" %>
+</li>

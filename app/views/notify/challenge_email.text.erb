@@ -1,0 +1,7 @@
+ELOVATION
+================================================================================
+You have been challenged
+
+<%= @challenge.challenger.name %> has challenged you to a game of <%= @challenge.game.name %>.  This challenge will expire on <%= @challenge.expires_at.to_s(:short) %>.
+
+Visit the ladder at <%= @base_url + url_for(@challenge.game)
