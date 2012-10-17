@@ -1,5 +1,9 @@
 <li>
+  <% winning_streak = rating.player.winning_streak(@game) %>
   <%= image_tag(gravatar_url(rating.player, :size => 32)) %>
   <%= link_to rating.player.name, player_game_path(rating.player, @game) %> - <%= rating.value %>
   (<%= rating.player.results.for_game(rating.game).wins.size %> - <%= rating.player.results.for_game(rating.game).losses.size %>)
+  <% if winning_streak >= 3 %>
+    <span class="red"><%= " (#{winning_streak} straight wins)" %></span>
+  <% end %>
 </li>
