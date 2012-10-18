@@ -5,7 +5,11 @@ class Game < ActiveRecord::Base
   validates :name, :presence => true
 
   def all_ratings
-    ratings.order("value DESC")
+    ratings.order("value DESC").includes([:player, :game])
+  end
+
+  def active_ratings
+    all_ratings.where("updated_at >= '#{Rating.active_rating_threshold}'")
   end
 
   def as_json(options = {})
@@ -21,7 +25,7 @@ class Game < ActiveRecord::Base
   end
 
   def recent_results
-    results.order("created_at DESC").limit(5)
+    results.order("created_at DESC").limit(5).includes([:winner, :loser, :players])
   end
 
   def top_ratings

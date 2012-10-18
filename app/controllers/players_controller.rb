@@ -39,6 +39,6 @@ class PlayersController < ApplicationController
   end
 
   def _find_player
-    @player = Player.find(params[:id])
+    @player = Player.includes(:ratings => :game).where(:id => params[:id]).first
   end
 end

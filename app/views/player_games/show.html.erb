@@ -25,7 +25,7 @@
 
   <div class="span4 offset1">
     <h2>Recent Games</h2>
-    <% @player.results.for_game(@game).limit(15).order('created_at desc').each do |result| %>
+    <% @player.results.for_game(@game).limit(15).order('created_at desc').includes([:winner, :loser]).each do |result| %>
       <li>
         <%= result.created_at.to_s(:short) %>
         -

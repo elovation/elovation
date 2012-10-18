@@ -45,6 +45,6 @@ class GamesController < ApplicationController
   end
 
   def _find_game
-    @game = Game.find(params[:id])
+    @game = Game.includes(:results).where(:id =>params[:id]).first
   end
 end
