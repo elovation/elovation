@@ -3,7 +3,8 @@
   <section class="action-buttons">
     <span><%= link_to 'Edit Game', edit_game_path(@game), :class => "btn btn-primary" %></span>
     <span><%= link_to "Add Result", new_game_result_path(@game), :class => "btn btn-success" %></span>
-    <% if @game.results.empty? %>
+    <span><%= link_to 'Challenge', new_game_challenge_path(@game), :class => "btn btn-warning" %></span>
+    <% if @game.results.empty? and @game.challenges.empty? %>
       <span><%= link_to "Delete", game_path(@game), :method => :delete, :confirm => "Are you sure?", :class => "btn btn-danger" %></span>
     <% end %>
   </section>
@@ -17,6 +18,14 @@
       </ul>
     <% else %>
       <span>No results, play some games!</span>
+    <% end %>
+    <h2>Challenges</h2>
+    <% if @game.challenges.active.any? %>
+      <ul>
+        <%= render :partial => 'challenge', :collection => @game.challenges.active.sort_by {|c| c.expires_at} %>
+      </ul>
+    <% else %>
+      <span>No active challenges, <%= link_to 'add one', new_game_challenge_path(@game) %>.</span>
     <% end %>
   </div>
   <div class="span6">

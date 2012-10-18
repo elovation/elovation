@@ -1,0 +1,17 @@
+<%= form_for [@game, @challenge], :html => {:class => "well form-search"} do |f| %>
+  <%= f.error_messages %>
+
+  <%= f.select :challenger_id, player_options, {:include_blank => 'Select a Player'} %>
+
+  <span class="acts-on-player"><strong>Challenges</strong></span>
+
+  <%= f.select :challengee_id, player_options, {:include_blank => 'Select a Player'} %>
+
+  <span class="inline-submit">
+    <%= f.submit :class => "btn btn-primary" %>
+  </span>
+
+  <div class="description">
+    The challenge will expire in <%= Challenge.expiration_threshold.inspect %>, resulting in a victory for the challenger.
+  </div>
+<% end %>

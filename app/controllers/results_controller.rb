@@ -5,10 +5,18 @@ class ResultsController < ApplicationController
     response = ResultService.create(@game, params[:result])
 
     if response.success?
+      resolve_challenges_for_result(response.result)
       redirect_to game_path(@game)
     else
       @result = response.result
       render :new
+    end
+  end
+
+  def resolve_challenges_for_result(result)
+    Challenge.find_active_challenges_for_result(result).each do |c|
+      c.result = result
+      c.save
     end
   end
 

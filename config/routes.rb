@@ -49,11 +49,14 @@ Elovation::Application.routes.draw do
   resources :games do
     resources :results, :only => [:create, :destroy, :new]
     resources :ratings, :only => [:index]
+    resources :challenges, :only => [:create, :destroy, :new]
   end
 
   resources :players do
     resources :games, :only => [:show], :controller => 'player_games'
   end
+
+  match "/expire_pending_challenges" => "challenges#expire_pending"
 
   match '/dashboard' => 'dashboard#show', :as => :dashboard
   root :to => 'dashboard#show'
