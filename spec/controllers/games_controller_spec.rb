@@ -124,6 +124,16 @@ describe GamesController do
       assigns(:game).should == game
     end
 
+    it "exposes wins and losses" do
+      game = FactoryGirl.create(:game)
+      FactoryGirl.create(:result, :game => game)
+      FactoryGirl.create(:result, :game => game)
+
+      get :show, :id => game
+
+      assigns(:wins_and_losses).should_not be_nil
+    end
+
     it "returns a json response" do
       Timecop.freeze(Time.now) do
         game = FactoryGirl.create(:game)

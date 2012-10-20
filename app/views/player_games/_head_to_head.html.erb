@@ -1,0 +1,17 @@
+<%
+opponent = head_to_head.player
+
+# invert wins/losses
+wins = @wins_and_losses[opponent.id][:losses]
+losses = @wins_and_losses[opponent.id][:wins]
+%>
+
+<li class="<%= "gray" if @player != opponent and wins == 0 and losses == 0 %>" >
+  <%= opponent.name %>
+  <span class="pull-right">
+  <% unless opponent == @player %>
+    (<%= head_to_head.value %>)
+    (<%= wins %> - <%= losses %>)
+  <% end %>
+  </span>
+</li>

@@ -28,6 +28,7 @@ class GamesController < ApplicationController
   end
 
   def show
+    @wins_and_losses = @game.wins_and_losses
     respond_to do |format|
       format.html
       format.json do
