@@ -29,6 +29,27 @@ describe Result do
     end
   end
 
+  describe "find_deletable" do
+    it "finds results that are most recent for both players" do
+      game_1 = FactoryGirl.create(:game)
+      game_2 = FactoryGirl.create(:game)
+
+      player_1 = FactoryGirl.create(:player)
+      player_2 = FactoryGirl.create(:player)
+      player_3 = FactoryGirl.create(:player)
+      player_4 = FactoryGirl.create(:player)
+
+      r1 = FactoryGirl.create(:result, :game => game_1, :winner => player_1, :loser => player_2)
+      r2 = FactoryGirl.create(:result, :game => game_1, :winner => player_3, :loser => player_4)
+
+      FactoryGirl.create(:result, :game => game_2, :winner => player_1, :loser => player_2)
+      r3 = FactoryGirl.create(:result, :game => game_2, :winner => player_2, :loser => player_3)
+
+      Result.find_deletable_for(game_1).should == [ r1, r2 ]
+      Result.find_deletable_for(game_2).should == [ r3 ]
+    end
+  end
+
   describe "most_recent?" do
     it "returns true if the result is the most recent for both players" do
       player_1 = FactoryGirl.create(:player)

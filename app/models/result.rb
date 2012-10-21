@@ -16,6 +16,12 @@ class Result < ActiveRecord::Base
     end
   end
 
+  def self.find_deletable_for(game)
+    most_recent_result_by_player_sql = Result.select("max(results.created_at) as created_at").joins("inner join players_results on results.id = players_results.result_id").where(:game_id => game).group(:player_id).to_sql
+    ids = Result.select(:id).joins("inner join (#{most_recent_result_by_player_sql}) x on x.created_at = results.created_at").group(:id).having("count(1) > 1").collect {|i| i.id}
+    return Result.find(ids)
+  end
+
   def as_json(options = {})
     {
       :winner => winner.name,

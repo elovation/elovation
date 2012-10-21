@@ -127,11 +127,19 @@ describe GamesController do
     it "exposes wins and losses" do
       game = FactoryGirl.create(:game)
       FactoryGirl.create(:result, :game => game)
+
+      get :show, :id => game
+
+      assigns(:wins_and_losses).should == HashWithIndifferentAccess.new(game.wins_and_losses)
+    end
+
+    it "exposes deletable results" do
+      game = FactoryGirl.create(:game)
       FactoryGirl.create(:result, :game => game)
 
       get :show, :id => game
 
-      assigns(:wins_and_losses).should_not be_nil
+      assigns(:deletable_results).should == Result.find_deletable_for(game)
     end
 
     it "returns a json response" do

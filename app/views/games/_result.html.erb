@@ -6,7 +6,7 @@
   beat
   <%= image_tag(gravatar_url(result.loser, :size => 24)) %>
   <strong><%= result.loser.name %></strong>
-  <% if result.most_recent? -%>
+  <% if @deletable_results.include?(result) -%>
     <%= link_to "Delete", game_result_path(@game, result), :class => "btn btn-danger", :method => :delete, :confirm => "Are you sure?" %>
   <% end -%>
 </li>

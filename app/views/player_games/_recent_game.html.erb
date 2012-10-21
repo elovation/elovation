@@ -6,7 +6,7 @@
   <% else %>
     Lost to <%= recent_game.winner.name %>
   <% end %>
-  <% if recent_game.most_recent? -%>
+  <% if @deletable_results.include? recent_game -%>
     <%= link_to "Delete", game_result_path(@game, recent_game), :class => "btn btn-danger", :method => :delete, :confirm => "Are you sure?" %>
   <% end -%>
 </li>
