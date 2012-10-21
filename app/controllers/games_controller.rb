@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
   include ParamsCleaner
 
-  allowed_params :game => [:name]
+  allowed_params :game => [:name, :description]
 
   before_filter :_find_game, :only => [:destroy, :edit, :show, :update]
 
