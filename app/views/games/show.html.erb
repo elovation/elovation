@@ -1,5 +1,6 @@
 <div class="hero-unit">
   <h1><%= @game.name %></h1>
+  <div class="description"><%= @game.description %></div>
   <section class="action-buttons">
     <span><%= link_to 'Edit Game', edit_game_path(@game), :class => "btn btn-primary" %></span>
     <span><%= link_to "Add Result", new_game_result_path(@game), :class => "btn btn-success" %></span>
