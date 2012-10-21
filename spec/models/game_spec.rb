@@ -121,4 +121,42 @@ describe Game do
       Result.find_by_id(result.id).should be_nil
     end
   end
+
+  describe "wins and losses" do
+    before do
+      @game1 = FactoryGirl.create(:game)
+      @game2 = FactoryGirl.create(:game)
+      @player1 = FactoryGirl.create(:player)
+      @player2 = FactoryGirl.create(:player)
+      @player3 = FactoryGirl.create(:player)
+
+      FactoryGirl.create(:result, :game => @game1, :winner => @player1, :loser => @player2)
+      FactoryGirl.create(:result, :game => @game1, :winner => @player1, :loser => @player3)
+      FactoryGirl.create(:result, :game => @game1, :winner => @player2, :loser => @player3)
+
+      FactoryGirl.create(:result, :game => @game2, :winner => @player1, :loser => @player2)
+    end
+
+    it "counts wins and losses" do
+      @game1.wins_and_losses.should == {
+        @player1.id => { :wins => 2, :losses => 0 },
+        @player2.id => { :wins => 1, :losses => 1 },
+        @player3.id => { :wins => 0, :losses => 2 },
+      }
+
+      @game2.wins_and_losses.should == {
+        @player1.id => { :wins => 1, :losses => 0 },
+        @player2.id => { :wins => 0, :losses => 1 },
+        @player3.id => { :wins => 0, :losses => 0 },
+      }
+    end
+
+    it "counts wins and losses against player" do
+      @game1.wins_and_losses_against(@player2).should == {
+        @player1.id => { :wins => 1, :losses => 0 },
+        @player2.id => { :wins => 0, :losses => 0 },
+        @player3.id => { :wins => 0, :losses => 1 },
+      }
+    end
+  end
 end

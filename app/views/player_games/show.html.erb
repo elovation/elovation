@@ -6,38 +6,14 @@
   <div class="span4">
     <h2>Head-to-Head Records</h2>
     <ol>
-      <% @game.all_ratings.each do |rating| %>
-        <% opponent = rating.player %>
-        <% wins = @player.results.wins.for_game(@game).against(opponent).size %>
-        <% losses = @player.results.losses.for_game(@game).against(opponent).size %>
-        <li class="<%= "gray" if @player != opponent and wins == 0 and losses == 0 %>" >
-          <%= opponent.name %>
-          <span class="pull-right">
-          <% unless opponent == @player %>
-            (<%= rating.value %>)
-            (<%= wins %> - <%= losses %>)
-          <% end %>
-          </span>
-        </li>
-      <% end %>
+      <%= render :partial => 'head_to_head', :collection => @game.all_ratings %>
     </ol>
   </div>
 
   <div class="span4 offset1">
     <h2>Recent Games</h2>
-    <% @player.results.for_game(@game).limit(15).order('created_at desc').each do |result| %>
-      <li>
-        <%= result.created_at.to_s(:short) %>
-        -
-        <% if @player == result.winner %>
-          Beat <%= result.loser.name %>
-        <% else %>
-          Lost to <%= result.winner.name %>
-        <% end %>
-        <% if result.most_recent? -%>
-          <%= link_to "Delete", game_result_path(@game, result), :class => "btn btn-danger", :method => :delete, :confirm => "Are you sure?" %>
-        <% end -%>
-      </li>
-    <% end %>
+    <ul>
+      <%= render :partial => 'recent_game', :collection => @player.results.for_game(@game).limit(15).order('created_at desc').includes([:winner, :loser]) %>
+    </ul>
   </div>
 </div>

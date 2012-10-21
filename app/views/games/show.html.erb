@@ -22,7 +22,7 @@
   <div class="span6">
     <h2>Active Ratings</h2>
     <ol>
-      <%= render :partial => 'rating', :collection => @game.all_ratings.select(&:active?) %>
+      <%= render :partial => 'rating', :collection => @game.active_ratings %>
     </ol>
     <%= link_to "View All", game_ratings_path(@game) %>
   </div>

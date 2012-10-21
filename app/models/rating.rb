@@ -5,9 +5,13 @@ class Rating < ActiveRecord::Base
   belongs_to :player
   has_many :history_events, :class_name => "RatingHistoryEvent", :dependent => :destroy, :order => "created_at DESC"
 
+  def self.active_rating_threshold
+    4.weeks.ago
+  end
+
   def active?
     if most_recent_result
-      most_recent_result.created_at >= 4.weeks.ago
+      most_recent_result.created_at >= self.class.active_rating_threshold
     else
       false
     end

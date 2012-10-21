@@ -12,5 +12,15 @@ describe PlayerGamesController do
       assigns(:game).should == game
       assigns(:player).should == player
     end
+
+    it "exposes deletable results" do
+      game = FactoryGirl.create(:game)
+      player = FactoryGirl.create(:player)
+      FactoryGirl.create(:result, :game => game)
+
+      get :show, :player_id => player, :id => game
+
+      assigns(:deletable_results).should == Result.find_deletable_for(game)
+    end
   end
 end

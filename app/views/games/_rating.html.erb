@@ -1,5 +1,5 @@
 <li>
   <%= image_tag(gravatar_url(rating.player, :size => 32)) %>
   <%= link_to rating.player.name, player_game_path(rating.player, @game) %> - <%= rating.value %>
-  (<%= rating.player.results.for_game(rating.game).wins.size %> - <%= rating.player.results.for_game(rating.game).losses.size %>)
+  (<%= @wins_and_losses[rating.player.id][:wins] %> - <%= @wins_and_losses[rating.player.id][:losses] %>)
 </li>

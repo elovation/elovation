@@ -1,0 +1,12 @@
+<li>
+  <%= recent_game.created_at.to_s(:short) %>
+  -
+  <% if @player == recent_game.winner %>
+    Beat <%= recent_game.loser.name %>
+  <% else %>
+    Lost to <%= recent_game.winner.name %>
+  <% end %>
+  <% if @deletable_results.include? recent_game -%>
+    <%= link_to "Delete", game_result_path(@game, recent_game), :class => "btn btn-danger", :method => :delete, :confirm => "Are you sure?" %>
+  <% end -%>
+</li>

@@ -28,6 +28,8 @@ class GamesController < ApplicationController
   end
 
   def show
+    @wins_and_losses = @game.wins_and_losses
+    @deletable_results = Result.find_deletable_for(@game)
     respond_to do |format|
       format.html
       format.json do
@@ -45,6 +47,6 @@ class GamesController < ApplicationController
   end
 
   def _find_game
-    @game = Game.find(params[:id])
+    @game = Game.includes(:results).where(:id =>params[:id]).first
   end
 end
