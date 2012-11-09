@@ -1,0 +1,9 @@
+<li>
+  <%= result.created_at.to_s(:short) %>
+  -
+  <%= image_tag(gravatar_url(result.winner, :size => 24)) %>
+  <strong><%= result.winner.name %></strong>
+  beat
+  <%= image_tag(gravatar_url(result.loser, :size => 24)) %>
+  <strong><%= result.loser.name %></strong>
+</li>
