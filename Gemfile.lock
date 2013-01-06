@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/saulabs/trueskill.git
+  revision: d15b0752cb4be5ff27f26e5dbbac520680446355
+  specs:
+    trueskill (1.0.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -175,4 +181,5 @@ DEPENDENCIES
   sass-rails (~> 3.2.5)
   taps (= 0.3.24)
   timecop (= 0.5.2)
+  trueskill!
   uglifier (>= 1.3.0)
