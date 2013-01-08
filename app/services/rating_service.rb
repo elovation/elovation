@@ -1,7 +1,7 @@
 class RatingService
-  def self.update(game, winner, loser)
-    winner_rating = winner.ratings.find_or_create(game)
-    loser_rating = loser.ratings.find_or_create(game)
+  def self.update(game, teams)
+    winner_rating = teams.detect{|team| team.rank == 1}.players.first.ratings.find_or_create(game)
+    loser_rating = teams.detect{|team| team.rank == 2}.players.first.ratings.find_or_create(game)
 
     winner_elo = winner_rating.to_elo
     loser_elo = loser_rating.to_elo

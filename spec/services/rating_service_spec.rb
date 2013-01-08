@@ -6,8 +6,10 @@ describe RatingService do
       game = FactoryGirl.create(:game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
+      team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
+      team2 = FactoryGirl.create(:team, rank: 2, players: [player2])
 
-      RatingService.update(game, player1, player2)
+      RatingService.update(game, [team1, team2])
 
       player1.ratings.where(:game_id => game.id).should_not be_empty
       player2.ratings.where(:game_id => game.id).should_not be_empty
@@ -17,6 +19,8 @@ describe RatingService do
       game = FactoryGirl.create(:game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
+      team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
+      team2 = FactoryGirl.create(:team, rank: 2, players: [player2])
       rating1 = FactoryGirl.create(
         :rating,
         :game => game,
@@ -30,7 +34,7 @@ describe RatingService do
         :value => Rating::DefaultValue
       )
 
-      RatingService.update(game, player1, player2)
+      RatingService.update(game, [team1, team2])
 
       rating1.reload.value.should > Rating::DefaultValue
       rating2.reload.value.should < Rating::DefaultValue
@@ -40,6 +44,8 @@ describe RatingService do
       game = FactoryGirl.create(:game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
+      team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
+      team2 = FactoryGirl.create(:team, rank: 2, players: [player2])
       rating1 = FactoryGirl.create(
         :rating,
         :game => game,
@@ -50,7 +56,7 @@ describe RatingService do
 
       Rating.any_instance.stubs(:to_elo).returns(Elo::Player.new(:pro => true))
 
-      RatingService.update(game, player1, player2)
+      RatingService.update(game, [team1, team2])
 
       rating1.reload.pro?.should be_true
     end
@@ -59,6 +65,8 @@ describe RatingService do
       game = FactoryGirl.create(:game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
+      team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
+      team2 = FactoryGirl.create(:team, rank: 2, players: [player2])
       rating1 = FactoryGirl.create(
         :rating,
         :game => game,
@@ -72,7 +80,7 @@ describe RatingService do
         :value => Rating::DefaultValue
       )
 
-      RatingService.update(game, player1, player2)
+      RatingService.update(game, [team1, team2])
 
       new_rating1 = rating1.reload.value
       new_rating2 = rating2.reload.value

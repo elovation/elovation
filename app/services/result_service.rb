@@ -8,7 +8,7 @@ class ResultService
 
     if result.valid?
       Result.transaction do
-        RatingService.update(game, result.winner, result.loser)
+        RatingService.update(game, result.teams)
         result.save!
 
         OpenStruct.new(
