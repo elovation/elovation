@@ -9,13 +9,11 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :winner_id => player1.id.to_s,
-        :loser_id => player2.id.to_s
+        :teams => [{players: [player1.id.to_s]}, {players: [player2.id.to_s]}]
       )
 
       response.should be_success
       result = response.result
-      result.player_ids.sort.should == [player1.id, player2.id].sort
       result.winner.should == player1
       result.loser.should == player2
       result.game.should == game
@@ -27,8 +25,7 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :winner_id => player.id.to_s,
-        :loser_id => player.id.to_s
+        :teams => [{players: [player.id.to_s]}, {players: [player.id.to_s]}]
       )
 
       response.should_not be_success
@@ -40,16 +37,14 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :winner_id => player.id.to_s,
-        :loser_id => nil
+        :teams => [{players: [player.id.to_s]}, {players: []}]
       )
 
       response.should_not be_success
 
       response = ResultService.create(
         game,
-        :winner_id => nil,
-        :loser_id => player.id.to_s
+        :teams => [{players: [nil]}, {players: [player.id.to_s]}]
       )
 
       response.should_not be_success
@@ -63,8 +58,7 @@ describe ResultService do
 
         ResultService.create(
           game,
-          :winner_id => player1.id.to_s,
-          :loser_id => player2.id.to_s
+          :teams => [{players: [player1.id.to_s]}, {players: [player2.id.to_s]}]
         )
 
         rating1 = player1.ratings.where(:game_id => game.id).first
@@ -82,13 +76,12 @@ describe ResultService do
   describe "destroy" do
     it "returns a successful response if the result is destroyed" do
       game = FactoryGirl.create(:game)
-      player_1 = FactoryGirl.create(:player)
-      player_2 = FactoryGirl.create(:player)
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
 
       result = ResultService.create(
         game,
-        :winner_id => player_1.id.to_s,
-        :loser_id => player_2.id.to_s
+        :teams => [{players: [player1.id.to_s]}, {players: [player2.id.to_s]}]
       ).result
 
       response = ResultService.destroy(result)
@@ -103,8 +96,8 @@ describe ResultService do
       player_2 = FactoryGirl.create(:player)
       player_3 = FactoryGirl.create(:player)
 
-      old_result = FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_2, :players => [player_1, player_2])
-      FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_3, :players => [player_1, player_3])
+      old_result = FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_2)
+      FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_3)
 
       response = ResultService.destroy(old_result)
 

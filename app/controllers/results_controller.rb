@@ -22,6 +22,7 @@ class ResultsController < ApplicationController
 
   def new
     @result = Result.new
+    2.times{ @result.teams.build }
   end
 
   def _find_game

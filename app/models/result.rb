@@ -1,7 +1,5 @@
 class Result < ActiveRecord::Base
-  has_and_belongs_to_many :players
-  belongs_to :winner, :class_name => "Player"
-  belongs_to :loser, :class_name => "Player"
+  has_many :teams
   belongs_to :game
 
   scope :most_recent_first, :order => "created_at desc"
@@ -16,6 +14,14 @@ class Result < ActiveRecord::Base
     end
   end
 
+  def winner
+    teams.detect{|team| team.rank == 1}.try(:players).try(:first)
+  end
+
+  def loser
+    teams.detect{|team| team.rank == 2}.try(:players).try(:first)
+  end
+
   def as_json(options = {})
     {
       :winner => winner.name,
@@ -25,8 +31,10 @@ class Result < ActiveRecord::Base
   end
 
   def most_recent?
-    players.all? do |player|
-      player.results.where(:game_id => game.id).order("created_at DESC").first == self
+    teams.all? do |team|
+      team.players.all? do |player|
+        player.results.where(:game_id => game.id).order("created_at DESC").first == self
+      end
     end
   end
 end

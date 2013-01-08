@@ -5,23 +5,21 @@ class Player < ActiveRecord::Base
     end
   end
 
-  has_and_belongs_to_many :results do
+  has_and_belongs_to_many :teams
+
+  has_many :results, through: :teams do
     def against(opponent)
-      player = proxy_association.owner.id
-      where(
-        [
-          "(winner_id = ? and loser_id = ?) OR (winner_id = ? and loser_id = ?)",
-          player, opponent, opponent, player
-        ]
-      )
+      joins("INNER JOIN teams AS other_teams ON results.id = other_teams.result_id")
+        .joins("INNER JOIN players_teams AS other_players_teams ON other_teams.id = other_players_teams.team_id")
+        .where("other_players_teams.player_id = ?", opponent)
     end
 
     def losses
-      where(:loser_id => proxy_association.owner.id)
+      where(:teams => {:rank => 2})
     end
 
     def wins
-      where(:winner_id => proxy_association.owner.id)
+      where(:teams => {:rank => 1})
     end
   end
 

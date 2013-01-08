@@ -1,11 +1,24 @@
 FactoryGirl.define do
   factory :result do
     game
-    association :loser, :factory => :player
-    association :winner, :factory => :player
 
-    after(:build) do |result|
-      result.players = [result.loser, result.winner]
+    ignore do
+      winner false
+      loser false
+    end
+
+    after(:build) do |result, evaluator|
+      if evaluator.winner
+        result.teams << FactoryGirl.build(:team, rank: 1, players: [evaluator.winner])
+      else
+        result.teams << FactoryGirl.build(:team, rank: 1)
+      end
+
+      if evaluator.loser
+        result.teams << FactoryGirl.build(:team, rank: 2, players: [evaluator.loser])
+      else
+        result.teams << FactoryGirl.build(:team, rank: 2)
+      end
     end
   end
 end

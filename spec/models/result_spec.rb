@@ -35,7 +35,7 @@ describe Result do
       player_2 = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
 
-      result = FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_2, :players => [player_1, player_2])
+      result = FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_2)
 
       result.should be_most_recent
     end
@@ -46,8 +46,8 @@ describe Result do
       player_3 = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
 
-      old_result = FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_2, :players => [player_1, player_2])
-      FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_3, :players => [player_1, player_3])
+      old_result = FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_2)
+      FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_3)
 
       old_result.should_not be_most_recent
     end
@@ -57,7 +57,8 @@ describe Result do
     context "base validations" do
       it "requires a winner" do
         player = FactoryGirl.build(:player)
-        result = Result.new(:loser => player)
+        result = Result.new
+        result.teams.build rank: 2, players: [player]
 
         result.should_not be_valid
         result.errors[:winner].should == ["can't be blank"]
@@ -65,7 +66,8 @@ describe Result do
 
       it "requires a loser" do
         player = FactoryGirl.build(:player)
-        result = Result.new(:winner => player)
+        result = Result.new
+        result.teams.build rank: 1, players: [player]
 
         result.should_not be_valid
         result.errors[:loser].should == ["can't be blank"]
@@ -74,17 +76,16 @@ describe Result do
       it "doesn't allow winner and loser to be the same player" do
         player = FactoryGirl.build(:player, :name => nil)
 
-        result = Result.new(
-          :winner => player,
-          :loser => player
-        )
+        result = Result.new
+        result.teams.build rank: 1, players: [player]
+        result.teams.build rank: 2, players: [player]
 
         result.should_not be_valid
         result.errors[:base].should == ["Winner and loser can't be the same player"]
       end
 
       it "does not complain about similarity when both winner and loser are nil" do
-        result = Result.new()
+        result = Result.new
 
         result.should_not be_valid
         result.errors[:base].should_not == ["Winner and loser can't be the same player"]

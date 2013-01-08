@@ -1,17 +1,10 @@
 class ResultService
   def self.create(game, params)
-    players = []
-    begin
-      players.push Player.find(params[:winner_id])
-      players.push Player.find(params[:loser_id])
-    rescue ActiveRecord::RecordNotFound
-    end
+    result = game.results.build
 
-    result = game.results.build(
-      :winner_id => params[:winner_id],
-      :loser_id => params[:loser_id],
-      :players => players
-    )
+    (params[:teams] || []).each.with_index do |team, index|
+      result.teams.build rank: index + 1, player_ids: team[:players]
+    end
 
     if result.valid?
       Result.transaction do
