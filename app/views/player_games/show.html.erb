@@ -29,10 +29,10 @@
       <li>
         <%= result.created_at.to_s(:short) %>
         -
-        <% if @player == result.winner %>
-          Beat <%= result.loser.name %>
+        <% if result.winners.include?(@player) %>
+          Beat <%= result.losers.map(&:name).join(", ") %>
         <% else %>
-          Lost to <%= result.winner.name %>
+          Lost to <%= result.winners.map(&:name).join(", ") %>
         <% end %>
         <% if result.most_recent? -%>
           <%= link_to "Delete", game_result_path(@game, result), :class => "btn btn-danger", :method => :delete, :confirm => "Are you sure?" %>

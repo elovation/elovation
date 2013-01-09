@@ -136,9 +136,9 @@ describe GamesController do
         rating2 = FactoryGirl.create(:rating, :game => game, :value => 1002, :player => player2)
         rating3 = FactoryGirl.create(:rating, :game => game, :value => 1001, :player => player3)
 
-        result1 = FactoryGirl.create(:result, :game => game, :winner => player1, :loser => player2)
-        result2 = FactoryGirl.create(:result, :game => game, :winner => player2, :loser => player3)
-        result3 = FactoryGirl.create(:result, :game => game, :winner => player3, :loser => player1)
+        result1 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player1]), FactoryGirl.create(:team, rank: 2, players: [player2])])
+        result2 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player2]), FactoryGirl.create(:team, rank: 2, players: [player3])])
+        result3 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player3]), FactoryGirl.create(:team, rank: 2, players: [player1])])
 
         get :show, :id => game, :format => :json
 

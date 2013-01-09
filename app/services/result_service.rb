@@ -28,7 +28,7 @@ class ResultService
     return OpenStruct.new(:success? => false) unless result.most_recent?
 
     Result.transaction do
-      [result.winner, result.loser].each do |player|
+      result.players.each do |player|
         player.rewind_rating!(result.game)
       end
 

@@ -47,9 +47,9 @@ describe PlayersController do
       Player.find_by_id(player.id).should be_nil
     end
 
-    it "doesn't allow deleting a player with no results" do
-      player = FactoryGirl.create(:player)
-      FactoryGirl.create(:result, :winner => player)
+    it "doesn't allow deleting a player with results" do
+      result = FactoryGirl.create(:result)
+      player = result.players.first
 
       delete :destroy, :id => player
 

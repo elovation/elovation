@@ -15,11 +15,11 @@ class Player < ActiveRecord::Base
     end
 
     def losses
-      where(:teams => {:rank => 2})
+      where("teams.rank > ?", Team::FIRST_PLACE_RANK)
     end
 
     def wins
-      where(:teams => {:rank => 1})
+      where(:teams => {:rank => Team::FIRST_PLACE_RANK})
     end
   end
 

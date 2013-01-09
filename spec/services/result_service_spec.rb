@@ -14,8 +14,8 @@ describe ResultService do
 
       response.should be_success
       result = response.result
-      result.winner.should == player1
-      result.loser.should == player2
+      result.winners.should == [player1]
+      result.losers.should == [player2]
       result.game.should == game
     end
 
@@ -96,8 +96,8 @@ describe ResultService do
       player_2 = FactoryGirl.create(:player)
       player_3 = FactoryGirl.create(:player)
 
-      old_result = FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_2)
-      FactoryGirl.create(:result, :game => game, :winner => player_1, :loser => player_3)
+      old_result = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_2])])
+      FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_3])])
 
       response = ResultService.destroy(old_result)
 

@@ -5,27 +5,37 @@ class Result < ActiveRecord::Base
   scope :most_recent_first, :order => "created_at desc"
   scope :for_game, lambda { |game| where(:game_id => game.id) }
 
-  validates_presence_of :winner
-  validates_presence_of :loser
-
   validate do |result|
-    if result.winner == result.loser and not result.winner.nil?
-      errors.add(:base, "Winner and loser can't be the same player")
+    if result.winners.empty?
+      errors.add(:teams, "must have a winner")
+    end
+
+    if result.players.size < 2
+      errors.add(:teams, "must have two teams")
+    end
+
+    player_ids = result.players.map(&:id)
+    if player_ids.size != player_ids.uniq.size
+      errors.add(:teams, "must have unique players")
     end
   end
 
-  def winner
-    teams.detect{|team| team.rank == 1}.try(:players).try(:first)
+  def players
+    teams.map(&:players).flatten
   end
 
-  def loser
-    teams.detect{|team| team.rank == 2}.try(:players).try(:first)
+  def winners
+    teams.detect{|team| team.rank == Team::FIRST_PLACE_RANK}.try(:players) || []
+  end
+
+  def losers
+    teams.detect{|team| team.rank != Team::FIRST_PLACE_RANK}.try(:players) || []
   end
 
   def as_json(options = {})
     {
-      :winner => winner.name,
-      :loser => loser.name,
+      :winner => winners.first.name,
+      :loser => losers.first.name,
       :created_at => created_at.utc.to_s
     }
   end

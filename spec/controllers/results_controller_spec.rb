@@ -33,8 +33,8 @@ describe ResultsController do
         result = game.reload.results.first
 
         result.should_not be_nil
-        result.winner.should == player_1
-        result.loser.should == player_2
+        result.winners.should == [player_1]
+        result.losers.should == [player_2]
       end
     end
 
