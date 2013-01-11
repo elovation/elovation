@@ -22,14 +22,6 @@ class Rating < ActiveRecord::Base
     player.results.for_game(game).most_recent_first.first
   end
 
-  def to_elo
-    Elo::Player.new(
-      :rating => value,
-      :games_played => player.results.where(:game_id => game.id).count,
-      :pro => pro?
-    )
-  end
-
   def rewind!
     if history_events.count == 1
       destroy

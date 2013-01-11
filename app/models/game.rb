@@ -3,8 +3,8 @@ class Game < ActiveRecord::Base
   has_many :results, :dependent => :destroy
 
   RATER_MAPPINGS = {
-    "elo" => Rater::Elo.new,
-    "trueskill" => Rater::Trueskill.new
+    "elo" => Rater::EloRater.new,
+    "trueskill" => Rater::TrueSkillRater.new
   }
 
   validates :name, :presence => true
