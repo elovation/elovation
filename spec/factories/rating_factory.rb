@@ -3,6 +3,6 @@ FactoryGirl.define do
     game
     player
     pro false
-    value Rating::DefaultValue
+    value { game.rater.default_attributes[:value] }
   end
 end

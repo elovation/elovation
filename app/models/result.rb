@@ -2,21 +2,33 @@ class Result < ActiveRecord::Base
   has_many :teams
   belongs_to :game
 
+  validates :game, presence: true
   scope :most_recent_first, :order => "created_at desc"
   scope :for_game, lambda { |game| where(:game_id => game.id) }
 
   validate do |result|
     if result.winners.empty?
-      errors.add(:teams, "must have a winner")
+      result.errors.add(:teams, "must have a winner")
     end
 
-    if result.players.size < 2
-      errors.add(:teams, "must have two teams")
+    if result.players.size != players.uniq.size
+      result.errors.add(:teams, "must have unique players")
     end
 
-    player_ids = result.players.map(&:id)
-    if player_ids.size != player_ids.uniq.size
-      errors.add(:teams, "must have unique players")
+    if result.teams.size < result.game.min_number_of_teams
+      result.errors.add(:teams, "must have at least #{result.game.min_number_of_teams} teams")
+    end
+
+    if result.game.max_number_of_teams && result.teams.size > result.game.max_number_of_teams
+      result.errors.add(:teams, "must have at most #{result.game.max_number_of_teams} teams")
+    end
+
+    if result.teams.any?{|team| team.players.size < result.game.min_number_of_players_per_team}
+      result.errors.add(:teams, "must have at least #{result.game.min_number_of_players_per_team} players per team")
+    end
+
+    if result.game.max_number_of_players_per_team && result.teams.any?{|team| team.players.size > result.game.max_number_of_players_per_team}
+      result.errors.add(:teams, "must have at most #{result.game.max_number_of_players_per_team} players per team")
     end
   end
 

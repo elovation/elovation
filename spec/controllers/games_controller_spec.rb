@@ -22,24 +22,27 @@ describe GamesController do
   describe "create" do
     context "with valid params" do
       it "creates a game" do
-        post :create, :game => {:name => "Go"}
+        game_attributes = FactoryGirl.attributes_for(:game)
+        post :create, :game => game_attributes
 
-        Game.where(:name => "Go").first.should_not be_nil
+        Game.where(:name => game_attributes[:name]).first.should_not be_nil
       end
 
       it "redirects to the game's show page" do
-        post :create, :game => {:name => "Go"}
+        game_attributes = FactoryGirl.attributes_for(:game)
+        post :create, :game => game_attributes
 
-        game = Game.where(:name => "Go").first
+        game = Game.where(:name => game_attributes[:name]).first
 
         response.should redirect_to(game_path(game))
       end
 
       it "protects against mass assignment" do
         Timecop.freeze(Time.now) do
-          post :create, :game => {:created_at => 3.days.ago, :name => "Go"}
+          game_attributes = FactoryGirl.attributes_for(:game, :created_at => 3.days.ago)
+          post :create, :game => game_attributes
 
-          game = Game.where(:name => "Go").first
+          game = Game.where(:name => game_attributes[:name]).first
           game.created_at.should > 3.days.ago
         end
       end

@@ -62,11 +62,11 @@ describe Result do
   end
 
   describe "validations" do
-    context "base validations" do
+    context "team validations" do
       it "requires a winner" do
         player1 = FactoryGirl.build(:player)
         player2 = FactoryGirl.build(:player)
-        result = Result.new
+        result = Result.new game: FactoryGirl.create(:game)
         result.teams.build rank: 2, players: [player1]
         result.teams.build rank: 3, players: [player2]
 
@@ -74,19 +74,10 @@ describe Result do
         result.errors[:teams].should include("must have a winner")
       end
 
-      it "requires two teams" do
-        player = FactoryGirl.build(:player)
-        result = Result.new
-        result.teams.build rank: 1, players: [player]
-
-        result.should_not be_valid
-        result.errors[:teams].should == ["must have two teams"]
-      end
-
       it "doesn't allow the same player twice" do
         player = FactoryGirl.build(:player, :name => nil)
 
-        result = Result.new
+        result = Result.new game: FactoryGirl.create(:game)
         result.teams.build rank: 1, players: [player]
         result.teams.build rank: 2, players: [player]
 
@@ -95,10 +86,119 @@ describe Result do
       end
 
       it "does not complain about similarity when both winner and loser are nil" do
-        result = Result.new
+        result = Result.new game: FactoryGirl.create(:game)
 
         result.should_not be_valid
         result.errors[:base].should_not == ["Winner and loser can't be the same player"]
+      end
+
+      it "cannot have less teams than allowed by the game" do
+        player1 = FactoryGirl.create(:player)
+        player2 = FactoryGirl.create(:player)
+        player3 = FactoryGirl.create(:player)
+
+        game = FactoryGirl.create(:game, min_number_of_teams: 4, max_number_of_teams: 5)
+
+        result = Result.new game: game
+        result.teams.build rank: 1, players: [player1]
+        result.teams.build rank: 2, players: [player2]
+        result.teams.build rank: 2, players: [player3]
+
+        result.should_not be_valid
+        result.errors[:teams].should == ["must have at least 4 teams"]
+      end
+
+      it "cannot have more teams than allowed by the game" do
+        player1 = FactoryGirl.create(:player)
+        player2 = FactoryGirl.create(:player)
+        player3 = FactoryGirl.create(:player)
+        player4 = FactoryGirl.create(:player)
+        player5 = FactoryGirl.create(:player)
+
+        game = FactoryGirl.create(:game, max_number_of_teams: 4)
+
+        result = Result.new game: game
+        result.teams.build rank: 1, players: [player1]
+        result.teams.build rank: 2, players: [player2]
+        result.teams.build rank: 2, players: [player3]
+        result.teams.build rank: 3, players: [player4]
+        result.teams.build rank: 2, players: [player5]
+
+        result.should_not be_valid
+        result.errors[:teams].should == ["must have at most 4 teams"]
+      end
+
+      it "can have any number of teams if not specified by the game" do
+        player1 = FactoryGirl.create(:player)
+        player2 = FactoryGirl.create(:player)
+        player3 = FactoryGirl.create(:player)
+        player4 = FactoryGirl.create(:player)
+        player5 = FactoryGirl.create(:player)
+        player6 = FactoryGirl.create(:player)
+
+        game = FactoryGirl.create(:game, max_number_of_teams: nil)
+
+        result = Result.new game: game
+        result.teams.build rank: 1, players: [player1]
+        result.teams.build rank: 2, players: [player2]
+        result.teams.build rank: 2, players: [player3]
+        result.teams.build rank: 3, players: [player4]
+        result.teams.build rank: 2, players: [player5]
+        result.teams.build rank: 4, players: [player6]
+
+        result.should be_valid
+      end
+
+      describe "teams" do
+        it "cannot have less players than allowed by the game" do
+          player1 = FactoryGirl.create(:player)
+          player2 = FactoryGirl.create(:player)
+          player3 = FactoryGirl.create(:player)
+
+          game = FactoryGirl.create(:game, min_number_of_players_per_team: 2, max_number_of_players_per_team: 2)
+
+          result = Result.new game: game
+          result.teams.build rank: 1, players: [player1]
+          result.teams.build rank: 2, players: [player2, player3]
+
+          result.should_not be_valid
+          result.errors[:teams].should == ["must have at least 2 players per team"]
+        end
+
+        it "cannot have more players than allowed by the game" do
+          player1 = FactoryGirl.create(:player)
+          player2 = FactoryGirl.create(:player)
+          player3 = FactoryGirl.create(:player)
+          player4 = FactoryGirl.create(:player)
+          player5 = FactoryGirl.create(:player)
+          player6 = FactoryGirl.create(:player)
+
+          game = FactoryGirl.create(:game, min_number_of_players_per_team: 2, max_number_of_players_per_team: 3)
+
+          result = Result.new game: game
+          result.teams.build rank: 1, players: [player1, player2]
+          result.teams.build rank: 2, players: [player3, player4, player5, player6]
+
+          result.should_not be_valid
+          result.errors[:teams].should == ["must have at most 3 players per team"]
+        end
+
+        it "can have any number of players if not specified by the game" do
+          player1 = FactoryGirl.create(:player)
+          player2 = FactoryGirl.create(:player)
+          player3 = FactoryGirl.create(:player)
+          player4 = FactoryGirl.create(:player)
+          player5 = FactoryGirl.create(:player)
+          player6 = FactoryGirl.create(:player)
+
+          game = FactoryGirl.create(:game, max_number_of_players_per_team: nil)
+
+          result = Result.new game: game
+          result.teams.build rank: 1, players: [player1]
+          result.teams.build rank: 2, players: [player2, player3, player4, player5, player6]
+
+          result.should be_valid
+        end
       end
     end
   end

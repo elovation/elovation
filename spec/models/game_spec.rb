@@ -107,6 +107,188 @@ describe Game do
         game.errors[:name].should == ["can't be blank"]
       end
     end
+
+    context "min_number_of_teams" do
+      it "can be 2" do
+        game = FactoryGirl.build(:game, min_number_of_teams: 2)
+
+        game.should be_valid
+      end
+
+      it "can be greater than 2" do
+        game = FactoryGirl.build(:game, min_number_of_teams: 3, max_number_of_teams: 3)
+
+        game.should be_valid
+      end
+
+      it "cannot be less than 2" do
+        game = FactoryGirl.build(:game, min_number_of_teams: 1)
+
+        game.should_not be_valid
+        game.errors[:min_number_of_teams].should == ["must be greater than or equal to 2"]
+      end
+
+      it "cannot be nil" do
+        game = FactoryGirl.build(:game, min_number_of_teams: nil)
+
+        game.should_not be_valid
+        game.errors[:min_number_of_teams].should == ["is not a number"]
+      end
+    end
+
+    context "max_number_of_teams" do
+      it "can be equal to min number of teams" do
+        game = FactoryGirl.build(:game, min_number_of_teams: 2, max_number_of_teams: 2)
+
+        game.should be_valid
+      end
+
+      it "can be greater than the min number of teams" do
+        game = FactoryGirl.build(:game, min_number_of_teams: 2, max_number_of_teams: 3)
+
+        game.should be_valid
+      end
+
+      it "can be nil" do
+        game = FactoryGirl.build(:game, min_number_of_teams: 2, max_number_of_teams: nil)
+
+        game.should be_valid
+      end
+
+      it "cannot be less than the min number of teams" do
+        game = FactoryGirl.build(:game, min_number_of_teams: 2, max_number_of_teams: 1)
+
+        game.should_not be_valid
+        game.errors[:max_number_of_teams].should == ["cannot be less than the minimum"]
+      end
+    end
+
+    context "min_number_of_players_per_team" do
+      it "can be 1" do
+        game = FactoryGirl.build(:game, min_number_of_players_per_team: 1)
+
+        game.should be_valid
+      end
+
+      it "can be greater than 1" do
+        game = FactoryGirl.build(:game, min_number_of_players_per_team: 2, max_number_of_players_per_team: 2)
+
+        game.should be_valid
+      end
+
+      it "cannot be less than 1" do
+        game = FactoryGirl.build(:game, min_number_of_players_per_team: 0)
+
+        game.should_not be_valid
+        game.errors[:min_number_of_players_per_team].should == ["must be greater than or equal to 1"]
+      end
+
+      it "cannot be nil" do
+        game = FactoryGirl.build(:game, min_number_of_players_per_team: nil)
+
+        game.should_not be_valid
+        game.errors[:min_number_of_players_per_team].should == ["is not a number"]
+      end
+    end
+
+    context "max_number_of_players_per_team" do
+      it "can be equal to the min number of players per team" do
+        game = FactoryGirl.build(:game, min_number_of_players_per_team: 2, max_number_of_players_per_team: 2)
+
+        game.should be_valid
+      end
+
+      it "can be greater than the min number of players per team" do
+        game = FactoryGirl.build(:game, min_number_of_players_per_team: 2, max_number_of_players_per_team: 3)
+
+        game.should be_valid
+      end
+
+      it "can be nil" do
+        game = FactoryGirl.build(:game, min_number_of_players_per_team: 2, max_number_of_players_per_team: 3)
+
+        game.should be_valid
+      end
+
+      it "cannot be less than the min number of players per team" do
+        game = FactoryGirl.build(:game, min_number_of_players_per_team: 2, max_number_of_players_per_team: 1)
+
+        game.should_not be_valid
+        game.errors[:max_number_of_teams].should == ["cannot be less than the minimum"]
+      end
+    end
+
+    context "allow_ties" do
+      it "can be true" do
+        game = FactoryGirl.build(:game, allow_ties: true)
+
+        game.should be_valid
+      end
+
+      it "can be false" do
+        game = FactoryGirl.build(:game, allow_ties: false)
+
+        game.should be_valid
+      end
+
+      it "cannot be nil" do
+        game = FactoryGirl.build(:game, allow_ties: nil)
+
+        game.should_not be_valid
+        game.errors[:allow_ties].should == ["must be selected"]
+      end
+    end
+
+    context "rating_type" do
+      it "must be present" do
+        game = FactoryGirl.build(:game, :rating_type => nil)
+
+        game.should_not be_valid
+        game.errors[:rating_type].should == ["must be a valid rating type"]
+      end
+
+      it "can be elo" do
+        game = FactoryGirl.build(:game, :rating_type => "elo")
+
+        game.should be_valid
+      end
+
+      it "can be trueskill" do
+        game = FactoryGirl.build(:game, :rating_type => "trueskill")
+
+        game.should be_valid
+      end
+
+      it "cannot be anything else" do
+        game = FactoryGirl.build(:game, :rating_type => "foo")
+
+        game.should_not be_valid
+        game.errors[:rating_type].should == ["must be a valid rating type"]
+      end
+
+      it "cannot be changed" do
+        game = FactoryGirl.build(:game, :rating_type => "elo")
+        game.save!
+
+        game.rating_type = "trueskill"
+        game.should_not be_valid
+        game.errors[:rating_type].should == ["cannot be changed"]
+      end
+    end
+
+    describe "with elo rating type" do
+      it "does not allow more than 2 teams" do
+        game = FactoryGirl.build(:game, rating_type: "elo", max_number_of_teams: 3)
+        game.should_not be_valid
+        game.errors[:rating_type].should == ["Elo can only be used with 1v1 games"]
+      end
+
+      it "does not allow more than 1 player per team" do
+        game = FactoryGirl.build(:game, rating_type: "elo", max_number_of_players_per_team: 2)
+        game.should_not be_valid
+        game.errors[:rating_type].should == ["Elo can only be used with 1v1 games"]
+      end
+    end
   end
 
   describe "destroy" do

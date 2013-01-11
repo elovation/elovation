@@ -3,7 +3,7 @@ require "spec_helper"
 describe RatingService do
   describe "update" do
     it "creates new ratings" do
-      game = FactoryGirl.create(:game)
+      game = FactoryGirl.create(:elo_game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
       team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
@@ -16,7 +16,7 @@ describe RatingService do
     end
 
     it "updates existing ratings" do
-      game = FactoryGirl.create(:game)
+      game = FactoryGirl.create(:elo_game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
       team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
@@ -25,23 +25,23 @@ describe RatingService do
         :rating,
         :game => game,
         :player => player1,
-        :value => Rating::DefaultValue
+        :value => game.rater.default_attributes[:value]
       )
       rating2 = FactoryGirl.create(
         :rating,
         :game => game,
         :player => player2,
-        :value => Rating::DefaultValue
+        :value => game.rater.default_attributes[:value]
       )
 
       RatingService.update(game, [team1, team2])
 
-      rating1.reload.value.should > Rating::DefaultValue
-      rating2.reload.value.should < Rating::DefaultValue
+      rating1.reload.value.should > game.rater.default_attributes[:value]
+      rating2.reload.value.should < game.rater.default_attributes[:value]
     end
 
     it "persists the value of the pro flag" do
-      game = FactoryGirl.create(:game)
+      game = FactoryGirl.create(:elo_game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
       team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
@@ -50,7 +50,7 @@ describe RatingService do
         :rating,
         :game => game,
         :player => player1,
-        :value => Rating::DefaultValue,
+        :value => game.rater.default_attributes[:value],
         :pro => false
       )
 
@@ -62,7 +62,7 @@ describe RatingService do
     end
 
     it "creates rating history events" do
-      game = FactoryGirl.create(:game)
+      game = FactoryGirl.create(:elo_game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
       team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
@@ -71,13 +71,13 @@ describe RatingService do
         :rating,
         :game => game,
         :player => player1,
-        :value => Rating::DefaultValue
+        :value => game.rater.default_attributes[:value]
       )
       rating2 = FactoryGirl.create(
         :rating,
         :game => game,
         :player => player2,
-        :value => Rating::DefaultValue
+        :value => game.rater.default_attributes[:value]
       )
 
       RatingService.update(game, [team1, team2])

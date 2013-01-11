@@ -11,12 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130107190730) do
+ActiveRecord::Schema.define(:version => 20130109141809) do
 
   create_table "games", :force => true do |t|
-    t.string   "name",       :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "name",                           :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.string   "rating_type"
+    t.integer  "min_number_of_teams"
+    t.integer  "max_number_of_teams"
+    t.integer  "min_number_of_players_per_team"
+    t.integer  "max_number_of_players_per_team"
+    t.boolean  "allow_ties"
   end
 
   create_table "players", :force => true do |t|

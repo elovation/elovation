@@ -3,7 +3,7 @@ require "spec_helper"
 describe ResultService do
   describe "create" do
     it "builds a result given a game and params" do
-      game = FactoryGirl.create(:game)
+      game = FactoryGirl.create(:elo_game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
 
@@ -20,7 +20,7 @@ describe ResultService do
     end
 
     it "returns success as false if there are validation errors" do
-      game = FactoryGirl.create(:game)
+      game = FactoryGirl.create(:elo_game)
       player = FactoryGirl.create(:player)
 
       response = ResultService.create(
@@ -32,7 +32,7 @@ describe ResultService do
     end
 
     it "handles nil winner or loser" do
-      game = FactoryGirl.create(:game)
+      game = FactoryGirl.create(:elo_game)
       player = FactoryGirl.create(:player)
 
       response = ResultService.create(
@@ -52,7 +52,7 @@ describe ResultService do
 
     context "ratings" do
       it "builds ratings for both players and increments the winner" do
-        game = FactoryGirl.create(:game)
+        game = FactoryGirl.create(:elo_game)
         player1 = FactoryGirl.create(:player)
         player2 = FactoryGirl.create(:player)
 
@@ -65,17 +65,17 @@ describe ResultService do
         rating2 = player2.ratings.where(:game_id => game.id).first
 
         rating1.should_not be_nil
-        rating1.value.should > Rating::DefaultValue
+        rating1.value.should > game.rater.default_attributes[:value]
 
         rating2.should_not be_nil
-        rating2.value.should < Rating::DefaultValue
+        rating2.value.should < game.rater.default_attributes[:value]
       end
     end
   end
 
   describe "destroy" do
     it "returns a successful response if the result is destroyed" do
-      game = FactoryGirl.create(:game)
+      game = FactoryGirl.create(:elo_game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
 
@@ -91,7 +91,7 @@ describe ResultService do
     end
 
     it "returns an unsuccessful response and does not destroy the result if it is not the most recent for both players" do
-      game = FactoryGirl.create(:game)
+      game = FactoryGirl.create(:elo_game)
       player_1 = FactoryGirl.create(:player)
       player_2 = FactoryGirl.create(:player)
       player_3 = FactoryGirl.create(:player)
