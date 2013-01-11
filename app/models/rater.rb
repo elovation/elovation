@@ -18,6 +18,28 @@ module Rater
         game.errors.add(:rating_type, "Elo can only be used with 1v1 games")
       end
     end
+
+    def update_ratings game, teams
+      winner = teams.detect{|team| team.rank == Team::FIRST_PLACE_RANK}.players.first
+      winner_rating = winner.ratings.find_or_create(game)
+      loser = teams.detect{|team| team.rank != Team::FIRST_PLACE_RANK}.players.first
+      loser_rating = loser.ratings.find_or_create(game)
+
+      winner_elo = winner_rating.to_elo
+      loser_elo = loser_rating.to_elo
+
+      winner_elo.wins_from(loser_elo)
+
+      _update_rating_from_elo(winner_rating, winner_elo)
+      _update_rating_from_elo(loser_rating, loser_elo)
+    end
+
+    def _update_rating_from_elo(rating, elo)
+      Rating.transaction do
+        rating.update_attributes!(:value => elo.rating, :pro => elo.pro?)
+        rating.history_events.create!(:value => elo.rating)
+      end
+    end
   end
 
   class Trueskill
@@ -32,6 +54,10 @@ module Rater
     end
 
     def validate_game game
+    end
+
+    def update_ratings game, teams
+
     end
   end
 end

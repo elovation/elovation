@@ -30,6 +30,8 @@ class Result < ActiveRecord::Base
     if result.game.max_number_of_players_per_team && result.teams.any?{|team| team.players.size > result.game.max_number_of_players_per_team}
       result.errors.add(:teams, "must have at most #{result.game.max_number_of_players_per_team} players per team")
     end
+
+    # CHECK FOR TIES
   end
 
   def players

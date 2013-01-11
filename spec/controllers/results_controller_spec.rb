@@ -55,7 +55,7 @@ describe ResultsController do
   describe "destroy" do
     context "the most recent result for each player" do
       it "destroys the result and resets the elo for each player" do
-        game = FactoryGirl.create(:game, :results => [])
+        game = FactoryGirl.create(:elo_game, :results => [])
         player_1 = FactoryGirl.create(:player)
         player_2 = FactoryGirl.create(:player)
 
