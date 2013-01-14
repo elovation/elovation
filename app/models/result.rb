@@ -41,11 +41,11 @@ class Result < ActiveRecord::Base
   end
 
   def winners
-    teams.detect{|team| team.rank == Team::FIRST_PLACE_RANK}.try(:players) || []
+    teams.select{|team| team.rank == Team::FIRST_PLACE_RANK}.map(&:players).flatten
   end
 
   def losers
-    teams.detect{|team| team.rank != Team::FIRST_PLACE_RANK}.try(:players) || []
+    teams.select{|team| team.rank != Team::FIRST_PLACE_RANK}.map(&:players).flatten
   end
 
   def as_json(options = {})

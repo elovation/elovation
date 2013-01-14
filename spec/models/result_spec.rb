@@ -61,6 +61,50 @@ describe Result do
     end
   end
 
+  describe "winners" do
+    it "has all the players in all the first place teams" do
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+      player3 = FactoryGirl.create(:player)
+      player4 = FactoryGirl.create(:player)
+      player5 = FactoryGirl.create(:player)
+      player6 = FactoryGirl.create(:player)
+      player7 = FactoryGirl.create(:player)
+      player7 = FactoryGirl.create(:player)
+
+      result = Result.new game: FactoryGirl.create(:game)
+
+      result.teams.build rank: 1, players: [player1, player2]
+      result.teams.build rank: 1, players: [player3, player4]
+      result.teams.build rank: 2, players: [player5, player6]
+      result.teams.build rank: 3, players: [player7, player7]
+
+      result.winners.should == [player1, player2, player3, player4]
+    end
+  end
+
+  describe "losers" do
+    it "has all the players not in the first place teams" do
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+      player3 = FactoryGirl.create(:player)
+      player4 = FactoryGirl.create(:player)
+      player5 = FactoryGirl.create(:player)
+      player6 = FactoryGirl.create(:player)
+      player7 = FactoryGirl.create(:player)
+      player8 = FactoryGirl.create(:player)
+
+      result = Result.new game: FactoryGirl.create(:game)
+
+      result.teams.build rank: 1, players: [player1, player2]
+      result.teams.build rank: 1, players: [player3, player4]
+      result.teams.build rank: 2, players: [player5, player6]
+      result.teams.build rank: 3, players: [player7, player8]
+
+      result.losers.should == [player5, player6, player7, player8]
+    end
+  end
+
   describe "validations" do
     context "team validations" do
       it "requires a winner" do
