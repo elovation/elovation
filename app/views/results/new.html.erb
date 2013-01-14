@@ -2,7 +2,7 @@
   <%= f.error_messages %>
 
   <% @result.teams.each.with_index do |team, index| %>
-    <%= select "result[teams][#{index}]", "players", player_options, {}, :size => 10, :multiple => true %>
+    <%= select "result[teams][#{index}]", "players", player_options, {}, :size => 5, :multiple => true %>
     <% if index != @result.teams.size - 1 %>
       <br />
       <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"] %>

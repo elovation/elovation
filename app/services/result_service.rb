@@ -2,12 +2,18 @@ class ResultService
   def self.create(game, params)
     result = game.results.build
 
-    current_rank = Team::FIRST_PLACE_RANK
-    (params[:teams] || {}).each do |_, team|
-      result.teams.build rank: current_rank, player_ids: team[:players]
-      if team[:relation] != "ties"
-        current_rank = current_rank + 1
-      end
+    next_rank = Team::FIRST_PLACE_RANK
+    teams = (params[:teams] || {}).values.each.with_object([]) do |team, acc|
+      players = team[:players].delete_if(&:blank?)
+      acc << { rank: next_rank, players: players }
+
+      next_rank = next_rank + 1 if team[:relation] != "ties"
+    end
+
+    teams = teams.reverse.drop_while{ |team| team[:players].empty? }.reverse
+
+    teams.each do |team|
+      result.teams.build rank: team[:rank], player_ids: team[:players]
     end
 
     if result.valid?

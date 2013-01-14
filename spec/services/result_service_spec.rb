@@ -62,6 +62,44 @@ describe ResultService do
       response.should_not be_success
     end
 
+    it "is successful on trailing empty teams" do
+      game = FactoryGirl.create(:elo_game)
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+
+      response = ResultService.create(
+        game,
+        :teams => {
+          "0" => { players: [player1.id.to_s] },
+          "1" => { players: [player2.id.to_s] },
+          "2" => { players: [] }
+        }
+      )
+
+      response.should be_success
+      result = response.result
+      result.winners.should == [player1]
+      result.losers.should == [player2]
+      result.game.should == game
+    end
+
+    it "fails on skipped teams" do
+      game = FactoryGirl.create(:elo_game)
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+
+      response = ResultService.create(
+        game,
+        :teams => {
+          "0" => { players: [player1.id.to_s] },
+          "1" => { players: [""] },
+          "2" => { players: [player2.id.to_s] }
+        }
+      )
+
+      response.should_not be_success
+    end
+
     context "ratings" do
       it "builds ratings for both players and increments the winner" do
         game = FactoryGirl.create(:elo_game)
