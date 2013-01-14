@@ -2,8 +2,12 @@ class ResultService
   def self.create(game, params)
     result = game.results.build
 
-    (params[:teams] || []).each.with_index do |team, index|
-      result.teams.build rank: index + 1, player_ids: team[:players]
+    current_rank = Team::FIRST_PLACE_RANK
+    (params[:teams] || {}).each do |_, team|
+      result.teams.build rank: current_rank, player_ids: team[:players]
+      if team[:relation] != "ties"
+        current_rank = current_rank + 1
+      end
     end
 
     if result.valid?

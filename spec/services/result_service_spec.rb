@@ -9,7 +9,10 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => [{players: [player1.id.to_s]}, {players: [player2.id.to_s]}]
+        :teams => {
+          "0" => { players: [player1.id.to_s] },
+          "1" => { players: [player2.id.to_s] }
+        }
       )
 
       response.should be_success
@@ -25,7 +28,10 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => [{players: [player.id.to_s]}, {players: [player.id.to_s]}]
+        :teams => {
+          "0" => { players: [player.id.to_s] },
+          "1" => { players: [player.id.to_s] }
+        }
       )
 
       response.should_not be_success
@@ -37,14 +43,20 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => [{players: [player.id.to_s]}, {players: []}]
+        :teams => {
+          "0" => { players: [player.id.to_s] },
+          "1" => { players: [] }
+        }
       )
 
       response.should_not be_success
 
       response = ResultService.create(
         game,
-        :teams => [{players: [nil]}, {players: [player.id.to_s]}]
+        :teams => {
+          "0" => { players: [nil] },
+          "1" => { players: [player.id.to_s] }
+        }
       )
 
       response.should_not be_success
@@ -58,7 +70,10 @@ describe ResultService do
 
         ResultService.create(
           game,
-          :teams => [{players: [player1.id.to_s]}, {players: [player2.id.to_s]}]
+          :teams => {
+            "0" => { players: [player1.id.to_s] },
+            "1" => { players: [player2.id.to_s] }
+          }
         )
 
         rating1 = player1.ratings.where(:game_id => game.id).first
@@ -81,7 +96,10 @@ describe ResultService do
 
       result = ResultService.create(
         game,
-        :teams => [{players: [player1.id.to_s]}, {players: [player2.id.to_s]}]
+          :teams => {
+            "0" => { players: [player1.id.to_s] },
+            "1" => { players: [player2.id.to_s] }
+          }
       ).result
 
       response = ResultService.destroy(result)

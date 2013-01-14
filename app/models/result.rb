@@ -31,7 +31,9 @@ class Result < ActiveRecord::Base
       result.errors.add(:teams, "must have at most #{result.game.max_number_of_players_per_team} players per team")
     end
 
-    # CHECK FOR TIES
+    if !result.game.allow_ties && result.teams.map(&:rank).uniq.size != result.teams.size
+      result.errors.add(:teams, "game does not allow ties")
+    end
   end
 
   def players

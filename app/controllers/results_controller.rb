@@ -22,7 +22,7 @@ class ResultsController < ApplicationController
 
   def new
     @result = Result.new
-    2.times{ @result.teams.build }
+    (@game.max_number_of_teams || 10).times{|i| @result.teams.build rank: i}
   end
 
   def _find_game

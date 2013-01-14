@@ -6,7 +6,7 @@ FactoryGirl.define do
     max_number_of_teams 2
     min_number_of_players_per_team 1
     max_number_of_players_per_team 1
-    allow_ties false
+    allow_ties true
 
     factory :elo_game do
       rating_type "elo"

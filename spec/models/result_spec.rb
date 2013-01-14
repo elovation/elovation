@@ -149,6 +149,20 @@ describe Result do
         result.should be_valid
       end
 
+      it "cannot have ties if not allowed by the game" do
+        player1 = FactoryGirl.create(:player)
+        player2 = FactoryGirl.create(:player)
+
+        game = FactoryGirl.create(:game, allow_ties: false)
+
+        result = Result.new game: game
+        result.teams.build rank: 1, players: [player1]
+        result.teams.build rank: 1, players: [player2]
+
+        result.should_not be_valid
+        result.errors[:teams].should == ["game does not allow ties"]
+      end
+
       describe "teams" do
         it "cannot have less players than allowed by the game" do
           player1 = FactoryGirl.create(:player)

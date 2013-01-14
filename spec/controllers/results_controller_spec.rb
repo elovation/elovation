@@ -27,7 +27,10 @@ describe ResultsController do
         player_2 = FactoryGirl.create(:player)
 
         post :create, :game_id => game, :result => {
-          :teams => [{players: [player_1.id.to_s]}, {players: [player_2.id.to_s]}]
+          :teams => {
+            "0" => { players: [player_1.id.to_s] },
+            "1" => { players: [player_2.id.to_s] }
+          }
         }
 
         result = game.reload.results.first
@@ -44,7 +47,10 @@ describe ResultsController do
         player = FactoryGirl.create(:player)
 
         post :create, :game_id => game, :result => {
-          :teams => [{players: [player.id.to_s]}, {players: [player.id.to_s]}]
+          :teams => {
+            "0" => { players: [player.id.to_s] },
+            "1" => { players: [player.id.to_s] }
+          }
         }
 
         response.should render_template(:new)
@@ -59,7 +65,12 @@ describe ResultsController do
         player_1 = FactoryGirl.create(:player)
         player_2 = FactoryGirl.create(:player)
 
-        ResultService.create(game, :teams => [{players: [player_1.id]}, {players: [player_2.id]}]).result
+        ResultService.create(game,
+          :teams => {
+            "0" => { players: [player_1.id.to_s] },
+            "1" => { players: [player_2.id.to_s] }
+          }
+        ).result
 
         player_1_rating = player_1.ratings.where(:game_id => game.id).first
         player_2_rating = player_2.ratings.where(:game_id => game.id).first
@@ -67,7 +78,12 @@ describe ResultsController do
         old_rating_1 = player_1_rating.value
         old_rating_2 = player_2_rating.value
 
-        result = ResultService.create(game, :teams => [{players: [player_1.id]}, {players: [player_2.id]}]).result
+        result = ResultService.create(game,
+          :teams => {
+            "0" => { players: [player_1.id.to_s] },
+            "1" => { players: [player_2.id.to_s] }
+          }
+        ).result
 
         player_1_rating.reload.value.should_not == old_rating_1
         player_2_rating.reload.value.should_not == old_rating_2
