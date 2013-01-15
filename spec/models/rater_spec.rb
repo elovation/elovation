@@ -16,6 +16,21 @@ describe Rater do
         player2.ratings.where(:game_id => game.id).should_not be_empty
       end
 
+      it "works with ties" do
+        game = FactoryGirl.create(:elo_game)
+        player1 = FactoryGirl.create(:player)
+        player2 = FactoryGirl.create(:player)
+        team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
+        team2 = FactoryGirl.create(:team, rank: 1, players: [player2])
+
+        game.rater.update_ratings(game, [team1, team2])
+
+        rating1 = player1.ratings.where(:game_id => game.id).first
+        rating2 = player2.ratings.where(:game_id => game.id).first
+        rating1.reload.value.should == game.rater.default_attributes[:value]
+        rating2.reload.value.should == game.rater.default_attributes[:value]
+      end
+
       it "updates existing ratings" do
         game = FactoryGirl.create(:elo_game)
         player1 = FactoryGirl.create(:player)

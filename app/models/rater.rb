@@ -20,18 +20,33 @@ module Rater
     end
 
     def update_ratings game, teams
-      winner = teams.detect{|team| team.rank == Team::FIRST_PLACE_RANK}.players.first
-      winner_rating = winner.ratings.find_or_create(game)
-      loser = teams.detect{|team| team.rank != Team::FIRST_PLACE_RANK}.players.first
-      loser_rating = loser.ratings.find_or_create(game)
+      winning_teams = teams.select{|team| team.rank == Team::FIRST_PLACE_RANK}
 
-      winner_elo = to_elo(winner_rating)
-      loser_elo = to_elo(loser_rating)
+      if winning_teams.size > 1
+        first_rating, second_rating = winning_teams
+          .map(&:players)
+          .map(&:first)
+          .map{ |player| player.ratings.find_or_create(game) }
 
-      winner_elo.wins_from(loser_elo)
+        first_elo = to_elo(first_rating)
+        second_elo = to_elo(second_rating)
 
-      _update_rating_from_elo(winner_rating, winner_elo)
-      _update_rating_from_elo(loser_rating, loser_elo)
+        first_elo.plays_draw(second_elo)
+      else
+        winner = winning_teams.first.players.first
+        loser = teams.detect{|team| team.rank != Team::FIRST_PLACE_RANK}.players.first
+
+        first_rating = winner.ratings.find_or_create(game)
+        second_rating = loser.ratings.find_or_create(game)
+
+        first_elo = to_elo(first_rating)
+        second_elo = to_elo(second_rating)
+
+        first_elo.wins_from(second_elo)
+      end
+
+      _update_rating_from_elo(first_rating, first_elo)
+      _update_rating_from_elo(second_rating, second_elo)
     end
 
     def to_elo rating
