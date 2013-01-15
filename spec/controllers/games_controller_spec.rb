@@ -22,24 +22,27 @@ describe GamesController do
   describe "create" do
     context "with valid params" do
       it "creates a game" do
-        post :create, :game => {:name => "Go"}
+        game_attributes = FactoryGirl.attributes_for(:game)
+        post :create, :game => game_attributes
 
-        Game.where(:name => "Go").first.should_not be_nil
+        Game.where(:name => game_attributes[:name]).first.should_not be_nil
       end
 
       it "redirects to the game's show page" do
-        post :create, :game => {:name => "Go"}
+        game_attributes = FactoryGirl.attributes_for(:game)
+        post :create, :game => game_attributes
 
-        game = Game.where(:name => "Go").first
+        game = Game.where(:name => game_attributes[:name]).first
 
         response.should redirect_to(game_path(game))
       end
 
       it "protects against mass assignment" do
         Timecop.freeze(Time.now) do
-          post :create, :game => {:created_at => 3.days.ago, :name => "Go"}
+          game_attributes = FactoryGirl.attributes_for(:game, :created_at => 3.days.ago)
+          post :create, :game => game_attributes
 
-          game = Game.where(:name => "Go").first
+          game = Game.where(:name => game_attributes[:name]).first
           game.created_at.should > 3.days.ago
         end
       end
@@ -136,9 +139,9 @@ describe GamesController do
         rating2 = FactoryGirl.create(:rating, :game => game, :value => 1002, :player => player2)
         rating3 = FactoryGirl.create(:rating, :game => game, :value => 1001, :player => player3)
 
-        result1 = FactoryGirl.create(:result, :game => game, :winner => player1, :loser => player2)
-        result2 = FactoryGirl.create(:result, :game => game, :winner => player2, :loser => player3)
-        result3 = FactoryGirl.create(:result, :game => game, :winner => player3, :loser => player1)
+        result1 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player1]), FactoryGirl.create(:team, rank: 2, players: [player2])])
+        result2 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player2]), FactoryGirl.create(:team, rank: 2, players: [player3])])
+        result3 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player3]), FactoryGirl.create(:team, rank: 2, players: [player1])])
 
         get :show, :id => game, :format => :json
 

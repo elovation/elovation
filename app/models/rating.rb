@@ -1,6 +1,4 @@
 class Rating < ActiveRecord::Base
-  DefaultValue = 1000
-
   belongs_to :game
   belongs_to :player
   has_many :history_events, :class_name => "RatingHistoryEvent", :dependent => :destroy, :order => "created_at DESC"
@@ -22,14 +20,6 @@ class Rating < ActiveRecord::Base
 
   def most_recent_result
     player.results.for_game(game).most_recent_first.first
-  end
-
-  def to_elo
-    Elo::Player.new(
-      :rating => value,
-      :games_played => player.results.where(:game_id => game.id).count,
-      :pro => pro?
-    )
   end
 
   def rewind!

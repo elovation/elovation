@@ -10,6 +10,7 @@ gem 'json', '1.7.5'
 gem 'jquery-rails', '2.1.2'
 gem 'dynamic_form', '1.1.4'
 gem 'elo', '0.1.0'
+gem 'trueskill', :git => 'git://github.com/saulabs/trueskill.git', :require => "saulabs/trueskill"
 gem 'params_cleaner', '0.4.2'
 
 # Gems used only for assets and not required

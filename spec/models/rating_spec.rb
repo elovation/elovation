@@ -6,9 +6,13 @@ describe Rating do
       player = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
       rating = FactoryGirl.create(:rating, :player => player, :game => game)
-      result = FactoryGirl.create(:result, :winner => player, :game => game, :created_at => 5.weeks.ago)
+      teams = [ FactoryGirl.create(:team, rank: 1, :players => [player]),
+                FactoryGirl.create(:team, rank: 2) ]
+      result = FactoryGirl.create(:result, :teams => teams, :game => game, :created_at => 5.weeks.ago)
       rating.active?.should == false
-      result = FactoryGirl.create(:result, :winner => player, :game => game, :created_at => 4.weeks.ago + 1.hour)
+      teams = [ FactoryGirl.create(:team, rank: 1, :players => [player]),
+                FactoryGirl.create(:team, rank: 2) ]
+      result = FactoryGirl.create(:result, :teams => teams, :game => game, :created_at => 4.weeks.ago + 1.hour)
       rating.active?.should == true
     end
   end
@@ -33,34 +37,24 @@ describe Rating do
       player = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
       rating = FactoryGirl.create(:rating, :player => player, :game => game)
-      result_5_weeks_ago = FactoryGirl.create(:result, :winner => player, :game => game, :created_at => 5.weeks.ago)
+      result_5_weeks_ago = FactoryGirl.create(:result,
+                                              :teams => [ FactoryGirl.create(:team, :rank => 1, players: [player]),
+                                                          FactoryGirl.create(:team, :rank => 2)],
+                                              :game => game,
+                                              :created_at => 5.weeks.ago)
       rating.most_recent_result.should == result_5_weeks_ago
-      result_4_weeks_ago = FactoryGirl.create(:result, :winner => player, :game => game, :created_at => 4.weeks.ago)
+      result_4_weeks_ago = FactoryGirl.create(:result,
+                                              :teams => [ FactoryGirl.create(:team, :rank => 2, players: [player]),
+                                                          FactoryGirl.create(:team, :rank => 1)],
+                                              :game => game,
+                                              :created_at => 4.weeks.ago)
       rating.most_recent_result.should == result_4_weeks_ago
-      result_6_weeks_ago = FactoryGirl.create(:result, :winner => player, :game => game, :created_at => 6.weeks.ago)
+      result_6_weeks_ago = FactoryGirl.create(:result,
+                                              :teams => [ FactoryGirl.create(:team, :rank => 1, players: [player]),
+                                                          FactoryGirl.create(:team, :rank => 2)],
+                                              :game => game,
+                                              :created_at => 6.weeks.ago)
       rating.most_recent_result.should == result_4_weeks_ago
-    end
-  end
-
-  describe "to_elo" do
-    it "returns an elo player with the correct value" do
-      rating = FactoryGirl.build(:rating, :value => 1000)
-      rating.to_elo.rating.should == 1000
-    end
-
-    it "includes number of games played" do
-      player = FactoryGirl.create(:player)
-      game = FactoryGirl.create(:game)
-      2.times { FactoryGirl.create(:result, :game => game, :winner => player) }
-
-      rating = FactoryGirl.create(:rating, :player => player, :game => game)
-
-      rating.to_elo.games_played.should == 2
-    end
-
-    it "includes the pro flag" do
-      rating = FactoryGirl.build(:rating, :pro => true)
-      rating.to_elo.should be_pro
     end
   end
 

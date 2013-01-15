@@ -11,6 +11,50 @@
       </div>
     </div>
 
+    <div class="control-group">
+      <%= f.label :rating_type, :class => "control-label" %>
+      <div class="controls">
+        <%= f.select :rating_type, Game::RATER_MAPPINGS.map{|k, v| [v.description, k]}, {}, :class => "input-xlarge" %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :min_number_of_players_per_team, :class => "control-label" %>
+      <div class="controls">
+        <%= f.text_field :min_number_of_players_per_team, :class => "input-mini" %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :max_number_of_players_per_team, :class => "control-label" %>
+      <div class="controls">
+        <%= f.text_field :max_number_of_players_per_team, :class => "input-mini" %>
+        <span class="help-inline">Leave blank for no restriction</span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :min_number_of_teams, :class => "control-label" %>
+      <div class="controls">
+        <%= f.text_field :min_number_of_teams, :class => "input-mini" %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :max_number_of_teams, :class => "control-label" %>
+      <div class="controls">
+        <%= f.text_field :max_number_of_teams, :class => "input-mini" %>
+        <span class="help-inline">Leave blank for no restriction</span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :allow_ties, :class => "control-label" %>
+      <div class="controls">
+        <%= f.check_box :allow_ties, :class => "input-mini" %>
+      </div>
+    </div>
+
     <div class="form-actions">
       <%= f.submit :class => "btn btn-primary" %>
       <%= link_to "Cancel", root_path, :class => "btn btn-warning" %>

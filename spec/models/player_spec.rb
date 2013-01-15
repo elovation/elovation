@@ -60,7 +60,7 @@ describe Player do
       game = FactoryGirl.create(:game)
       player = FactoryGirl.create(:player)
 
-      10.times { FactoryGirl.create(:result, :game => game, :winner => player) }
+      10.times { FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
 
       player.recent_results.size.should == 5
     end
@@ -71,11 +71,11 @@ describe Player do
       player = FactoryGirl.create(:player)
 
       Timecop.freeze(3.days.ago) do
-        5.times.map { FactoryGirl.create(:result, :game => game, :winner => player) }
+        5.times { FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
       end
 
       Timecop.freeze(1.day.ago) do
-        newer_results = 5.times.map { FactoryGirl.create(:result, :game => game, :winner => player) }
+        newer_results = 5.times.map { FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
       end
 
       player.recent_results.sort.should == newer_results.sort
@@ -87,11 +87,11 @@ describe Player do
       old = new = nil
 
       Timecop.freeze(2.days.ago) do
-        old = FactoryGirl.create(:result, :game => game, :winner => player)
+        old = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
       end
 
       Timecop.freeze(1.days.ago) do
-        new = FactoryGirl.create(:result, :game => game, :winner => player)
+        new = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
       end
 
       player.recent_results.should == [new, old]
@@ -102,7 +102,7 @@ describe Player do
     it "deletes related ratings and results" do
       player = FactoryGirl.create(:player)
       rating = FactoryGirl.create(:rating, :player => player)
-      result = FactoryGirl.create(:result, :winner => player)
+      result = FactoryGirl.create(:result, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
 
       player.destroy
 
@@ -153,8 +153,8 @@ describe Player do
     it "finds wins" do
       player = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
-      win = FactoryGirl.create(:result, :game => game, :winner => player)
-      loss = FactoryGirl.create(:result, :game => game, :loser => player)
+      win = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
+      loss = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1)])
       player.results.for_game(game).size.should == 2
       player.results.for_game(game).wins.should == [win]
     end
@@ -164,8 +164,8 @@ describe Player do
     it "finds losses" do
       player = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
-      win = FactoryGirl.create(:result, :game => game, :winner => player)
-      loss = FactoryGirl.create(:result, :game => game, :loser => player)
+      win = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
+      loss = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1)])
       player.results.for_game(game).size.should == 2
       player.results.for_game(game).losses.should == [loss]
     end
@@ -177,10 +177,11 @@ describe Player do
       game = FactoryGirl.create(:game)
       opponent1 = FactoryGirl.create(:player)
       opponent2 = FactoryGirl.create(:player)
-      win_against_opponent1 = FactoryGirl.create(:result, :game => game, :winner => player, :loser => opponent1)
-      loss_against_opponent1 = FactoryGirl.create(:result, :game => game, :winner => opponent1, :loser => player)
-      win_against_opponent2 = FactoryGirl.create(:result, :game => game, :winner => player, :loser => opponent2)
-      opponent2_game_against_different_player = FactoryGirl.create(:result, :game => game, :winner => FactoryGirl.create(:player), :loser => opponent2)
+      win_against_opponent1 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2, players: [opponent1])])
+      loss_against_opponent1 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1, players: [opponent1])])
+      win_against_opponent2 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2, players: [opponent2])])
+      opponent2_game_against_different_player = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1), FactoryGirl.create(:team, rank: 2, players: [opponent2])])
+
       player.results.for_game(game).against(opponent1).sort_by(&:id).should == [win_against_opponent1, loss_against_opponent1]
       player.results.for_game(game).against(opponent2).sort_by(&:id).should == [win_against_opponent2]
     end

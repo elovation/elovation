@@ -1,11 +1,11 @@
 FactoryGirl.define do
   factory :result do
     game
-    association :loser, :factory => :player
-    association :winner, :factory => :player
+    teams { [ FactoryGirl.build(:team, rank: 1),
+              FactoryGirl.build(:team, rank: 2)] }
 
-    after(:build) do |result|
-      result.players = [result.loser, result.winner]
+    before(:create) do |result|
+      result.teams.map(&:save!)
     end
   end
 end
