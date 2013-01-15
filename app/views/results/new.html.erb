@@ -1,15 +1,19 @@
-<%= form_for [@game, @result], :html => {:class => "well form-search"} do |f| %>
+<%= form_for [@game, @result], :html => {:class => "well form-horizontal"} do |f| %>
   <%= f.error_messages %>
 
   <% @result.teams.each.with_index do |team, index| %>
-    <%= select "result[teams][#{index}]", "players", player_options, {}, :size => 5, :multiple => true %>
+    <%= select "result[teams][#{index}]", "players", player_options, {:include_blank => ''}, :class => "players span4", :multiple => @game.max_number_of_players_per_team != 1, "data-placeholder" => "Team #{index + 1}" %>
     <% if index != @result.teams.size - 1 %>
       <br />
-      <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"] %>
+      <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {}, :class => "span2" %>
     <% end %>
   <% end %>
 
-  <span class="inline-submit">
+  <p>
     <%= f.submit :class => "btn btn-primary" %>
-  </span>
+  </p>
+<% end %>
+
+<%= javascript_tag do %>
+  $(".players").chosen();
 <% end %>

@@ -11,5 +11,6 @@
  *= require_self
  *= require bootstrap-2.0.0.min
  *= require bootstrap-responsive-2.0.0.min
+ *= require chosen
  *= require_tree .
 */
