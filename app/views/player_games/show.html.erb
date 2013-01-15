@@ -30,7 +30,11 @@
         <%= result.created_at.to_s(:short) %>
         -
         <% if result.winners.include?(@player) %>
-          Beat <%= result.losers.map(&:name).join(", ") %>
+          <% if result.losers.empty? %>
+            Tied
+          <% else %>
+            Beat <%= result.losers.map(&:name).join(", ") %>
+          <% end %>
         <% else %>
           Lost to <%= result.winners.map(&:name).join(", ") %>
         <% end %>

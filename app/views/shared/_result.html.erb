@@ -1,0 +1,27 @@
+<tr>
+  <td>
+    <%= result.created_at.to_s(:short) %>
+  </td>
+  <td>
+    <ul>
+      <% result.teams.each do |team| %>
+        <li>
+          <%= team.rank.ordinalize %>:
+          <% team.players.each do |winner| %>
+            <%= image_tag(gravatar_url(winner, :size => 24)) %>
+            <strong><%= winner.name %></strong>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </td>
+  <td>
+    <p>
+      in
+      <strong><%= result.game.name %></strong>
+      <% if result.most_recent? -%>
+        <%= link_to "Delete", game_result_path(result.game, result), :class => "btn btn-danger", :method => :delete, :confirm => "Are you sure?" %>
+      <% end -%>
+  </p>
+  </td>
+</tr>

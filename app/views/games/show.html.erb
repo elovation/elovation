@@ -9,17 +9,15 @@
   </section>
 </div>
 <div class="row-fluid">
-  <div class="span6">
+  <div class="span8">
     <h2>Recent Results</h2>
     <% if @game.recent_results.any? %>
-      <ul>
-        <%= render :partial => 'result', :collection => @game.recent_results %>
-      </ul>
+      <%= render :partial => 'shared/results', :object => @game.recent_results %>
     <% else %>
       <span>No results, play some games!</span>
     <% end %>
   </div>
-  <div class="span6">
+  <div class="span4">
     <h2>Active Ratings</h2>
     <ol>
       <%= render :partial => 'rating', :collection => @game.all_ratings.select(&:active?) %>
