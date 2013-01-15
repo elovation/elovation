@@ -100,6 +100,26 @@ describe ResultService do
       response.should_not be_success
     end
 
+    it "doesn't need the players in an array" do
+      game = FactoryGirl.create(:elo_game)
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+
+      response = ResultService.create(
+        game,
+        :teams => {
+          "0" => { players: player1.id.to_s },
+          "1" => { players: player2.id.to_s }
+        }
+      )
+
+      response.should be_success
+      result = response.result
+      result.winners.should == [player1]
+      result.losers.should == [player2]
+      result.game.should == game
+    end
+
     it "works with ties" do
       game = FactoryGirl.create(:game)
       player1 = FactoryGirl.create(:player)

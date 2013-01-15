@@ -4,7 +4,7 @@ class ResultService
 
     next_rank = Team::FIRST_PLACE_RANK
     teams = (params[:teams] || {}).values.each.with_object([]) do |team, acc|
-      players = team[:players].delete_if(&:blank?)
+      players = Array.wrap(team[:players]).delete_if(&:blank?)
       acc << { rank: next_rank, players: players }
 
       next_rank = next_rank + 1 if team[:relation] != "ties"
