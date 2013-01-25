@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130111024016) do
+ActiveRecord::Schema.define(:version => 6) do
 
   create_table "games", :force => true do |t|
     t.string   "name",                           :null => false
