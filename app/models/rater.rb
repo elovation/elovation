@@ -10,6 +10,10 @@ module Rater
       "Elo (1v1 only)"
     end
 
+    def coerce_value(value)
+      value.to_i
+    end
+
     def validate_game game
       if game.min_number_of_teams != 2 ||
          game.max_number_of_teams != 2 ||
@@ -76,6 +80,10 @@ module Rater
 
     def description
       "Trueskill"
+    end
+
+    def coerce_value(value)
+      BigDecimal(value)
     end
 
     def validate_game game

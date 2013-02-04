@@ -132,7 +132,7 @@ describe Rater do
 
   describe Rater::TrueSkillRater do
     describe "update_ratings" do
-      let(:game) { FactoryGirl.create(:game, max_number_of_teams: nil, max_number_of_players_per_team: nil) }
+      let(:game) { FactoryGirl.create(:game, max_number_of_teams: nil, max_number_of_players_per_team: nil, rating_type: "trueskill") }
       let(:player1) { FactoryGirl.create(:player) }
       let(:player2) { FactoryGirl.create(:player) }
       let(:player3) { FactoryGirl.create(:player) }
@@ -217,7 +217,7 @@ describe Rater do
         rating1 = player1.ratings.find_or_create(game)
         rating2 = player2.ratings.find_or_create(game)
 
-        rating1.value.should == (rating1.trueskill_mean - (3 * rating1.trueskill_deviation)).floor
+        rating1.value.should == BigDecimal((rating1.trueskill_mean - (3 * rating1.trueskill_deviation).to_f), 6)
         rating1.value.should > rating2.value
       end
 
