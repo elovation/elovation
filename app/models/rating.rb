@@ -11,6 +11,10 @@ class Rating < ActiveRecord::Base
     end
   end
 
+  def value
+    game.rater.coerce_value(super)
+  end
+
   def as_json(option = {})
     {
       :player => player.as_json,

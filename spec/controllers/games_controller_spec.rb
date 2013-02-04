@@ -129,7 +129,7 @@ describe GamesController do
 
     it "returns a json response" do
       Timecop.freeze(Time.now) do
-        game = FactoryGirl.create(:game)
+        game = FactoryGirl.create(:elo_game)
 
         player1 = FactoryGirl.create(:player)
         player2 = FactoryGirl.create(:player)

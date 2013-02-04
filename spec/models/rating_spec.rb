@@ -17,6 +17,22 @@ describe Rating do
     end
   end
 
+  describe "value" do
+    it "should return an integer value for elo games" do
+      game = FactoryGirl.create(:elo_game)
+      rating = FactoryGirl.build(:rating, :value => 1000.0, :game => game)
+      rating.value.class.should == Fixnum
+      rating.value.to_s.should == "1000"
+    end
+
+    it "should return a big decimal value for trueskill games" do
+      game = FactoryGirl.create(:trueskill_game)
+      rating = FactoryGirl.build(:rating, :value => 1000.1234, :game => game)
+      rating.value.class.should == BigDecimal
+      rating.value.to_s.should == BigDecimal("1000.1234").to_s
+    end
+  end
+
   describe "as_json" do
     it "returns the json representation of the result" do
       player = FactoryGirl.build(:player, :name => "John")
