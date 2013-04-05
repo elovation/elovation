@@ -217,7 +217,7 @@ describe Rater do
         rating1 = player1.ratings.find_or_create(game)
         rating2 = player2.ratings.find_or_create(game)
 
-        rating1.value.should == (rating1.trueskill_mean - (3 * rating1.trueskill_deviation)).floor
+        rating1.value.should == (((rating1.trueskill_mean - (3 * rating1.trueskill_deviation)) * 100)).floor
         rating1.value.should > rating2.value
       end
 

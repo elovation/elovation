@@ -110,7 +110,7 @@ module Rater
 
     def _update_rating_from_trueskill rating, trueskill
       Rating.transaction do
-        attributes = { value: (trueskill.mean - (3.0 * trueskill.deviation)),
+        attributes = { value: (trueskill.mean - (3.0 * trueskill.deviation)) * 100,
                        trueskill_mean: trueskill.mean,
                        trueskill_deviation: trueskill.deviation }
         rating.update_attributes! attributes
