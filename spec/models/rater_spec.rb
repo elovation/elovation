@@ -104,6 +104,24 @@ describe Rater do
         rating1.history_events.first.value.should == new_rating1
         rating2.history_events.first.value.should == new_rating2
       end
+
+      it "returns the same result regardless of team order" do
+        game = FactoryGirl.create(:elo_game)
+        player1 = FactoryGirl.create(:player)
+        player2 = FactoryGirl.create(:player)
+        team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
+        team2 = FactoryGirl.create(:team, rank: 2, players: [player2])
+
+        game.rater.update_ratings(game, [team2, team1])
+
+        old_ratings = game.ratings.map(&:value)
+
+        game.ratings.destroy_all
+        game.reload
+
+        game.rater.update_ratings(game, [team1, team2])
+        game.ratings.map(&:value).should == old_ratings
+      end
     end
 
     describe "to_elo" do
@@ -238,6 +256,17 @@ describe Rater do
         rating4.value.should > rating5.value
         rating5.value.should == rating6.value
         rating6.value.should == rating7.value
+      end
+
+      it "returns the same result regardless of team order" do
+        game.rater.update_ratings(game, [team1, team2, team3, team4])
+        old_ratings = game.ratings.map(&:value)
+
+        game.ratings.destroy_all
+        game.reload
+
+        game.rater.update_ratings(game, [team4, team2, team3, team1])
+        game.ratings.map(&:value).should == old_ratings
       end
     end
 
