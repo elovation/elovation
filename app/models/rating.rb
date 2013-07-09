@@ -27,7 +27,9 @@ class Rating < ActiveRecord::Base
       destroy
     else
       Rating.transaction do
-        update_attributes!(:value => _previous_rating.value)
+        update_attributes!(:value => _previous_rating.value,
+                           :trueskill_mean => _previous_rating.trueskill_mean,
+                           :trueskill_deviation => _previous_rating.trueskill_deviation)
         _current_rating.destroy
       end
     end

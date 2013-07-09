@@ -71,13 +71,17 @@ describe Rating do
 
   describe "rewind!" do
     it "resets the rating to the previous rating" do
-      rating = FactoryGirl.create(:rating, :value => 1002)
-      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1001)
-      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1002)
+      rating = FactoryGirl.create(:rating, :value => 1002, :trueskill_mean => 52, :trueskill_deviation => 22)
+      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1001, :trueskill_mean => 51, :trueskill_deviation => 21)
+      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1002, :trueskill_mean => 52, :trueskill_deviation => 22)
 
       rating.rewind!
 
-      rating.reload.value.should == 1001
+      rating.reload
+
+      rating.value.should == 1001
+      rating.trueskill_mean.should == 51
+      rating.trueskill_deviation.should == 21
     end
 
     it "deletes the most recent history event" do

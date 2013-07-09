@@ -303,4 +303,34 @@ describe Game do
       Result.find_by_id(result.id).should be_nil
     end
   end
+
+  describe "recalculate_ratings!" do
+    it "wipes out the rating history, and recalculates the results" do
+      game = FactoryGirl.create(:game)
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+      player3 = FactoryGirl.create(:player)
+      5.times do
+        team1 = FactoryGirl.create(:team, :rank => 1, :players => [player1])
+        team2 = FactoryGirl.create(:team, :rank => 2, :players => [player2])
+        result = FactoryGirl.create(:result, :game => game, :teams => [team1, team2])
+        game.rater.update_ratings game, result.teams
+      end
+      4.times do
+        team1 = FactoryGirl.create(:team, :rank => 1, :players => [player3])
+        team2 = FactoryGirl.create(:team, :rank => 2, :players => [player2])
+        result = FactoryGirl.create(:result, :game => game, :teams => [team1, team2])
+        game.rater.update_ratings game, result.teams
+      end
+
+      previous_ratings = game.all_ratings.all
+
+      game.recalculate_ratings!
+      game.reload.ratings
+
+      attrs = ->(rating){[rating.player_id, rating.value, rating.trueskill_mean, rating.trueskill_deviation]}
+      previous_ratings.map(&:id).should_not == game.all_ratings.map(&:id)
+      previous_ratings.map(&attrs).should == game.all_ratings.map(&attrs)
+    end
+  end
 end

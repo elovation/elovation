@@ -82,7 +82,7 @@ module Rater
     end
 
     def update_ratings game, teams
-      ratings_to_ranks = teams.each_with_object({}){ |team, hash| hash[team.players.map{|player| player.ratings.find_or_create(game)}] = team.rank }
+      ratings_to_ranks = teams.sort_by(&:rank).each_with_object({}){ |team, hash| hash[team.players.map{|player| player.ratings.find_or_create(game)}] = team.rank }
 
       ratings_to_trueskill = {}
       trueskills_to_rank = ratings_to_ranks.each_with_object({}) do |(ratings, rank), hash|
@@ -110,7 +110,7 @@ module Rater
 
     def _update_rating_from_trueskill rating, trueskill
       Rating.transaction do
-        attributes = { value: (trueskill.mean - (3.0 * trueskill.deviation)),
+        attributes = { value: (trueskill.mean - (3.0 * trueskill.deviation)) * 100,
                        trueskill_mean: trueskill.mean,
                        trueskill_deviation: trueskill.deviation }
         rating.update_attributes! attributes
