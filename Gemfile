@@ -7,7 +7,7 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'pg', '0.14.1'
+gem 'mysql2'
 gem 'json', '1.7.5'
 gem 'jquery-rails', '2.1.2'
 gem 'dynamic_form', '1.1.4'
