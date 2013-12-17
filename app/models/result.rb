@@ -1,5 +1,5 @@
 class Result < ActiveRecord::Base
-  has_many :teams
+  has_many :teams, :dependent => :destroy
   belongs_to :game
 
   validates :game, presence: true

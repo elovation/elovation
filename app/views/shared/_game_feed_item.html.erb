@@ -1,0 +1,8 @@
+<li class="list-group-item">
+    <% game_feed_item.teams.each_with_index do |team, index| %>
+      <% html = team.players.map { |player| link_to(player.display_name(current_player), player_game_path(player, @game)) }.join(" and ") %>
+      <%= raw html %>
+      <% if index == 0 %> beat <% end %>
+    <% end %>
+    <%= time_ago_in_words game_feed_item.created_at %> ago
+</li>

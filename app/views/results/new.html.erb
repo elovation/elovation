@@ -1,12 +1,25 @@
-<%= form_for [@game, @result], :html => {:class => "well form-horizontal"} do |f| %>
+<%= form_for [@game, @result], html: { class: 'form-horizontal' } do |f| %>
   <%= f.error_messages %>
 
+  <div class="row">
   <% @result.teams.each.with_index do |team, index| %>
-    <%= select "result[teams][#{index}]", "players", player_options, {:include_blank => ''}, :class => "players span4", :multiple => @game.max_number_of_players_per_team != 1, "data-placeholder" => "Team #{index + 1}" %>
-    <% if index != @result.teams.size - 1 %>
-      <br />
-      <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {}, :class => "span2" %>
-    <% end %>
+    <div class="panel panel-default">
+      <div class="panel-heading">Team <%= index + 1 %></div>
+      <div class="panel-body">
+        <div class="form-group">
+          <div class="col-md-12">
+            <%= select "result[teams][#{index}]", "players", player_options, {:include_blank => ''}, :class => "players form-control", :multiple => @game.max_number_of_players_per_team != 1, "data-placeholder" => "Players in team #{index + 1}..." %>
+          </div>
+        </div>
+        <% if index != @result.teams.size - 1 %>
+          <div class="form-group">
+            <div class="col-md-12">
+              <%= select "result[teams][#{index}]", :relation, [["defeated team #{index + 2}", "defeats"], ["ties with team #{index + 2}", "ties"]], {}, :class => "form-control" %>
+            </div>
+          </div>        
+        <% end %>
+      </div>
+    </div>
   <% end %>
 
   <p>

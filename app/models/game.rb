@@ -56,11 +56,11 @@ class Game < ActiveRecord::Base
   end
 
   def recent_results
-    results.order("created_at DESC").limit(5)
+    results.order("created_at DESC").limit(10)
   end
 
   def top_ratings
-    ratings.order("value DESC").limit(5)
+    ratings.order("value DESC").limit(10)
   end
 
   def rater

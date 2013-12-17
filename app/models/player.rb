@@ -1,4 +1,13 @@
 class Player < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name	
+  # attr_accessible :title, :body
+
   has_many :ratings, :order => "value DESC", :dependent => :destroy do
     def find_or_create(game)
       where(:game_id => game.id).first || create({game: game, pro: false}.merge(game.rater.default_attributes))
@@ -45,4 +54,9 @@ class Player < ActiveRecord::Base
     rating = ratings.where(:game_id => game.id).first
     rating.rewind!
   end
+
+  def display_name(current_player)
+		return "You" if current_player && self == current_player
+    self.name.split(' ')[0]
+	end
 end
