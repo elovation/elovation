@@ -30,4 +30,8 @@ group :test, :development do
   gem 'taps', '0.3.24'
 end
 
+group :production do
+  gem 'rails_12factor'
+end
+
 ruby "1.9.3"
