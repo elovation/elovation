@@ -9,5 +9,5 @@ json.array! @activities do |activity|
 
 	json.message message
 	json.time activity.created_at
-	json.formatted_time activity.created_at.strftime('%l:%M %p')
+	json.formatted_time activity.created_at.strftime('%l:%M %p').strip
 end
