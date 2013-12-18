@@ -12,6 +12,7 @@ gem 'devise', '~> 3.2.2'
 gem 'cancan', '~> 1.6.10'
 gem 'gravtastic'
 gem 'urbanairship'
+gem 'jbuilder', '~> 1.5.3'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.5'
