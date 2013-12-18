@@ -9,6 +9,11 @@ Elovation::Application.routes.draw do
 						get :top
 					end
 				end
+				resources :activities, only: :none do
+					collection do
+						get :recent
+					end
+				end
 			end
 		end
 	end
