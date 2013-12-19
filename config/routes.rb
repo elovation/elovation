@@ -4,7 +4,7 @@ Elovation::Application.routes.draw do
   namespace :api do
   	namespace :v1 do
 			resources :games, only: :none do
-				resources :ratings, only: :none do
+				resources :ratings, only: :index do
 					collection do
 						get :top
 					end
