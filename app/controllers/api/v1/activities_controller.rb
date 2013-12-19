@@ -3,7 +3,9 @@ module Api::V1
 		respond_to :json
 
 		def recent
-			@activities = Game.find(params[:game_id]).recent_results
+			@activities = Game
+				.find(params[:game_id])
+				.recent_results
 		end
 	end
 end

@@ -3,10 +3,10 @@ module Api::V1
 		respond_to :json
 
 		def top
-			@ratings = Game				
-				.find(params[:game_id])
-			 	.all_ratings
-				.select(&:active?)
+			@ratings = Rating
+			 	.includes(:player)
+				.where(game_id: params[:game_id])
+				.limit(10)
 		end
 	end
 end
