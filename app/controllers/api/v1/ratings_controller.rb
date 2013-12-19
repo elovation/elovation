@@ -6,6 +6,7 @@ module Api::V1
 			@ratings = Rating
 			 	.includes(:player)
 				.where(game_id: params[:game_id])
+				.order("value DESC")
 				.limit(10)
 		end
 	end
