@@ -17,3 +17,5 @@
 /vendor/bundle
 /bin
 /.rvmrc
+
+.DS_Store
