@@ -2,4 +2,4 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require chosen
-//= require_tree .
+//= require kendo.all.min

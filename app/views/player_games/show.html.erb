@@ -7,7 +7,7 @@
 </div>
 
 <div class="row">
-  <div class="col-md-12 col-lg-12">
+  <div class="col-md-6 col-lg-6">
     <div class="panel panel-default">
       <div class="panel-heading">Recent Activity</div>
       <% if @game.recent_results.any? %>
@@ -19,6 +19,130 @@
       <% end %>
     </div>
   </div>
+  <div class="col-md-6 col-lg-6">
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="chart-wrapper">
+          <div id="chart-ten" style="height:200px"></div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-12">
+        <div class="chart-wrapper">
+          <div id="chart-all" style="height:200px"></div>
+        </div>
+      </div>      
+    </div>
+  </div>
+</div>
+
+    <script>
+      (function(){
+
+        var chartData = <%= current_player.ratings.where(game_id: 1).first.history_events.reorder('created_at ASC').limit(10).pluck(:value) %>;
+        function createChart() {
+            $("#chart-ten").kendoChart({
+                title: {
+                  text: 'Rating History (Last 10)'
+                },
+                legend: {
+                    visible: false
+                },
+                chartArea: {
+                    background: ""
+                },
+                seriesDefaults: {
+                    type: "line",
+                    style: "smooth"
+                },
+                series: [{
+                    data: chartData,
+                    labels: {
+                      visible: true
+                    }
+
+                }],
+                valueAxis: {
+                    majorGridLines: {
+                      visible: false
+                    },
+
+                    labels: {
+                        visible: false
+                    },
+                    line: {
+                        visible: false
+                    }
+                },
+                categoryAxis: {
+                    majorGridLines: {
+                      visible: false
+                    },
+                    line: {
+                        visible: false
+                    }                  
+                  },
+                tooltip: {
+                  visible: false
+                }
+            });
+        }
+
+        $(document).ready(createChart);
+      })();
+    </script>
+
+    <script>
+      (function(){
+
+        var chartData = <%= current_player.ratings.where(game_id: 1).first.history_events.reorder('created_at ASC').pluck(:value) %>;
+        function createChart() {
+            $("#chart-all").kendoChart({
+                title: {
+                  text: 'Rating History (Complete)'
+                },
+                legend: {
+                    visible: false
+                },
+                chartArea: {
+                    background: ""
+                },
+                seriesDefaults: {
+                    type: "line",
+                    style: "smooth"
+                },
+                series: [{
+                    data: chartData,
+                    type: 'area'
+                }],
+                valueAxis: {
+                    majorGridLines: {
+                      visible: false
+                    },
+
+                    labels: {
+                        visible: false
+                    },
+                    line: {
+                        visible: false
+                    }
+                },
+                categoryAxis: {
+                    majorGridLines: {
+                      visible: false
+                    },
+                    line: {
+                        visible: false
+                    }                  
+                  },
+                tooltip: {
+                  visible: false
+                }
+            });
+        }
+
+        $(document).ready(createChart);
+      })();
+    </script>
 <!--
   This isn't really right. It needs to not take into account team games.
   <div class="col-md-4 col-lg-4">
