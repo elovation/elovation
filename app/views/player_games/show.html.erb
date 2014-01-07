@@ -34,11 +34,10 @@
     </div>
   </div>
 </div>
-
     <script>
       (function(){
 
-        var chartData = <%= current_player.ratings.where(game_id: 1).first.history_events.reorder('created_at ASC').limit(10).pluck(:value) %>;
+        var chartData = <%= Player.find(params[:player_id]).ratings.where(game_id: 1).first.history_events.reorder('created_at ASC').limit(10).pluck(:value) %>;
         function createChart() {
             $("#chart-ten").kendoChart({
                 title: {
@@ -94,7 +93,7 @@
     <script>
       (function(){
 
-        var chartData = <%= current_player.ratings.where(game_id: 1).first.history_events.reorder('created_at ASC').pluck(:value) %>;
+        var chartData = <%= Player.find(params[:player_id]).ratings.where(game_id: 1).first.history_events.reorder('created_at ASC').pluck(:value) %>;
         function createChart() {
             $("#chart-all").kendoChart({
                 title: {
