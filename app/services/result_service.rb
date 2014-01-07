@@ -18,7 +18,7 @@ class ResultService
 
     if result.valid?
       Result.transaction do
-        game.rater.update_ratings game, result.teams
+        game.rater.update_ratings game, result.teams, result
 
         result.save!
 

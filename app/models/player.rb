@@ -59,4 +59,11 @@ class Player < ActiveRecord::Base
 		return "You" if current_player && self == current_player
     self.name.split(' ')[0]
 	end
+	
+	def display_name_for_result(current_player, result)
+	  _name = display_name(current_player)
+	  rhe = result.rating_history_events.detect { |rhe| rhe.rating.player == self }
+	  return _name unless rhe
+	  "#{name} (#{rhe.change > 0 ? "+#{rhe.change}" : rhe.change })"
+	end
 end

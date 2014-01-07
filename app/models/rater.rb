@@ -19,7 +19,7 @@ module Rater
       end
     end
 
-    def update_ratings game, teams
+    def update_ratings game, teams, result
       winning_teams = teams.select{|team| team.rank == Team::FIRST_PLACE_RANK}
 
       if winning_teams.size > 1
@@ -45,8 +45,8 @@ module Rater
         first_elo.wins_from(second_elo)
       end
 
-      _update_rating_from_elo(first_rating, first_elo)
-      _update_rating_from_elo(second_rating, second_elo)
+      _update_rating_from_elo(first_rating, first_elo, result)
+      _update_rating_from_elo(second_rating, second_elo, result)
     end
 
     def to_elo rating
@@ -57,10 +57,10 @@ module Rater
       )
     end
 
-    def _update_rating_from_elo(rating, elo)
+    def _update_rating_from_elo(rating, elo, result)
       Rating.transaction do
         rating.update_attributes!(:value => elo.rating, :pro => elo.pro?)
-        rating.history_events.create!(:value => elo.rating)
+        rating.history_events.create!(:value => elo.rating, :result => result)
       end
     end
   end
@@ -81,7 +81,7 @@ module Rater
     def validate_game game
     end
 
-    def update_ratings game, teams
+    def update_ratings game, teams, result
       ratings_to_ranks = teams.sort_by(&:rank).each_with_object({}){ |team, hash| hash[team.players.map{|player| player.ratings.find_or_create(game)}] = team.rank }
 
       ratings_to_trueskill = {}
@@ -97,7 +97,7 @@ module Rater
       graph.update_skills
 
       ratings_to_trueskill.each do |rating, trueskill|
-        _update_rating_from_trueskill rating, trueskill
+        _update_rating_from_trueskill rating, trueskill, result
       end
     end
 
@@ -108,13 +108,14 @@ module Rater
       )
     end
 
-    def _update_rating_from_trueskill rating, trueskill
+    def _update_rating_from_trueskill rating, trueskill, result
       Rating.transaction do
         attributes = { value: (trueskill.mean - (3.0 * trueskill.deviation)) * 100,
                        trueskill_mean: trueskill.mean,
                        trueskill_deviation: trueskill.deviation }
+        prev_rating = rating.value
         rating.update_attributes! attributes
-        rating.history_events.create! attributes
+        rating.history_events.create! attributes.merge(:result => result, :change => rating.value - prev_rating)
       end
     end
   end

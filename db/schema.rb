@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131217154722) do
+ActiveRecord::Schema.define(:version => 20140107221709) do
 
   create_table "games", :force => true do |t|
     t.string   "name",                           :null => false
@@ -57,6 +57,8 @@ ActiveRecord::Schema.define(:version => 20131217154722) do
     t.datetime "updated_at",          :null => false
     t.float    "trueskill_mean"
     t.float    "trueskill_deviation"
+    t.integer  "result_id"
+    t.integer  "change"
   end
 
   add_index "rating_history_events", ["rating_id"], :name => "index_rating_history_events_on_rating_id"
