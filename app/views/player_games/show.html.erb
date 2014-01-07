@@ -37,7 +37,7 @@
     <script>
       (function(){
 
-        var chartData = <%= Player.find(params[:player_id]).ratings.where(game_id: 1).first.history_events.reorder('created_at ASC').limit(10).pluck(:value) %>;
+        var chartData = <%= Player.find(params[:player_id]).ratings.where(game_id: 1).first.history_events.limit(10).pluck(:value).reverse %>;
         function createChart() {
             $("#chart-ten").kendoChart({
                 title: {
