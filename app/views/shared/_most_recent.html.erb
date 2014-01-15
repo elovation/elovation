@@ -1,9 +1,9 @@
 <ol>
 	 <li>
-	    <% game_feed_item.teams.each_with_index do |team, index| %>
-	      
-	   	<%= image_tag(gravatar_url(player, :size => 40)) %>
-	    
+	    <% most_recent.teams.each_with_index do |team, index| %>
+	      <% team.players.each do |player| %>
+	   			<%= image_tag(gravatar_url(player, :size => 40)) %>
+	      <% end %>	    
 	    <% end %>
 	</li>
 </ol>
