@@ -2,6 +2,15 @@
   <%= link_to "Record a Match", new_game_result_path(@game), :class => "btn btn-primary" %>  
   <h1><%= @game.name %></h1>  
 </div>
+
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <% if @game.most_recent_results.any? %>
+      <%= render :partial => 'shared/most_recent', :object => @game.most_recent_results %>
+    <% end %>
+  </div>
+</div>
+
 <div class="row">
   <div class="col-md-7 col-lg-7">
     <div class="panel panel-default">
