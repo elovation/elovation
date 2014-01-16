@@ -1,9 +1,50 @@
-<ol>
-	 <li>
-	    <% most_recent.teams.each_with_index do |team, index| %>
-	      <% team.players.each do |player| %>
-	   			<%= image_tag(gravatar_url(player, :size => 40)) %>
-	      <% end %>	    
-	    <% end %>
-	</li>
-</ol>
+<div class="most-recent">
+	<h2>Most Recently</h2>
+	<ul>
+		<% most_recent.teams.each_with_index do |team, index| %>
+		  <% team.players.each do |player| %>
+		  	<li>
+		  		<%= image_tag(gravatar_url(player, :size => 250)) %>
+		  		<h3><a href="<%= player_game_path(player, @game) %>"><%= player.name %></a></h3>
+		  	</li>
+		  <% end %>
+		<% end %>
+	</ul>
+</div>
+
+
+ 
+
+
+<style>
+	.most-recent{
+		clear: both;
+		margin: 40px 0;
+		overflow: hidden;
+	}
+
+	.most-recent ul{
+		padding: 0;
+		list-style: none;
+		overflow: hidden;
+		clear: both;
+		width: 50%;
+		margin: 0 auto;
+	}
+
+	.most-recent li {
+		width: 50%;
+		float: left;
+		text-align: center;
+	}
+
+	.most-recent li:first-child:after{
+		content: 'vs'
+		font-weight:;
+	}
+
+	.most-recent h3 {
+		font-weight: bold;
+	}
+
+</style>
