@@ -1,28 +1,34 @@
 <div class="most-recent">
 	<h2>Most Recently</h2>
-	<ul>
+	<div class="game">
 		<% most_recent.teams.each_with_index do |team, index| %>
-		  <% team.players.each do |player| %>
-		  	<li>
+		  <% team.players.map do |player| %>
+		  	<div class="player">
 		  		<%= image_tag(gravatar_url(player, :size => 250)) %>
 		  		<h3><a href="<%= player_game_path(player, @game) %>"><%= player.name %></a></h3>
-		  	</li>
+		  	</div>
+		  	<% if index == 0 %>
+		  		<div class="versus">
+		  			<div class="versus-text">
+		  				defeated
+		  			</div>
+		  		</div>
+		  	<% end %>
 		  <% end %>
 		<% end %>
-	</ul>
+	</div>
 </div>
 
-
- 
-
-
 <style>
+
+/* These styles are only here temporarily. -Ryan */
 	.most-recent{
 		clear: both;
 		margin: 0 0 40px;
 		overflow: hidden;
 		background: #222;
 		padding: 20px 0;
+		position: relative;
 	}
 
 	.most-recent h2 {
@@ -32,16 +38,15 @@
 		margin: 10px 0;
 	}
 
-	.most-recent ul{
+	.most-recent .game{
 		padding: 0;
-		list-style: none;
 		overflow: hidden;
 		clear: both;
-		width: 50%;
+		width: 60%;
 		margin: 0 auto;
 	}
 
-	.most-recent li {
+	.most-recent .player {
 		width: 50%;
 		float: left;
 		text-align: center;
@@ -55,6 +60,37 @@
 	.most-recent img{
 		border: 1px solid #fff;
 		margin: 0 0 10px 0;
+		float: left;
+		width: 100%;
+	}
+
+	.versus-text{
+		display: block;
+		position: absolute;
+		color: #222;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: #efefef;
+		border-radius: 200px;
+		margin-left: -50%;
+		font-family: 'Georgia', serif;
+		font-style: italic;
+		font-size: 20px;
+		border: 1px solid #222;
+
+	}
+
+	.versus {
+		position: absolute;
+		width: 100%;
+		left: 50%;
+		bottom: 10px;
+		z-index: 1;
+		height: 100px;
+		width: 100px;
+		text-align: center;
+		line-height: 100px;
 	}
 
 </style>
