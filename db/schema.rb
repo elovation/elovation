@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 7) do
+ActiveRecord::Schema.define(:version => 20140107221709) do
 
   create_table "games", :force => true do |t|
     t.string   "name",                           :null => false
@@ -26,11 +26,24 @@ ActiveRecord::Schema.define(:version => 7) do
   end
 
   create_table "players", :force => true do |t|
-    t.string   "name",       :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "name",                                   :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.string   "email"
+    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          :default => 0,  :null => false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.boolean  "admin"
   end
+
+  add_index "players", ["email"], :name => "index_players_on_email", :unique => true
+  add_index "players", ["reset_password_token"], :name => "index_players_on_reset_password_token", :unique => true
 
   create_table "players_teams", :force => true do |t|
     t.integer "player_id"
@@ -44,6 +57,8 @@ ActiveRecord::Schema.define(:version => 7) do
     t.datetime "updated_at",          :null => false
     t.float    "trueskill_mean"
     t.float    "trueskill_deviation"
+    t.integer  "result_id"
+    t.integer  "change"
   end
 
   add_index "rating_history_events", ["rating_id"], :name => "index_rating_history_events_on_rating_id"

@@ -1,2 +1,3 @@
-<div class="hero-unit">
-</div>
+<% Game.all.each do |game| %>
+	<%= link_to game.name, game %>
+<% end %>

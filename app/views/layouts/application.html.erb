@@ -1,56 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Elovation</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Leaders</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">  
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
   <link rel="SHORTCUT ICON" href="<%= image_path "favicon.png" %>" />
 </head>
 <body>
-  <div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container-fluid">
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </a>
-        <%= link_to "Elovation", root_path, :class => "brand" %>
-      </div>
-    </div>
-  </div>
-
-  <div class="container-fluid">
-    <div class="row-fluid">
-      <div class="span3">
-        <div class="well sidebar-nav">
-          <ul class="nav nav-list">
-            <li class="nav-header">
-              <span>Games</span>
-              <span><%= link_to "Add", new_game_path, :class => "btn btn-small btn-sidebar" %></span>
-            </li>
-            <% Game.all.sort_by(&:name).each do |game| %>
-              <li class="<%= "active" if @game == game %>">
-                <%= link_to game.name, game_path(game) %>
-              </li>
-            <% end %>
-            <li class="nav-header">
-              <span>Players</span>
-              <span><%= link_to "Add", new_player_path, :class => "btn btn-small btn-sidebar" %></span>
-            </li>
-            <% Player.all.sort_by(&:name).each do |player| %>
-              <li class="<%= "active" if @player == player %>">
-                <%= link_to player.name, player_path(player) %>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      </div>
-      <div class="span9">
-        <%= yield %>
-      </div>
-    </div>
+  <%= render 'banner' %>  
+  <div class="container">
+    <%= yield %>
   </div>
 </body>
 </html>

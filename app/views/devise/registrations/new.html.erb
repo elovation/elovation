@@ -1,0 +1,13 @@
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-signin form-register' }) do |f| %>
+  <h2 class="form-signin-heading">Register</h2>
+  <%= devise_error_messages! %>
+  <%= f.label :name, class: 'sr-only' %>
+  <%= f.text_field :name, class: "form-control name-field", required: "required", placeholder: "Full Name", autofocus: true %>  
+  <%= f.label :email, class: 'sr-only' %>
+  <%= f.email_field :email, class: "form-control", required: "required", placeholder: "Email address" %>
+  <%= f.label :password, class: 'sr-only' %>
+  <%= f.password_field :password, class: "form-control password-field", required: "required", placeholder: "Password" %>
+  <%= f.label :password_confirmation, class: 'sr-only' %>
+  <%= f.password_field :password_confirmation, class: "form-control", required: "required", placeholder: "Confirm Password" %>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+<% end %>

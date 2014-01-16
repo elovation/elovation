@@ -1,0 +1,7 @@
+<% if @games.any? %>
+  <% @games.all.each do |game| %>
+    <%= link_to game %>
+  <% end %>   
+<% end %>
+
+<%= link_to "New", new_game_path, class: 'btn btn-primary' %>

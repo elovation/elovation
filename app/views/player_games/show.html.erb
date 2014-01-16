@@ -1,47 +1,178 @@
-<div class="hero-unit">
-  <h1><%= @player.name %> - <%= @game.name %> (<%= @player.ratings.find_by_game_id(@game).value %>)</h1>
+This?
+
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <div class="page-header">
+      <h1><%= @player.name %> <small><%= @game.name %> Rating: <%= @player.ratings.find_by_game_id(@game).value %></small></h1>
+    </div>
+  </div>
 </div>
 
 <div class="row">
-  <div class="span4">
-    <h2>Head-to-Head Records</h2>
-    <ol>
-      <% @game.all_ratings.each do |rating| %>
-        <% opponent = rating.player %>
-        <% wins = @player.results.wins.for_game(@game).against(opponent).size %>
-        <% losses = @player.results.losses.for_game(@game).against(opponent).size %>
-        <li class="<%= "gray" if @player != opponent and wins == 0 and losses == 0 %>" >
-          <%= opponent.name %>
-          <span class="pull-right">
-          <% unless opponent == @player %>
-            (<%= rating.value %>)
-            (<%= wins %> - <%= losses %>)
-          <% end %>
-          </span>
-        </li>
+  <div class="col-md-6 col-lg-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">Recent Activity</div>
+      <% if @game.recent_results.any? %>
+        <%= render :partial => 'shared/game_feed', :object => @player.results.for_game(@game).limit(15).order('created_at desc') %>
+      <% else %>
+        <div class="panel-body">
+          No matches have been recorded.
+        </div>
       <% end %>
-    </ol>
+    </div>
   </div>
-
-  <div class="span4 offset1">
-    <h2>Recent Games</h2>
-    <% @player.results.for_game(@game).limit(15).order('created_at desc').each do |result| %>
-      <li>
-        <%= result.created_at.to_s(:short) %>
-        -
-        <% if result.winners.include?(@player) %>
-          <% if result.losers.empty? %>
-            Tied
-          <% else %>
-            Beat <%= result.losers.map(&:name).join(", ") %>
-          <% end %>
-        <% else %>
-          Lost to <%= result.winners.map(&:name).join(", ") %>
-        <% end %>
-        <% if result.most_recent? -%>
-          <%= link_to "Delete", game_result_path(@game, result), :class => "btn btn-danger", :method => :delete, :confirm => "Are you sure?" %>
-        <% end -%>
-      </li>
-    <% end %>
+  <div class="col-md-6 col-lg-6">
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="chart-wrapper">
+          <div id="chart-ten" style="height:200px"></div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-12">
+        <div class="chart-wrapper">
+          <div id="chart-all" style="height:200px"></div>
+        </div>
+      </div>      
+    </div>
   </div>
 </div>
+    <script>
+      (function(){
+
+        var chartData = <%= Player.find(params[:player_id]).ratings.where(game_id: 1).first.history_events.limit(10).pluck(:value).reverse %>;
+        function createChart() {
+            $("#chart-ten").kendoChart({
+                title: {
+                  text: 'Rating History (Last 10)'
+                },
+                legend: {
+                    visible: false
+                },
+                chartArea: {
+                    background: ""
+                },
+                seriesDefaults: {
+                    type: "line",
+                    style: "smooth"
+                },
+                series: [{
+                    data: chartData,
+                    labels: {
+                      visible: true
+                    }
+
+                }],
+                valueAxis: {
+                    majorGridLines: {
+                      visible: false
+                    },
+
+                    labels: {
+                        visible: false
+                    },
+                    line: {
+                        visible: false
+                    }
+                },
+                categoryAxis: {
+                    majorGridLines: {
+                      visible: false
+                    },
+                    line: {
+                        visible: false
+                    }                  
+                  },
+                tooltip: {
+                  visible: false
+                }
+            });
+        }
+
+        $(document).ready(createChart);
+      })();
+    </script>
+
+    <script>
+      (function(){
+
+        var chartData = <%= Player.find(params[:player_id]).ratings.where(game_id: 1).first.history_events.reorder('created_at ASC').pluck(:value) %>;
+        function createChart() {
+            $("#chart-all").kendoChart({
+                title: {
+                  text: 'Rating History (Complete)'
+                },
+                legend: {
+                    visible: false
+                },
+                chartArea: {
+                    background: ""
+                },
+                seriesDefaults: {
+                    type: "line",
+                    style: "smooth"
+                },
+                series: [{
+                    data: chartData,
+                    type: 'area'
+                }],
+                valueAxis: {
+                    majorGridLines: {
+                      visible: false
+                    },
+
+                    labels: {
+                        visible: false
+                    },
+                    line: {
+                        visible: false
+                    }
+                },
+                categoryAxis: {
+                    majorGridLines: {
+                      visible: false
+                    },
+                    line: {
+                        visible: false
+                    }                  
+                  },
+                tooltip: {
+                  visible: false
+                }
+            });
+        }
+
+        $(document).ready(createChart);
+      })();
+    </script>
+<!--
+  This isn't really right. It needs to not take into account team games.
+  <div class="col-md-4 col-lg-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">Records</div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Opponent</th>
+            <th>W</th>
+            <th>L</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @game.all_ratings.each do |rating| %>
+            <% opponent = rating.player %>
+            <% wins = @player.results.wins.for_game(@game).against(opponent).size %>
+            <% losses = @player.results.losses.for_game(@game).against(opponent).size %>
+            <% unless @player == opponent %>
+            <tr>
+              <td><%= opponent.name %> (<%= rating.value %>)</td>
+              <td><%= wins %></td>
+              <td><%= losses %></td>
+            </tr>
+            <% end %>
+          <% end %>          
+        </tbody>   
+      </table>
+    </div>
+  </div>
+</div>
+-->
