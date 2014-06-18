@@ -260,4 +260,54 @@ describe Result do
       end
     end
   end
+
+  describe "streak" do
+    it "counts three or more wins" do
+      game = FactoryGirl.create(:game)
+      player = FactoryGirl.create(:player)
+
+      FactoryGirl.create(:result, :game => game, :winner => player)
+      FactoryGirl.create(:result, :game => game, :winner => player)
+      Result.find_winning_streaks(game)[player.id].should be_nil
+
+      FactoryGirl.create(:result, :game => game, :winner => player)
+      Result.find_winning_streaks(game)[player.id].should == 3
+    end
+
+    it "only counts wins since the most recent loss" do
+      game = FactoryGirl.create(:game)
+      player = FactoryGirl.create(:player)
+
+      FactoryGirl.create(:result, :game => game, :winner => player)
+      FactoryGirl.create(:result, :game => game, :loser => player)
+      FactoryGirl.create(:result, :game => game, :winner => player)
+      FactoryGirl.create(:result, :game => game, :winner => player)
+      FactoryGirl.create(:result, :game => game, :winner => player)
+      Result.find_winning_streaks(game)[player.id].should == 3
+    end
+
+    it "counts wins for multiple players and games" do
+      game1 = FactoryGirl.create(:game)
+      game2 = FactoryGirl.create(:game)
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+
+
+      FactoryGirl.create(:result, :game => game1, :winner => player1)
+      FactoryGirl.create(:result, :game => game1, :winner => player1)
+      FactoryGirl.create(:result, :game => game1, :winner => player1)
+
+      FactoryGirl.create(:result, :game => game2, :winner => player1)
+      FactoryGirl.create(:result, :game => game2, :winner => player1)
+      FactoryGirl.create(:result, :game => game2, :winner => player1)
+
+      FactoryGirl.create(:result, :game => game1, :winner => player2)
+      FactoryGirl.create(:result, :game => game1, :winner => player2)
+      FactoryGirl.create(:result, :game => game1, :winner => player2)
+      FactoryGirl.create(:result, :game => game1, :winner => player2)
+
+       Result.find_winning_streaks(game1).should == { player1.id => 3, player2.id => 4 }
+       Result.find_winning_streaks(game2).should == { player1.id => 3 }
+    end
+  end
 end

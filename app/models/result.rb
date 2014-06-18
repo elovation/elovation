@@ -63,4 +63,19 @@ class Result < ActiveRecord::Base
       end
     end
   end
+
+  def self.find_winning_streaks(game)
+    recent_losses_sql = select('game_id, loser_id as player_id, max(created_at) as loss_created_at').
+                        group('game_id, loser_id').to_sql
+
+    # count wins with created_at date after the most recent loss
+    winning_streaks = select('winner_id, count(1) as winning_streak').
+                      joins("left join (#{recent_losses_sql}) recent_losses on player_id = winner_id and recent_losses.game_id = results.game_id").
+                      where(:game_id => game).
+                      where('loss_created_at is null or created_at > loss_created_at').
+                      group(:winner_id).
+                      having('count(1) >= 3')
+
+    return Hash[ winning_streaks.collect {|i| [i.winner_id.to_i, i.winning_streak.to_i] } ]
+  end
 end

@@ -37,6 +37,7 @@ class GamesController < ApplicationController
   end
 
   def show
+    @streaks = Result.find_winning_streaks(@game)
     respond_to do |format|
       format.html
       format.json do
