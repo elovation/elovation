@@ -1,2 +1,20 @@
 <div class="hero-unit">
+  <h1>Elovation</h1>
 </div>
+<% @games.each do |game| %>
+<div class="row-fluid">
+  <div class="span6">
+    <h2>Recent Results for <%= link_to game.name, game_path(game) %></h2>
+    <% if game.recent_results.any? %>
+      <ul>
+        <%= render :partial => 'result', :collection => game.recent_results %>
+      </ul>
+    <% end %>
+  </div>
+  <div class="span6">
+    <h2>Recent Ratings</h2>
+    <ol>
+      <%= render :partial => 'rating', :collection => game.all_ratings.select(&:active?) %>
+    </ol>
+</div>
+<% end %>
