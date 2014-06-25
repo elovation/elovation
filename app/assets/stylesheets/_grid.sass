@@ -1,0 +1,50 @@
+$columns: 12
+
+.row, .row-fluid
+  &:before, &:after
+    content: ''
+    display: table
+    clear: both
+
+[class^='span']
+  float: left
+  box-sizing: border-box
+  -moz-box-sizing: border-box
+  padding: 0 15px
+  &:first-child
+    padding-left: 0
+  &:last-child
+    padding-right: 0
+.span1
+  width: percentage(1/$columns)
+.span2
+  width: percentage(2/$columns)
+.span3
+  width: percentage(3/$columns)
+.span4
+  width: percentage(4/$columns)
+.span5
+  width: percentage(5/$columns)
+.span6
+  width: percentage(6/$columns)
+.span7
+  width: percentage(7/$columns)
+.span8
+  width: percentage(8/$columns)
+.span9
+  width: percentage(9/$columns)
+.span10
+  width: percentage(10/$columns)
+.span11
+  width: percentage(11/$columns)
+.span12
+  width: percentage(12/$columns)
+
+
+@media screen and (max-width: 800px)
+  [class^='span']
+    float: none
+    padding: 0
+    margin: 0 0 40px
+    clear: both
+    width: 100%

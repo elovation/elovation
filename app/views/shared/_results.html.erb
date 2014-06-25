@@ -1,3 +1,3 @@
-<table class="table table-striped">
-  <%= render :partial => 'shared/result', :collection => results %>
-</table>
+<ol id='results'>
+  <%= render :partial => 'shared/result', :collection => results, locals: {show_game: show_game} %>
+</ol>

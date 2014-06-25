@@ -1,27 +1,40 @@
-<div class="hero-unit">
-  <h1><%= @game.name %></h1>
-  <section class="action-buttons">
-    <span><%= link_to 'Edit Game', edit_game_path(@game), :class => "btn btn-primary" %></span>
-    <span><%= link_to "Add Result", new_game_result_path(@game), :class => "btn btn-success" %></span>
-    <% if @game.results.empty? %>
-      <span><%= link_to "Delete", game_path(@game), :method => :delete, :confirm => "Are you sure?", :class => "btn btn-danger" %></span>
-    <% end %>
-  </section>
-</div>
+<h1>Games / <%= @game.name %></h1>
+
+<section class="action-buttons">
+  <%= link_to 'Edit', edit_game_path(@game), :class => "btn" %>
+  <% if @game.results.empty? %>
+    <%= link_to "Delete", game_path(@game), :method => :delete, :confirm => "Are you sure?", :class => "btn btn-danger" %>
+  <% end %>
+</section>
+
 <div class="row-fluid">
   <div class="span8">
     <h2>Recent Results</h2>
+    <%= link_to "Add Result", new_game_result_path(@game), :class => "btn btn-primary" %>
+    
     <% if @game.recent_results.any? %>
-      <%= render :partial => 'shared/results', :object => @game.recent_results %>
+      <%= render :partial => 'shared/results', :object => @game.recent_results, locals: {show_game: false} %>
     <% else %>
       <span>No results, play some games!</span>
     <% end %>
+    
   </div>
+
   <div class="span4">
-    <h2>Active Ratings</h2>
-    <ol>
-      <%= render :partial => 'rating', :collection => @game.all_ratings.select(&:active?) %>
-    </ol>
+    <h2>Player Ratings</h2>
+    <table id='ratings'>
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Rating</th>
+          <th>W</th>
+          <th>L</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render :partial => 'rating', :collection => @game.all_ratings.select(&:active?) %>
+      </tbody>
+    </table>
     <%= link_to "View All", game_ratings_path(@game) %>
   </div>
 </div>

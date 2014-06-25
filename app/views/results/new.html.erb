@@ -1,17 +1,19 @@
-<%= form_for [@game, @result], :html => {:class => "well form-horizontal"} do |f| %>
+<%= form_for [@game, @result], :html => {:id => "form-results"} do |f| %>
   <%= f.error_messages %>
 
   <% @result.teams.each.with_index do |team, index| %>
-    <%= select "result[teams][#{index}]", "players", player_options, {:include_blank => ''}, :class => "players span4", :multiple => @game.max_number_of_players_per_team != 1, "data-placeholder" => "Team #{index + 1}" %>
+    <%= select "result[teams][#{index}]", "players", player_options, {:include_blank => ''}, :class => "players", :multiple => @game.max_number_of_players_per_team != 1, "data-placeholder" => "Team #{index + 1}" %>
+
     <% if index != @result.teams.size - 1 %>
-      <br />
-      <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {}, :class => "span2" %>
+      <br/>
+      <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {} %>
     <% end %>
   <% end %>
 
-  <p>
-    <%= f.submit :class => "btn btn-primary" %>
-  </p>
+  <div class='form-actions'>
+    <%= f.submit :class => "btn btn-primary", value: 'Save Result' %>
+  </div>
+  
 <% end %>
 
 <%= javascript_tag do %>

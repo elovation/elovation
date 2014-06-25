@@ -1,5 +1,12 @@
-<li>
-  <%= image_tag(gravatar_url(rating.player, :size => 32)) %>
-  <%= link_to rating.player.name, player_game_path(rating.player, @game) %> - <%= rating.value %>
-  (<%= rating.player.results.for_game(rating.game).wins.size %> - <%= rating.player.results.for_game(rating.game).losses.size %>)
-</li>
+<tr>
+	<td>
+	  <div class='player'>
+		<%= image_tag(gravatar_url(rating.player, :size => 24)) %>
+		<%= link_to rating.player.name, player_game_path(rating.player, @game) %>
+	  </div>
+	</td>
+
+	<td><%= rating.value %></td>
+  <td><%= rating.player.results.for_game(rating.game).wins.size %></td>
+  <td><%= rating.player.results.for_game(rating.game).losses.size %></td>
+</tr>
