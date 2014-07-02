@@ -56,7 +56,7 @@ class Game < ActiveRecord::Base
   end
 
   def recent_results
-    results.order("created_at DESC").limit(5)
+    results.order("created_at DESC").limit(20)
   end
 
   def top_ratings
