@@ -9,7 +9,7 @@ class PlayersController < ApplicationController
     @player = Player.new(clean_params[:player])
 
     if @player.save
-      redirect_to player_path(@player)
+      redirect_to dashboard_path
     else
       render :new
     end

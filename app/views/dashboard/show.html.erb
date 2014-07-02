@@ -1,7 +1,7 @@
 <div class="row-fluid">
 
 	<div class='span8'>
-		<h1>Games</h1>
+		<h1>Strava Ping Pong Games</h1>
 		<%= link_to "New Game", new_game_path, :class => "btn btn-primary" %>
 
 		<ul id='games-list'>
@@ -13,7 +13,7 @@
   		    	<li class='rating-type'><%= game.rating_type %> – <%= game.allow_ties ? 'Ties allowed' : 'No ties' %></li>
             <li class='num-players'><%= game.players.length %> players</li>
             <li class='games-played'><%= game.results.length %> games played</li>
-  		    	
+
 		    	</ul>
 
           <% result = game.recent_results.limit(1).first %>
@@ -33,12 +33,12 @@
                   <% end %>
                 <% end %>
                 <br/>
-                <time><%= result.created_at.to_s(:long) %></time>
+                <time><%= format_time(result.created_at) %></time>
               </div>
             </div>
           <% end %>
-            
-          
+
+
 		    <% end %>
 		  </li>
 		<% end %>

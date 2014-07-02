@@ -2,7 +2,7 @@
 <li class="<%= 'new' if result.most_recent? -%>">
 
   <% result.teams.each_with_index do |team, i| %>
-    
+
     <% team.players.each do |winner| %>
       <%= link_to winner, class: 'player' do %>
         <%= image_tag(gravatar_url(winner, :size => 16)) %>
@@ -10,9 +10,9 @@
             <%= winner.name %>
         </strong>
       <% end %>
-    
+
     <% end %>
-    
+
     <% if i == 0 %>
       defeated
     <% end %>
@@ -24,7 +24,7 @@
     <strong><%= link_to result.game.name, result.game %></strong>
   <% end %>
   on
-  <%= result.created_at.to_s(:long) %>  
+  <%= format_time(result.created_at) %>
 
 
   <% if result.most_recent? -%>
