@@ -54,7 +54,7 @@ img
   vertical-align: text-bottom
   position: relative
   top: -2px
-  
+
 table, ul, ol
   margin-top: 20px
   margin-bottom: 20px
@@ -85,7 +85,7 @@ ul, ol
   li
     display: block
     padding: 10px 0
-    border-bottom: 1px dashed #ccc 
+    border-bottom: 1px dashed #ccc
 
 a
   color: #069
@@ -111,7 +111,7 @@ header
     margin-top: -18px
     &:hover .brand-label
       opacity: 1
-      @include transform(translateY(-8px))  
+      @include transform(translateY(-8px))
   .brand-name
     color: #fff
     font-size: 2rem
@@ -193,19 +193,20 @@ fieldset
     margin: 0
   .rating-type
     text-transform: uppercase
-  .game-params 
+  .game-params
     margin: 0
     li
       border: none
       padding: 0
 
-    
+
 #results
   li
     padding-left: 10px
     padding-right: 10px
   .player
-    margin: 0 0.25em
+    display: inline-block
+    margin: 0 0.5em
     &:first-child
       margin-left: 0
   td:last-child
@@ -219,6 +220,8 @@ fieldset
       @include transition(opacity 0.2s ease)
     &:hover .btn
       opacity: 1
+  time
+    margin-left: 20px
   .btn-danger
     float: right
   a:not(.btn)
@@ -229,8 +232,9 @@ fieldset
   .description
     opacity: 0.6
     line-height: 1.2em
-  time
-    font-size: 1.2rem
+time
+  font-size: 1.2rem
+  opacity: 0.6
 #ratings
   counter-reset: rank
   th, td
@@ -244,7 +248,7 @@ fieldset
   tbody
     tr:first-child
       font-weight: 700
-      font-size: 1.6rem      
+      font-size: 1.6rem
     td
       vertical-align: middle
   img
@@ -258,12 +262,12 @@ fieldset
   img
     vertical-align: middle
     margin: -2px 6px -2px 10px
-  
-  
 
-    
 
-.chzn-container, .chzn-choices, .chzn-container .search-field input, 
+
+
+
+.chzn-container, .chzn-choices, .chzn-container .search-field input,
 .chzn-default, .chzn-default span
   display: inline-block
   vertical-align: bottom
