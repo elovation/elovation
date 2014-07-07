@@ -21,14 +21,14 @@ describe Game do
   end
 
   describe "recent results" do
-    it "returns 5 of the games results" do
+    it "returns 20 of the games results" do
       game = FactoryGirl.create(:game)
-      10.times { FactoryGirl.create(:result, :game => game) }
+      21.times { FactoryGirl.create(:result, :game => game) }
 
-      game.recent_results.size.should == 5
+      game.recent_results.size.should == 20
     end
 
-    it "returns the 5 most recently created results" do
+    it "returns the 20 most recently created results" do
       newer_results = nil
       game = FactoryGirl.create(:game)
 
@@ -37,7 +37,7 @@ describe Game do
       end
 
       Timecop.freeze(1.day.ago) do
-        newer_results = 5.times.map { FactoryGirl.create(:result, :game => game) }
+        newer_results = 20.times.map { FactoryGirl.create(:result, :game => game) }
       end
 
       game.recent_results.sort.should == newer_results.sort

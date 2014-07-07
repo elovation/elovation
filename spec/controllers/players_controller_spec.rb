@@ -16,7 +16,7 @@ describe PlayersController do
       player = Player.where(:name => "Drew", :email => "drew@example.com").first
 
       player.should_not be_nil
-      response.should redirect_to(player_path(player))
+      response.should redirect_to(dashboard_path)
     end
 
     it "renders new given invalid params" do
