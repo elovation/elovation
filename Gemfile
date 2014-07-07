@@ -32,5 +32,4 @@ group :test, :development do
   gem 'heroku', '2.31.4'
   gem 'timecop', '0.5.2'
   gem 'taps', '0.3.24'
-  gem 'sqlite3'
 end

@@ -17,5 +17,6 @@
 /vendor/bundle
 /bin
 /.rvmrc
+/.ruby-version
 .DS_Store
 elovation_development
