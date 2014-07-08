@@ -323,10 +323,9 @@ describe Game do
         game.rater.update_ratings game, result.teams
       end
 
-      previous_ratings = game.all_ratings.all
+      previous_ratings = game.all_ratings.to_a
 
       game.recalculate_ratings!
-      game.reload.ratings
 
       attrs = ->(rating){[rating.player_id, rating.value, rating.trueskill_mean, rating.trueskill_deviation]}
       previous_ratings.map(&:id).should_not == game.all_ratings.map(&:id)

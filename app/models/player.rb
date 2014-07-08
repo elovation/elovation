@@ -1,5 +1,5 @@
 class Player < ActiveRecord::Base
-  has_many :ratings, order: "value DESC", dependent: :destroy do
+  has_many :ratings, dependent: :destroy do
     def find_or_create(game)
       where(game_id: game.id).first || create({game: game, pro: false}.merge(game.rater.default_attributes))
     end
@@ -28,7 +28,7 @@ class Player < ActiveRecord::Base
   end
 
   validates :name, uniqueness: true, presence: true
-  validates :email, format: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true
+  validates :email, allow_blank: true, format: /@/
 
   def as_json
     {
