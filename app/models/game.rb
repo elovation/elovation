@@ -1,13 +1,13 @@
 class Game < ActiveRecord::Base
-  has_many :ratings, :dependent => :destroy
-  has_many :results, :dependent => :destroy
+  has_many :ratings, dependent: :destroy
+  has_many :results, dependent: :destroy
 
   RATER_MAPPINGS = {
     "elo" => Rater::EloRater.new,
     "trueskill" => Rater::TrueSkillRater.new
   }
 
-  validates :name, :presence => true
+  validates :name, presence: true
   validates :rating_type, inclusion: { in: RATER_MAPPINGS.keys, message: "must be a valid rating type" }
   validate do |game|
     if game.rater
@@ -45,9 +45,9 @@ class Game < ActiveRecord::Base
 
   def as_json(options = {})
     {
-      :name => name,
-      :ratings => top_ratings.map(&:as_json),
-      :results => recent_results.map(&:as_json)
+      name: name,
+      ratings: top_ratings.map(&:as_json),
+      results: recent_results.map(&:as_json)
     }
   end
 

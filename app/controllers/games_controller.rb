@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
   include ParamsCleaner
 
-  allowed_params :game => [ :name,
+  allowed_params game: [ :name,
                             :rating_type,
                             :min_number_of_teams,
                             :max_number_of_teams,
@@ -9,7 +9,7 @@ class GamesController < ApplicationController
                             :max_number_of_players_per_team,
                             :allow_ties ]
 
-  before_filter :_find_game, :only => [:destroy, :edit, :show, :update]
+  before_filter :_find_game, only: [:destroy, :edit, :show, :update]
 
   def create
     @game = Game.new(clean_params[:game])
@@ -40,7 +40,7 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        render :json => @game
+        render json: @game
       end
     end
   end

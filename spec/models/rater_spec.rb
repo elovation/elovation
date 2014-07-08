@@ -12,8 +12,8 @@ describe Rater do
 
         game.rater.update_ratings(game, [team1, team2])
 
-        player1.ratings.where(:game_id => game.id).should_not be_empty
-        player2.ratings.where(:game_id => game.id).should_not be_empty
+        player1.ratings.where(game_id: game.id).should_not be_empty
+        player2.ratings.where(game_id: game.id).should_not be_empty
       end
 
       it "works with ties" do
@@ -25,8 +25,8 @@ describe Rater do
 
         game.rater.update_ratings(game, [team1, team2])
 
-        rating1 = player1.ratings.where(:game_id => game.id).first
-        rating2 = player2.ratings.where(:game_id => game.id).first
+        rating1 = player1.ratings.where(game_id: game.id).first
+        rating2 = player2.ratings.where(game_id: game.id).first
         rating1.reload.value.should == game.rater.default_attributes[:value]
         rating2.reload.value.should == game.rater.default_attributes[:value]
       end
@@ -39,15 +39,15 @@ describe Rater do
         team2 = FactoryGirl.create(:team, rank: 2, players: [player2])
         rating1 = FactoryGirl.create(
           :rating,
-          :game => game,
-          :player => player1,
-          :value => game.rater.default_attributes[:value]
+          game: game,
+          player: player1,
+          value: game.rater.default_attributes[:value]
         )
         rating2 = FactoryGirl.create(
           :rating,
-          :game => game,
-          :player => player2,
-          :value => game.rater.default_attributes[:value]
+          game: game,
+          player: player2,
+          value: game.rater.default_attributes[:value]
         )
 
         game.rater.update_ratings(game, [team1, team2])
@@ -64,13 +64,13 @@ describe Rater do
         team2 = FactoryGirl.create(:team, rank: 2, players: [player2])
         rating1 = FactoryGirl.create(
           :rating,
-          :game => game,
-          :player => player1,
-          :value => game.rater.default_attributes[:value],
-          :pro => false
+          game: game,
+          player: player1,
+          value: game.rater.default_attributes[:value],
+          pro: false
         )
 
-        Rater::EloRater.any_instance.stubs(:to_elo).returns(Elo::Player.new(:pro => true))
+        Rater::EloRater.any_instance.stubs(:to_elo).returns(Elo::Player.new(pro: true))
 
         game.rater.update_ratings(game, [team1, team2])
 
@@ -85,15 +85,15 @@ describe Rater do
         team2 = FactoryGirl.create(:team, rank: 2, players: [player2])
         rating1 = FactoryGirl.create(
           :rating,
-          :game => game,
-          :player => player1,
-          :value => game.rater.default_attributes[:value]
+          game: game,
+          player: player1,
+          value: game.rater.default_attributes[:value]
         )
         rating2 = FactoryGirl.create(
           :rating,
-          :game => game,
-          :player => player2,
-          :value => game.rater.default_attributes[:value]
+          game: game,
+          player: player2,
+          value: game.rater.default_attributes[:value]
         )
 
         game.rater.update_ratings(game, [team1, team2])
@@ -127,22 +127,22 @@ describe Rater do
     describe "to_elo" do
       let(:rater) { Rater::EloRater.new }
       it "returns an elo player with the correct value" do
-        rating = FactoryGirl.build(:rating, :value => 1000)
+        rating = FactoryGirl.build(:rating, value: 1000)
         rater.to_elo(rating).rating.should == 1000
       end
 
       it "includes number of games played" do
         player = FactoryGirl.create(:player)
         game = FactoryGirl.create(:game)
-        2.times { FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
+        2.times { FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
 
-        rating = FactoryGirl.create(:rating, :player => player, :game => game)
+        rating = FactoryGirl.create(:rating, player: player, game: game)
 
         rater.to_elo(rating).games_played.should == 2
       end
 
       it "includes the pro flag" do
-        rating = FactoryGirl.build(:rating, :pro => true)
+        rating = FactoryGirl.build(:rating, pro: true)
         rater.to_elo(rating).should be_pro
       end
     end
@@ -166,31 +166,31 @@ describe Rater do
       it "creates new ratings" do
         game.rater.update_ratings(game, [team1, team2, team3, team4])
 
-        player1.ratings.where(:game_id => game.id).should_not be_empty
-        player2.ratings.where(:game_id => game.id).should_not be_empty
-        player3.ratings.where(:game_id => game.id).should_not be_empty
-        player4.ratings.where(:game_id => game.id).should_not be_empty
-        player5.ratings.where(:game_id => game.id).should_not be_empty
-        player6.ratings.where(:game_id => game.id).should_not be_empty
-        player7.ratings.where(:game_id => game.id).should_not be_empty
+        player1.ratings.where(game_id: game.id).should_not be_empty
+        player2.ratings.where(game_id: game.id).should_not be_empty
+        player3.ratings.where(game_id: game.id).should_not be_empty
+        player4.ratings.where(game_id: game.id).should_not be_empty
+        player5.ratings.where(game_id: game.id).should_not be_empty
+        player6.ratings.where(game_id: game.id).should_not be_empty
+        player7.ratings.where(game_id: game.id).should_not be_empty
       end
 
       it "updates existing ratings" do
         rating1 = FactoryGirl.create(
           :rating,
-          :game => game,
-          :player => player1,
-          :value => game.rater.default_attributes[:value],
-          :trueskill_mean => game.rater.default_attributes[:trueskill_mean],
-          :trueskill_deviation => game.rater.default_attributes[:trueskill_deviation]
+          game: game,
+          player: player1,
+          value: game.rater.default_attributes[:value],
+          trueskill_mean: game.rater.default_attributes[:trueskill_mean],
+          trueskill_deviation: game.rater.default_attributes[:trueskill_deviation]
         )
         rating2 = FactoryGirl.create(
           :rating,
-          :game => game,
-          :player => player2,
-          :value => game.rater.default_attributes[:value],
-          :trueskill_mean => game.rater.default_attributes[:trueskill_mean],
-          :trueskill_deviation => game.rater.default_attributes[:trueskill_deviation]
+          game: game,
+          player: player2,
+          value: game.rater.default_attributes[:value],
+          trueskill_mean: game.rater.default_attributes[:trueskill_mean],
+          trueskill_deviation: game.rater.default_attributes[:trueskill_deviation]
         )
 
         game.rater.update_ratings(game, [team1, team2, team3, team4])
@@ -204,19 +204,19 @@ describe Rater do
       it "creates rating history events" do
         rating1 = FactoryGirl.create(
           :rating,
-          :game => game,
-          :player => player1,
-          :value => game.rater.default_attributes[:value],
-          :trueskill_mean => game.rater.default_attributes[:trueskill_mean],
-          :trueskill_deviation => game.rater.default_attributes[:trueskill_deviation]
+          game: game,
+          player: player1,
+          value: game.rater.default_attributes[:value],
+          trueskill_mean: game.rater.default_attributes[:trueskill_mean],
+          trueskill_deviation: game.rater.default_attributes[:trueskill_deviation]
         )
         rating2 = FactoryGirl.create(
           :rating,
-          :game => game,
-          :player => player2,
-          :value => game.rater.default_attributes[:value],
-          :trueskill_mean => game.rater.default_attributes[:trueskill_mean],
-          :trueskill_deviation => game.rater.default_attributes[:trueskill_deviation]
+          game: game,
+          player: player2,
+          value: game.rater.default_attributes[:value],
+          trueskill_mean: game.rater.default_attributes[:trueskill_mean],
+          trueskill_deviation: game.rater.default_attributes[:trueskill_deviation]
         )
 
         game.rater.update_ratings(game, [team1, team2, team3, team4])

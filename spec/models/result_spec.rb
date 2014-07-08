@@ -10,9 +10,9 @@ describe Result do
       result = FactoryGirl.build(:result, teams: [winner, loser], created_at: created_at)
 
       result.as_json.should == {
-        :winner => winner.players.first.name,
-        :loser => loser.players.first.name,
-        :created_at => created_at.utc.to_s
+        winner: winner.players.first.name,
+        loser: loser.players.first.name,
+        created_at: created_at.utc.to_s
       }
     end
   end
@@ -22,8 +22,8 @@ describe Result do
       player = FactoryGirl.create(:player)
       game1 = FactoryGirl.create(:game)
       game2 = FactoryGirl.create(:game)
-      result_for_game1 = FactoryGirl.create(:result, :game => game1, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
-      result_for_game2 = FactoryGirl.create(:result, :game => game2, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
+      result_for_game1 = FactoryGirl.create(:result, game: game1, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
+      result_for_game2 = FactoryGirl.create(:result, game: game2, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
       player.results.for_game(game1).should == [result_for_game1]
       player.results.for_game(game2).should == [result_for_game2]
     end
@@ -35,7 +35,7 @@ describe Result do
       player_2 = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
 
-      result = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_2])])
+      result = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_2])])
 
       result.should be_most_recent
     end
@@ -46,8 +46,8 @@ describe Result do
       player_3 = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
 
-      old_result = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_2])])
-      FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_3])])
+      old_result = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_2])])
+      FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_3])])
 
       old_result.should_not be_most_recent
     end
@@ -119,7 +119,7 @@ describe Result do
       end
 
       it "doesn't allow the same player twice" do
-        player = FactoryGirl.build(:player, :name => nil)
+        player = FactoryGirl.build(:player, name: nil)
 
         result = Result.new game: FactoryGirl.create(:game)
         result.teams.build rank: 1, players: [player]

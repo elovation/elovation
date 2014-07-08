@@ -1,9 +1,9 @@
 class PlayersController < ApplicationController
   include ParamsCleaner
 
-  allowed_params :player => [:name, :email]
+  allowed_params player: [:name, :email]
 
-  before_filter :_find_player, :only => [:edit, :destroy, :show, :update]
+  before_filter :_find_player, only: [:edit, :destroy, :show, :update]
 
   def create
     @player = Player.new(clean_params[:player])

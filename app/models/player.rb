@@ -1,7 +1,7 @@
 class Player < ActiveRecord::Base
-  has_many :ratings, :order => "value DESC", :dependent => :destroy do
+  has_many :ratings, order: "value DESC", dependent: :destroy do
     def find_or_create(game)
-      where(:game_id => game.id).first || create({game: game, pro: false}.merge(game.rater.default_attributes))
+      where(game_id: game.id).first || create({game: game, pro: false}.merge(game.rater.default_attributes))
     end
   end
 
@@ -19,7 +19,7 @@ class Player < ActiveRecord::Base
     end
 
     def wins
-      where(:teams => {:rank => Team::FIRST_PLACE_RANK})
+      where(teams: {rank: Team::FIRST_PLACE_RANK})
     end
   end
 
@@ -27,13 +27,13 @@ class Player < ActiveRecord::Base
     results.each { |result| result.destroy }
   end
 
-  validates :name, :uniqueness => true, :presence => true
-  validates :email, :format => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, :allow_blank => true
+  validates :name, uniqueness: true, presence: true
+  validates :email, format: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true
 
   def as_json
     {
-      :name => name,
-      :email => email
+      name: name,
+      email: email
     }
   end
 
@@ -42,7 +42,7 @@ class Player < ActiveRecord::Base
   end
 
   def rewind_rating!(game)
-    rating = ratings.where(:game_id => game.id).first
+    rating = ratings.where(game_id: game.id).first
     rating.rewind!
   end
 end
