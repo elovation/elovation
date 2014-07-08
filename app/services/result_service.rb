@@ -23,20 +23,20 @@ class ResultService
         result.save!
 
         OpenStruct.new(
-          :success? => true,
-          :result => result
+          success?: true,
+          result: result
         )
       end
     else
       OpenStruct.new(
-        :success? => false,
-        :result => result
+        success?: false,
+        result: result
       )
     end
   end
 
   def self.destroy(result)
-    return OpenStruct.new(:success? => false) unless result.most_recent?
+    return OpenStruct.new(success?: false) unless result.most_recent?
 
     Result.transaction do
       result.players.each do |player|
@@ -45,7 +45,7 @@ class ResultService
 
       result.destroy
 
-      OpenStruct.new(:success? => true)
+      OpenStruct.new(success?: true)
     end
   end
 end

@@ -3,7 +3,7 @@ require "spec_helper"
 describe Game do
   describe "name" do
     it "has a name" do
-      game = FactoryGirl.create(:game, :name => "Go")
+      game = FactoryGirl.create(:game, name: "Go")
 
       game.name.should == "Go"
     end
@@ -14,16 +14,16 @@ describe Game do
       game = FactoryGirl.create(:game)
       player1 = FactoryGirl.create(:player)
       player2 = FactoryGirl.create(:player)
-      FactoryGirl.create(:rating, :game => game, :player => player1)
-      FactoryGirl.create(:rating, :game => game, :player => player2)
+      FactoryGirl.create(:rating, game: game, player: player1)
+      FactoryGirl.create(:rating, game: game, player: player2)
       game.players.sort_by(&:id).should == [player1, player2]
     end
   end
 
   describe "recent results" do
-    it "returns 20 of the games results" do
+    it "returns 10 of the games results" do
       game = FactoryGirl.create(:game)
-      21.times { FactoryGirl.create(:result, :game => game) }
+      21.times { FactoryGirl.create(:result, game: game) }
 
       game.recent_results.size.should == 20
     end
@@ -33,11 +33,11 @@ describe Game do
       game = FactoryGirl.create(:game)
 
       Timecop.freeze(3.days.ago) do
-        5.times.map { FactoryGirl.create(:result, :game => game) }
+        5.times.map { FactoryGirl.create(:result, game: game) }
       end
 
       Timecop.freeze(1.day.ago) do
-        newer_results = 20.times.map { FactoryGirl.create(:result, :game => game) }
+        newer_results = 20.times.map { FactoryGirl.create(:result, game: game) }
       end
 
       game.recent_results.sort.should == newer_results.sort
@@ -48,11 +48,11 @@ describe Game do
       old = new = nil
 
       Timecop.freeze(2.days.ago) do
-        old = FactoryGirl.create(:result, :game => game)
+        old = FactoryGirl.create(:result, game: game)
       end
 
       Timecop.freeze(1.days.ago) do
-        new = FactoryGirl.create(:result, :game => game)
+        new = FactoryGirl.create(:result, game: game)
       end
 
       game.recent_results.should == [new, old]
@@ -62,16 +62,16 @@ describe Game do
   describe "top_ratings" do
     it "returns 5 ratings associated with the game" do
       game = FactoryGirl.create(:game)
-      10.times { FactoryGirl.create(:rating, :game => game) }
+      10.times { FactoryGirl.create(:rating, game: game) }
 
       game.top_ratings.count.should == 5
     end
 
     it "orders ratings by value, descending" do
       game = FactoryGirl.create(:game)
-      rating2 = FactoryGirl.create(:rating, :game => game, :value => 2)
-      rating3 = FactoryGirl.create(:rating, :game => game, :value => 3)
-      rating1 = FactoryGirl.create(:rating, :game => game, :value => 1)
+      rating2 = FactoryGirl.create(:rating, game: game, value: 2)
+      rating3 = FactoryGirl.create(:rating, game: game, value: 3)
+      rating1 = FactoryGirl.create(:rating, game: game, value: 1)
 
       game.top_ratings.should == [rating3, rating2, rating1]
     end
@@ -80,12 +80,12 @@ describe Game do
   describe "all_ratings" do
     it "orders all ratings by value, descending" do
       game = FactoryGirl.create(:game)
-      rating2 = FactoryGirl.create(:rating, :game => game, :value => 2)
-      rating3 = FactoryGirl.create(:rating, :game => game, :value => 3)
-      rating1 = FactoryGirl.create(:rating, :game => game, :value => 1)
-      rating4 = FactoryGirl.create(:rating, :game => game, :value => 4)
-      rating5 = FactoryGirl.create(:rating, :game => game, :value => 5)
-      rating6 = FactoryGirl.create(:rating, :game => game, :value => 6)
+      rating2 = FactoryGirl.create(:rating, game: game, value: 2)
+      rating3 = FactoryGirl.create(:rating, game: game, value: 3)
+      rating1 = FactoryGirl.create(:rating, game: game, value: 1)
+      rating4 = FactoryGirl.create(:rating, game: game, value: 4)
+      rating5 = FactoryGirl.create(:rating, game: game, value: 5)
+      rating6 = FactoryGirl.create(:rating, game: game, value: 6)
 
       game.all_ratings.should == [
         rating6,
@@ -101,7 +101,7 @@ describe Game do
   describe "validations" do
     context "name" do
       it "must be present" do
-        game = FactoryGirl.build(:game, :name => nil)
+        game = FactoryGirl.build(:game, name: nil)
 
         game.should_not be_valid
         game.errors[:name].should == ["can't be blank"]
@@ -241,33 +241,33 @@ describe Game do
 
     context "rating_type" do
       it "must be present" do
-        game = FactoryGirl.build(:game, :rating_type => nil)
+        game = FactoryGirl.build(:game, rating_type: nil)
 
         game.should_not be_valid
         game.errors[:rating_type].should == ["must be a valid rating type"]
       end
 
       it "can be elo" do
-        game = FactoryGirl.build(:game, :rating_type => "elo")
+        game = FactoryGirl.build(:game, rating_type: "elo")
 
         game.should be_valid
       end
 
       it "can be trueskill" do
-        game = FactoryGirl.build(:game, :rating_type => "trueskill")
+        game = FactoryGirl.build(:game, rating_type: "trueskill")
 
         game.should be_valid
       end
 
       it "cannot be anything else" do
-        game = FactoryGirl.build(:game, :rating_type => "foo")
+        game = FactoryGirl.build(:game, rating_type: "foo")
 
         game.should_not be_valid
         game.errors[:rating_type].should == ["must be a valid rating type"]
       end
 
       it "cannot be changed" do
-        game = FactoryGirl.build(:game, :rating_type => "elo")
+        game = FactoryGirl.build(:game, rating_type: "elo")
         game.save!
 
         game.rating_type = "trueskill"
@@ -294,8 +294,8 @@ describe Game do
   describe "destroy" do
     it "deletes related ratings and results" do
       game = FactoryGirl.create(:game)
-      rating = FactoryGirl.create(:rating, :game => game)
-      result = FactoryGirl.create(:result, :game => game)
+      rating = FactoryGirl.create(:rating, game: game)
+      result = FactoryGirl.create(:result, game: game)
 
       game.destroy
 
@@ -311,22 +311,21 @@ describe Game do
       player2 = FactoryGirl.create(:player)
       player3 = FactoryGirl.create(:player)
       5.times do
-        team1 = FactoryGirl.create(:team, :rank => 1, :players => [player1])
-        team2 = FactoryGirl.create(:team, :rank => 2, :players => [player2])
-        result = FactoryGirl.create(:result, :game => game, :teams => [team1, team2])
+        team1 = FactoryGirl.create(:team, rank: 1, players: [player1])
+        team2 = FactoryGirl.create(:team, rank: 2, players: [player2])
+        result = FactoryGirl.create(:result, game: game, teams: [team1, team2])
         game.rater.update_ratings game, result.teams
       end
       4.times do
-        team1 = FactoryGirl.create(:team, :rank => 1, :players => [player3])
-        team2 = FactoryGirl.create(:team, :rank => 2, :players => [player2])
-        result = FactoryGirl.create(:result, :game => game, :teams => [team1, team2])
+        team1 = FactoryGirl.create(:team, rank: 1, players: [player3])
+        team2 = FactoryGirl.create(:team, rank: 2, players: [player2])
+        result = FactoryGirl.create(:result, game: game, teams: [team1, team2])
         game.rater.update_ratings game, result.teams
       end
 
-      previous_ratings = game.all_ratings.all
+      previous_ratings = game.all_ratings.to_a
 
       game.recalculate_ratings!
-      game.reload.ratings
 
       attrs = ->(rating){[rating.player_id, rating.value, rating.trueskill_mean, rating.trueskill_deviation]}
       previous_ratings.map(&:id).should_not == game.all_ratings.map(&:id)

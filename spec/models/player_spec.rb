@@ -3,26 +3,26 @@ require "spec_helper"
 describe Player do
   describe "as_json" do
     it "returns the json representation of the player" do
-      player = FactoryGirl.build(:player, :name => "John Doe", :email => "foo@example.com")
+      player = FactoryGirl.build(:player, name: "John Doe", email: "foo@example.com")
 
       player.as_json.should == {
-        :name => "John Doe",
-        :email => "foo@example.com"
+        name: "John Doe",
+        email: "foo@example.com"
       }
     end
   end
   describe "validations" do
     context "name" do
       it "is required" do
-        player = FactoryGirl.build(:player, :name => nil)
+        player = FactoryGirl.build(:player, name: nil)
 
         player.should_not be_valid
         player.errors[:name].should == ["can't be blank"]
       end
 
       it "must be unique" do
-        FactoryGirl.create(:player, :name => "Drew")
-        player = FactoryGirl.build(:player, :name => "Drew")
+        FactoryGirl.create(:player, name: "Drew")
+        player = FactoryGirl.build(:player, name: "Drew")
 
         player.should_not be_valid
         player.errors[:name].should == ["has already been taken"]
@@ -31,7 +31,7 @@ describe Player do
 
     context "email" do
       it "can be blank" do
-        player = FactoryGirl.build(:player, :email => "")
+        player = FactoryGirl.build(:player, email: "")
         player.should be_valid
       end
 
@@ -49,7 +49,7 @@ describe Player do
 
   describe "name" do
     it "has a name" do
-      player = FactoryGirl.create(:player, :name => "Drew")
+      player = FactoryGirl.create(:player, name: "Drew")
 
       player.name.should == "Drew"
     end
@@ -60,7 +60,7 @@ describe Player do
       game = FactoryGirl.create(:game)
       player = FactoryGirl.create(:player)
 
-      10.times { FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
+      10.times { FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
 
       player.recent_results.size.should == 5
     end
@@ -71,11 +71,11 @@ describe Player do
       player = FactoryGirl.create(:player)
 
       Timecop.freeze(3.days.ago) do
-        5.times { FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
+        5.times { FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
       end
 
       Timecop.freeze(1.day.ago) do
-        newer_results = 5.times.map { FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
+        newer_results = 5.times.map { FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)]) }
       end
 
       player.recent_results.sort.should == newer_results.sort
@@ -87,11 +87,11 @@ describe Player do
       old = new = nil
 
       Timecop.freeze(2.days.ago) do
-        old = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
+        old = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
       end
 
       Timecop.freeze(1.days.ago) do
-        new = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
+        new = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
       end
 
       player.recent_results.should == [new, old]
@@ -101,8 +101,8 @@ describe Player do
   describe "destroy" do
     it "deletes related ratings and results" do
       player = FactoryGirl.create(:player)
-      rating = FactoryGirl.create(:rating, :player => player)
-      result = FactoryGirl.create(:result, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
+      rating = FactoryGirl.create(:rating, player: player)
+      result = FactoryGirl.create(:result, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
 
       player.destroy
 
@@ -116,7 +116,7 @@ describe Player do
       it "returns the rating if it exists" do
         player = FactoryGirl.create(:player)
         game = FactoryGirl.create(:game)
-        rating = FactoryGirl.create(:rating, :game => game, :player => player)
+        rating = FactoryGirl.create(:rating, game: game, player: player)
 
         expect do
           found_rating = player.ratings.find_or_create(game)
@@ -139,13 +139,13 @@ describe Player do
     it "resets the player's rating to the previous rating" do
       player = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
-      rating = FactoryGirl.create(:rating, :game => game, :player => player, :value => 1002)
-      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1001)
-      FactoryGirl.create(:rating_history_event, :rating => rating, :value => 1002)
+      rating = FactoryGirl.create(:rating, game: game, player: player, value: 1002)
+      FactoryGirl.create(:rating_history_event, rating: rating, value: 1001)
+      FactoryGirl.create(:rating_history_event, rating: rating, value: 1002)
 
       player.rewind_rating!(game)
 
-      player.ratings.where(:game_id => game.id).first.value.should == 1001
+      player.ratings.where(game_id: game.id).first.value.should == 1001
     end
   end
 
@@ -153,8 +153,8 @@ describe Player do
     it "finds wins" do
       player = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
-      win = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
-      loss = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1)])
+      win = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
+      loss = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1)])
       player.results.for_game(game).size.should == 2
       player.results.for_game(game).wins.should == [win]
     end
@@ -164,8 +164,8 @@ describe Player do
     it "finds losses" do
       player = FactoryGirl.create(:player)
       game = FactoryGirl.create(:game)
-      win = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
-      loss = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1)])
+      win = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
+      loss = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1)])
       player.results.for_game(game).size.should == 2
       player.results.for_game(game).losses.should == [loss]
     end
@@ -177,10 +177,10 @@ describe Player do
       game = FactoryGirl.create(:game)
       opponent1 = FactoryGirl.create(:player)
       opponent2 = FactoryGirl.create(:player)
-      win_against_opponent1 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2, players: [opponent1])])
-      loss_against_opponent1 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1, players: [opponent1])])
-      win_against_opponent2 = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2, players: [opponent2])])
-      opponent2_game_against_different_player = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1), FactoryGirl.create(:team, rank: 2, players: [opponent2])])
+      win_against_opponent1 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2, players: [opponent1])])
+      loss_against_opponent1 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1, players: [opponent1])])
+      win_against_opponent2 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2, players: [opponent2])])
+      opponent2_game_against_different_player = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1), FactoryGirl.create(:team, rank: 2, players: [opponent2])])
 
       player.results.for_game(game).against(opponent1).sort_by(&:id).should == [win_against_opponent1, loss_against_opponent1]
       player.results.for_game(game).against(opponent2).sort_by(&:id).should == [win_against_opponent2]
