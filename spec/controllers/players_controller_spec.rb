@@ -10,7 +10,7 @@ describe PlayersController do
   end
 
   describe "create" do
-    it "creates a player and redirects to the player show page" do
+    it "creates a player and redirects to dashboard" do
       post :create, :player => {:name => "Drew", :email => "drew@example.com"}
 
       player = Player.where(:name => "Drew", :email => "drew@example.com").first
