@@ -9,7 +9,7 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => {
+        teams: {
           "0" => { players: [player1.id.to_s] },
           "1" => { players: [player2.id.to_s] }
         }
@@ -28,7 +28,7 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => {
+        teams: {
           "0" => { players: [player.id.to_s] },
           "1" => { players: [player.id.to_s] }
         }
@@ -43,7 +43,7 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => {
+        teams: {
           "0" => { players: [player.id.to_s] },
           "1" => { players: [] }
         }
@@ -53,7 +53,7 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => {
+        teams: {
           "0" => { players: [nil] },
           "1" => { players: [player.id.to_s] }
         }
@@ -69,7 +69,7 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => {
+        teams: {
           "0" => { players: [player1.id.to_s] },
           "1" => { players: [player2.id.to_s] },
           "2" => { players: [] }
@@ -90,7 +90,7 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => {
+        teams: {
           "0" => { players: [player1.id.to_s] },
           "1" => { players: [""] },
           "2" => { players: [player2.id.to_s] }
@@ -107,7 +107,7 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => {
+        teams: {
           "0" => { players: player1.id.to_s },
           "1" => { players: player2.id.to_s }
         }
@@ -127,7 +127,7 @@ describe ResultService do
 
       response = ResultService.create(
         game,
-        :teams => {
+        teams: {
           "0" => { players: [player1.id.to_s], relation: "ties" },
           "1" => { players: [player2.id.to_s] },
         }
@@ -146,14 +146,14 @@ describe ResultService do
 
         ResultService.create(
           game,
-          :teams => {
+          teams: {
             "0" => { players: [player1.id.to_s] },
             "1" => { players: [player2.id.to_s] }
           }
         )
 
-        rating1 = player1.ratings.where(:game_id => game.id).first
-        rating2 = player2.ratings.where(:game_id => game.id).first
+        rating1 = player1.ratings.where(game_id: game.id).first
+        rating2 = player2.ratings.where(game_id: game.id).first
 
         rating1.should_not be_nil
         rating1.value.should > game.rater.default_attributes[:value]
@@ -172,7 +172,7 @@ describe ResultService do
 
       result = ResultService.create(
         game,
-          :teams => {
+          teams: {
             "0" => { players: [player1.id.to_s] },
             "1" => { players: [player2.id.to_s] }
           }
@@ -190,8 +190,8 @@ describe ResultService do
       player_2 = FactoryGirl.create(:player)
       player_3 = FactoryGirl.create(:player)
 
-      old_result = FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_2])])
-      FactoryGirl.create(:result, :game => game, :teams => [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_3])])
+      old_result = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_2])])
+      FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_3])])
 
       response = ResultService.destroy(old_result)
 

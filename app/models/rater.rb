@@ -51,16 +51,16 @@ module Rater
 
     def to_elo rating
       Elo::Player.new(
-        :rating => rating.value,
-        :games_played => rating.player.results.where(:game_id => rating.game.id).count,
-        :pro => rating.pro?
+        rating: rating.value,
+        games_played: rating.player.results.where(game_id: rating.game.id).count,
+        pro: rating.pro?
       )
     end
 
     def _update_rating_from_elo(rating, elo)
       Rating.transaction do
-        rating.update_attributes!(:value => elo.rating, :pro => elo.pro?)
-        rating.history_events.create!(:value => elo.rating)
+        rating.update_attributes!(value: elo.rating, pro: elo.pro?)
+        rating.history_events.create!(value: elo.rating)
       end
     end
   end

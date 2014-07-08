@@ -1,5 +1,5 @@
 class ResultsController < ApplicationController
-  before_filter :_find_game
+  before_action :set_game
 
   def create
     response = ResultService.create(@game, params[:result])
@@ -25,7 +25,9 @@ class ResultsController < ApplicationController
     (@game.max_number_of_teams || 20).times{|i| @result.teams.build rank: i}
   end
 
-  def _find_game
+  private
+
+  def set_game
     @game = Game.find(params[:game_id])
   end
 end

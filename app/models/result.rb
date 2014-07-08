@@ -3,8 +3,8 @@ class Result < ActiveRecord::Base
   belongs_to :game
 
   validates :game, presence: true
-  scope :most_recent_first, :order => "created_at desc"
-  scope :for_game, lambda { |game| where(:game_id => game.id) }
+  scope :most_recent_first, -> { order created_at: :desc }
+  scope :for_game, -> (game) { where(game_id: game.id) }
 
   validate do |result|
     if result.winners.empty?
@@ -50,16 +50,16 @@ class Result < ActiveRecord::Base
 
   def as_json(options = {})
     {
-      :winner => winners.first.name,
-      :loser => losers.first.name,
-      :created_at => created_at.utc.to_s
+      winner: winners.first.name,
+      loser: losers.first.name,
+      created_at: created_at.utc.to_s
     }
   end
 
   def most_recent?
     teams.all? do |team|
       team.players.all? do |player|
-        player.results.where(:game_id => game.id).order("created_at DESC").first == self
+        player.results.where(game_id: game.id).order("created_at DESC").first == self
       end
     end
   end

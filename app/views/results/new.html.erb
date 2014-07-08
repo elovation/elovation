@@ -1,4 +1,4 @@
-<%= form_for [@game, @result], :html => {:id => "form-results"} do |f| %>
+<%= form_for [@game, @result], :html => {id: "form-results"} do |f| %>
   <%= f.error_messages %>
 
   <% @result.teams.each.with_index do |team, index| %>
