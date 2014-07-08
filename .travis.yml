@@ -1,4 +1,7 @@
 language: ruby
 rvm:
-  - 1.9.3
-before_script: bundle exec rake db:do
+  - 2.1.2
+before_script:
+  - cp config/database.yml.travis config/database.yml
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - rake db:migrate

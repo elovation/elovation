@@ -126,7 +126,7 @@ describe Result do
         result.teams.build rank: 2, players: [player]
 
         result.should_not be_valid
-        result.errors[:teams].should == ["must have unique players"]
+        result.errors[:teams].should include("must have unique players")
       end
 
       it "does not complain about similarity when both winner and loser are nil" do

@@ -3,8 +3,8 @@ class Result < ActiveRecord::Base
   belongs_to :game
 
   validates :game, presence: true
-  scope :most_recent_first, order: "created_at desc"
-  scope :for_game, lambda { |game| where(game_id: game.id) }
+  scope :most_recent_first, -> { order created_at: :desc }
+  scope :for_game, -> (game) { where(game_id: game.id) }
 
   validate do |result|
     if result.winners.empty?
