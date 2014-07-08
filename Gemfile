@@ -17,6 +17,7 @@ gem 'trueskill', github: 'saulabs/trueskill', require: 'saulabs/trueskill'
 
 group :production do
   gem 'rails_12factor'
+  gem 'unicorn'
 end
 
 group :development do
