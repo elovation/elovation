@@ -4,9 +4,6 @@ ruby '2.1.2'
 
 gem 'rails', '~> 4.1.4'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
 gem 'pg'
 
 gem 'sass-rails', '~> 4.0.3'
@@ -34,10 +31,10 @@ group :development, :test do
   gem 'spring-commands-rspec'
   # Pry stuff
   gem 'pry'
+  gem 'pry-rails'
   gem 'pry-coolline'
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
-  gem 'pry-rails'
 end
 
 group :test do
