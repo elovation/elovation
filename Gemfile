@@ -26,21 +26,19 @@ group :development do
 end
 
 group :development, :test do
-  # App preloading
+  gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'pry'
+  gem 'pry-byebug'
+  gem 'pry-coolline'
+  gem 'pry-rails'
+  gem 'pry-stack_explorer'
   gem 'spring'
   gem 'spring-commands-rspec'
-  # Pry stuff
-  gem 'pry'
-  gem 'pry-rails'
-  gem 'pry-coolline'
-  gem 'pry-stack_explorer'
-  gem 'pry-byebug'
 end
 
 group :test do
-  gem 'rspec-rails', '~> 2.14.2'
   gem 'mocha'
-  gem 'factory_girl_rails'
-  gem 'faker'
+  gem 'rspec-rails', '~> 2.14.2'
   gem 'timecop'
 end
