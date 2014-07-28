@@ -5,9 +5,9 @@ Elovation::Application.routes.draw do
   end
 
   resources :players do
-    resources :games, only: [:show], :controller => 'player_games'
+    resources :games, only: [:show], controller: 'player_games'
   end
 
   get '/dashboard' => 'dashboard#show', as: :dashboard
-  root :to => 'dashboard#show'
+  root to: 'dashboard#show'
 end

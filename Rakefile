@@ -9,6 +9,6 @@ Elovation::Application.load_tasks
 begin
   require "rspec/core/rake_task"
 
-  task :default => :spec
+  task default: :spec
 rescue LoadError
 end

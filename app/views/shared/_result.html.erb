@@ -5,7 +5,7 @@
 
     <% team.players.each do |winner| %>
       <%= link_to winner, class: 'player' do %>
-        <%= image_tag(gravatar_url(winner, :size => 16)) %>
+        <%= image_tag(gravatar_url(winner, size: 16)) %>
         <strong> <%= winner.name %></strong>
       <% end %>
 
@@ -25,7 +25,7 @@
 
 
   <% if result.most_recent? -%>
-    <%= link_to "Delete", game_result_path(result.game, result), :class => "btn btn-danger", :method => :delete, :confirm => "Are you sure?" %>
+    <%= link_to "Delete", game_result_path(result.game, result), class: "btn btn-danger", method: :delete, confirm: "Are you sure?" %>
   <% end -%>
 
 </li>

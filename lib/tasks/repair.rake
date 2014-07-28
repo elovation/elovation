@@ -1,5 +1,5 @@
 namespace :repair do
-  task :ratings => :environment do
+  task ratings: :environment do
     Game.all.each do |game|
       puts "calculating ratings for #{game.id} #{game.name}"
       puts "before: "
