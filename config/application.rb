@@ -58,7 +58,7 @@ module Elovation
     config.assets.version = '1.0'
 
     if ENV['BASIC_AUTH'] == "true"
-      config.middleware.insert_after(::Rack::Lock, "::Rack::Auth::Basic", "Elovation") do |u, p|
+      config.middleware.use '::Rack::Auth::Basic' do |u, p|
         [u, p] == [ENV['BASIC_AUTH_USER'], ENV['BASIC_AUTH_PASSWORD']]
       end
     end
