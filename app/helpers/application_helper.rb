@@ -7,6 +7,6 @@ module ApplicationHelper
   end
 
   def format_time(time)
-    time.in_time_zone('Pacific Time (US & Canada)').strftime("%A, %Y %B %d, %l:%M %p")
+    "#{time_ago_in_words(time)} ago"
   end
 end
