@@ -6,7 +6,12 @@
 
     <% if index != @result.teams.size - 1 %>
       <br/>
-      <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {} %>
+      <% if @game.allow_ties %>
+        <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {} %>
+      <% else %>
+        <%= hidden_field_tag "result[teams][#{index}][relation]", :defeats, {} %>
+        Defeats:
+      <% end %>
     <% end %>
   <% end %>
 
