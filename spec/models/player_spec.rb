@@ -174,16 +174,17 @@ describe Player do
   describe "against" do
     it "finds results against a specific opponent" do
       player = FactoryGirl.create(:player)
-      game = FactoryGirl.create(:game)
+      game = FactoryGirl.create(:game, max_number_of_players_per_team: 2)
       opponent1 = FactoryGirl.create(:player)
       opponent2 = FactoryGirl.create(:player)
       win_against_opponent1 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2, players: [opponent1])])
       loss_against_opponent1 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1, players: [opponent1])])
       win_against_opponent2 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2, players: [opponent2])])
       opponent2_game_against_different_player = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1), FactoryGirl.create(:team, rank: 2, players: [opponent2])])
+      win_with_opponent1 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player, opponent1]), FactoryGirl.create(:team, rank: 2)])
 
-      player.results.for_game(game).against(opponent1).sort_by(&:id).should == [win_against_opponent1, loss_against_opponent1]
-      player.results.for_game(game).against(opponent2).sort_by(&:id).should == [win_against_opponent2]
+      player.results.for_game(game).against(opponent1).sort_by(&:id).should match_array [win_against_opponent1, loss_against_opponent1]
+      player.results.for_game(game).against(opponent2).sort_by(&:id).should match_array [win_against_opponent2]
     end
   end
 end
