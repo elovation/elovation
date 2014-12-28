@@ -15,7 +15,6 @@
 /tmp
 
 /vendor/bundle
-/bin
 /.rvmrc
 /.ruby-version
 .DS_Store
