@@ -8,7 +8,11 @@
     <% end %>
 
     <% if i == 0 %>
-      <small>defeats</small>
+      <% if result.tie? %>
+        <small>ties</small>
+      <% else %>
+        <small>defeats</small>
+      <% end %>
     <% end %>
   <% end %>
 

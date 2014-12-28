@@ -41,11 +41,15 @@ class Result < ActiveRecord::Base
   end
 
   def winners
-    teams.select{|team| team.rank == Team::FIRST_PLACE_RANK}.map(&:players).flatten
+    teams.select{ |team| team.rank == Team::FIRST_PLACE_RANK }.map(&:players).flatten
   end
 
   def losers
-    teams.select{|team| team.rank != Team::FIRST_PLACE_RANK}.map(&:players).flatten
+    teams.select{ |team| team.rank != Team::FIRST_PLACE_RANK }.map(&:players).flatten
+  end
+
+  def tie?
+    teams.count == teams.winners.count
   end
 
   def as_json(options = {})
