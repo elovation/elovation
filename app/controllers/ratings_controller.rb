@@ -11,6 +11,8 @@ class RatingsController < ApplicationController
     end
   end
 
+  private
+
   def getRatings(game)
     ratings = game.all_ratings.map do |rating|
       {
@@ -19,8 +21,8 @@ class RatingsController < ApplicationController
           gravatar_url: view_context.gravatar_url(rating.player, size: 24)
         },
         value: rating.value,
-        wins: rating.player.results.for_game(rating.game).wins.size,
-        losses: rating.player.results.for_game(rating.game).losses.size
+        wins: rating.wins,
+        losses: rating.losses
       }
     end
     {

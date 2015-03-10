@@ -2,7 +2,7 @@
   <%= f.error_messages %>
 
   <h1>Player</h1>
-  
+
   <div class="control-group">
     <%= f.label :name, class: "control-label" %>
     <div class="controls">
@@ -14,6 +14,13 @@
     <%= f.label :email, class: "control-label" %>
     <div class="controls">
       <%= f.text_field :email, class: "input-xlarge" %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls">
+      <%= f.check_box :display_game_count, class: "input-mini" %>
+      <%= f.label :display_game_count, class: "control-label" %>
     </div>
   </div>
 

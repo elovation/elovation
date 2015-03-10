@@ -30,6 +30,7 @@ class Player < ActiveRecord::Base
 
   validates :name, uniqueness: true, presence: true
   validates :email, allow_blank: true, format: /@/
+  validates :display_game_count, inclusion: { in: [true, false], message: "must be selected" }
 
   def as_json
     {
