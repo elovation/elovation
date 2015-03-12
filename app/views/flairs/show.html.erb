@@ -1,0 +1,22 @@
+<h1>
+  <%= image_tag @flair.avatar.url(:medium) %>
+  <%= @flair.name %>
+</h1>
+
+<section class="action-buttons">
+  <span><%= link_to 'Edit Flair', edit_flair_path(@flair), class: "btn btn-primary" %></span>
+  <% if @flair.players.empty? %>
+    <span><%= link_to "Delete", flair_path(@flair), method: :delete, confirm: "Are you sure?", class: "btn btn-danger" %></span>
+  <% end %>
+</section>
+
+<div class="row-fluid">
+  <div class="span8">
+    <h2>Players</h2>
+    <% if @flair.players.any? %>
+      <%= render partial: 'players', object: @flair.players %>
+    <% else %>
+      <span>No players, start recruiting!</span>
+    <% end %>
+  </div>
+</div>

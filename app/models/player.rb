@@ -6,6 +6,7 @@ class Player < ActiveRecord::Base
   end
 
   has_and_belongs_to_many :teams
+  belongs_to :flair
 
   has_many :results, through: :teams do
     def against(opponent)

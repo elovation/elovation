@@ -18,6 +18,13 @@
   </div>
 
   <div class="control-group">
+    <%= f.label :flair_id, class: "control-label" %>
+    <div class="controls">
+      <%= f.collection_select :flair_id, Flair.all, :id, :name, {include_blank: "No flair"}, class: "input-xlarge" %>
+    </div>
+  </div>
+
+  <div class="control-group">
     <div class="controls">
       <%= f.check_box :display_game_count, class: "input-mini" %>
       <%= f.label :display_game_count, class: "control-label" %>

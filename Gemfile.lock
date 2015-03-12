@@ -43,6 +43,10 @@ GEM
     byebug (2.7.0)
       columnize (~> 0.3)
       debugger-linecache (~> 1.2)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.7)
+      climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.0)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -83,6 +87,11 @@ GEM
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.10.1)
+    paperclip (4.2.1)
+      activemodel (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (~> 0.5.3)
+      mime-types
     pg (0.17.1)
     pry (0.10.0)
       coderay (~> 1.1.0)
@@ -183,6 +192,7 @@ DEPENDENCIES
   faker
   jquery-rails
   mocha
+  paperclip (~> 4.2)
   pg
   pry
   pry-byebug

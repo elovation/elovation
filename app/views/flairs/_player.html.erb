@@ -1,0 +1,6 @@
+<li>
+  <%= link_to player, class: 'player' do %>
+    <%= image_tag(gravatar_url(player, size: 16)) %>
+    <strong> <%= player.name %></strong>
+  <% end %>
+</li>
