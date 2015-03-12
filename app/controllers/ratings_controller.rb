@@ -14,20 +14,36 @@ class RatingsController < ApplicationController
   private
 
   def getRatings(game)
-    ratings = game.all_ratings.map do |rating|
-      {
-        player: {
-          name: rating.player.name,
-          gravatar_url: view_context.gravatar_url(rating.player, size: 24)
-        },
-        value: rating.value,
-        wins: rating.wins,
-        losses: rating.losses
-      }
-    end
     {
       game_name: game.name,
-      ratings: ratings
+      ratings: game.all_ratings.map do |rating|
+        {
+          player: getPlayerToJSONise(rating.player),
+          value: rating.value,
+          wins: rating.wins,
+          losses: rating.losses
+        }
+      end
     }
+  end
+
+  private
+
+  def getPlayerToJSONise(player)
+    result = {
+      name: player.name,
+      gravatar_url: view_context.gravatar_url(player, size: 24)
+    }
+    if (flair = player.flair)
+      result[:flair] = {
+        name: flair.name,
+        avatar_thumb: getAvatarThumbnailURL(flair)
+      }
+    end
+    return result
+  end
+
+  def getAvatarThumbnailURL(flair)
+    "#{request.protocol}#{request.host_with_port}#{flair.avatar.url(:thumb)}"
   end
 end
