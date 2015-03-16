@@ -46,22 +46,28 @@ class Rating < ActiveRecord::Base
   def wins
     results = player.results.for_game(game)
     if player.display_game_count
-      results.wins.size.to_s
-    else
-      wins = results.wins.size
-      losses = results.losses.size
-      ActionController::Base.helpers.number_to_percentage((100.0 * wins / (wins + losses)), precision: 0)
+      results.wins.size
     end
+  end
+
+  def winsPercentage
+    results = player.results.for_game(game)
+    wins = results.wins.size
+    losses = results.losses.size
+    ActionController::Base.helpers.number_to_percentage((100.0 * wins / (wins + losses)), precision: 0)
   end
 
   def losses
     results = player.results.for_game(game)
     if player.display_game_count
-      results.losses.size.to_s
-    else
-      wins = results.wins.size
-      losses = results.losses.size
-      ActionController::Base.helpers.number_to_percentage((100.0 * losses / (wins + losses)), precision: 0)
+      results.losses.size
     end
+  end
+
+  def lossesPercentage
+    results = player.results.for_game(game)
+    wins = results.wins.size
+    losses = results.losses.size
+    ActionController::Base.helpers.number_to_percentage((100.0 * losses / (wins + losses)), precision: 0)
   end
 end

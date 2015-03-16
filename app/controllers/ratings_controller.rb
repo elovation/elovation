@@ -17,12 +17,17 @@ class RatingsController < ApplicationController
     {
       game_name: game.name,
       ratings: game.all_ratings.map do |rating|
-        {
+        ratingToJSONise = {
           player: getPlayerToJSONise(rating.player),
           value: rating.value,
-          wins: rating.wins,
-          losses: rating.losses
+          wins_percentage: rating.winsPercentage,
+          losses_percentage: rating.lossesPercentage
         }
+        if (rating.player.display_game_count)
+          ratingToJSONise[:wins] = rating.wins
+          ratingToJSONise[:losses] = rating.losses
+        end
+        ratingToJSONise
       end
     }
   end
