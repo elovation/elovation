@@ -23,7 +23,7 @@
           <% losses = @player.results.losses.for_game(@game).against(opponent).size %>
           <tr class="<%= "unplayed" if @player != opponent and wins == 0 and losses == 0 %>" >
             <td>
-              <%= link_to opponent do %>
+              <%= link_to opponent, class: "player" do %>
                 <%= image_tag(gravatar_url(opponent, size: 24)) %>
                 <%= opponent.name %>
               <% end %>

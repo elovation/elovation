@@ -62,7 +62,7 @@
 				<tbody>
 				<% Player.all.sort_by(&:name).each do |player| %>
 					<tr>
-						<td class="<%= "active" if @player == player %>">
+						<td class="player <%= "active" if @player == player %>">
 							<%= link_to player_path(player) do %>
 								<%= image_tag(gravatar_url(player, size: 24)) %>
 								<%= player.name %>
