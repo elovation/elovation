@@ -68,7 +68,7 @@
             <td>
               <% unless difference.nil? %>
                 <span class="difference <%= difference < 0 ? "lost" : "won" %>">
-                  <%= difference %>
+                  <%= "%+d" % difference %>
                 </span>
               <% end %>
             </td>
