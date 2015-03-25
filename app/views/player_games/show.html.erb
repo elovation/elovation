@@ -47,25 +47,46 @@
 
   <div class="span6">
     <h2>Recent Games</h2>
-    <ul id='results'>
-      <% @player.results.for_game(@game).limit(15).order('created_at desc').each do |result| %>
-        <li>
-          <%= format_time(result.created_at) %>
-          -
-          <% if result.winners.include?(@player) %>
-            <% if result.losers.empty? %>
-              Tied
-            <% else %>
-              Won against <strong><%= result.losers.map(&:name).join(", ") %></strong>
-            <% end %>
-          <% else %>
-            Lost to <strong><%= result.winners.map(&:name).join(", ") %></strong>
-          <% end %>
-          <% if result.most_recent? -%>
-            <%= link_to "Delete", game_result_path(@game, result), class: "btn btn-danger", method: :delete, confirm: "Are you sure?" %>
-          <% end -%>
-        </li>
-      <% end %>
-    </ul>
+    <table class="recent">
+      <thead>
+        <tr>
+          <th>Rating</th>
+          <th>Difference</th>
+          <th>When</th>
+          <th>What</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% nr_of_games = 15 %>
+        <% rating_history = @player.ratings.find_by_game_id(@game).history_events.limit(nr_of_games + 1).map(&:value) %>
+        <% differences = rating_history.each_cons(2).map{ |to, from| to-from } %>
+        <% results = @player.results.for_game(@game).limit(nr_of_games).order('created_at desc') %>
+        <% rating_history.take(nr_of_games).zip(differences, results).each do |rating, difference, result| %>
+          <tr>
+            <td> <%= rating %> </td>
+            <td class="difference <%= difference < 0 ? "lost" : "won" %>">
+              <%= difference %>
+            </td>
+            <td> <%= format_time(result.created_at) %> </td>
+            <td>
+              <% if result.winners.include?(@player) %>
+                <% if result.losers.empty? %>
+                  Tied
+                <% else %>
+                  Won against <strong><%= result.losers.map(&:name).join(", ") %></strong>
+                <% end %>
+              <% else %>
+                Lost to <strong><%= result.winners.map(&:name).join(", ") %></strong>
+              <% end %>
+            <!-- </td>
+            <td> -->
+              <% if result.most_recent? -%>
+                <%= link_to "Delete", game_result_path(@game, result), class: "btn btn-danger", method: :delete, confirm: "Are you sure?" %>
+              <% end -%>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>
