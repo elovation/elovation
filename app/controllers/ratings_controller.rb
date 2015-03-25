@@ -11,6 +11,31 @@ class RatingsController < ApplicationController
     end
   end
 
+  def by_days
+    @game = Game.find(params[:game_id])
+
+    by_days = @game.all_ratings.each_with_index.map do |rating, i|
+      from = 4.weeks.ago.midnight
+      ratings_by_day = rating.history_events.where(created_at: from..Time.now).to_a.group_by_day(&:created_at)
+      each_days_last_rating = ratings_by_day.map do |day, ratings|
+        # A days last rating is actually the first in the array, because it's orderd by :created_at desc
+        [day, ratings.first.value] unless ratings.empty?
+      end.compact
+      rating_before = rating.history_events.where("created_at < ?", from).first
+      # Subtract a day from the first date to make it appear before the 1st actual
+      # point on the graph
+      each_days_last_rating.unshift([from - 1.day, rating_before.value]) unless rating_before.nil?
+      {
+        name: rating.player.name,
+        data: each_days_last_rating,
+        # Only the top 3 are initially visible
+        visible: i < 3
+      }
+    end
+
+    render json: by_days
+  end
+
   private
 
   def getRatings(game)

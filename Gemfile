@@ -15,7 +15,10 @@ gem 'dynamic_form'
 gem 'elo'
 gem 'trueskill', github: 'saulabs/trueskill', require: 'saulabs/trueskill'
 
-gem "paperclip", "~> 4.2"
+gem 'paperclip', '~> 4.2'
+
+gem 'chartkick'
+gem 'groupdate'
 
 group :production do
   gem 'rails_12factor'

@@ -1,7 +1,11 @@
 Elovation::Application.routes.draw do
   resources :games do
     resources :results, only: [:create, :destroy, :new]
-    resources :ratings, only: [:index]
+    resources :ratings, only: [:index] do
+      collection do
+        get 'by_days'
+      end
+    end
   end
 
   resources :players do
