@@ -8,16 +8,13 @@
 	<td><%= render partial: 'flairs/flair', object: rating.player.flair %></td>
 	<td><%= rating.value %></td>
 	<td>
-		<% rating_yesterday = rating.history_events.where("created_at < ?", Date.today).first %>
-		<% unless rating_yesterday.nil? %>
-			<% difference = rating.value - rating_yesterday.value %>
-			<% unless difference == 0 %>
-				<span class="difference <%= difference < 0 ? "lost" : "won" %>">
-					<%= "%+d" % difference %>
-				</span>
-			<% end %>
+		<% difference = rating.change_since_yesterday %>
+		<% unless difference.nil? %>
+			<span class="difference <%= difference < 0 ? "lost" : "won" %>">
+				<%= "%+d" % difference %>
+			</span>
 		<% end %>
 	</td>
-  <td><%= rating.winsPercentage %></td>
+  <td><%= rating.wins_percentage %></td>
   <td><%= rating.wins %></td>
 </tr>

@@ -43,6 +43,15 @@ class Rating < ActiveRecord::Base
     history_events.second
   end
 
+  def change_since_yesterday
+    rating_yesterday = history_events.where("created_at < ?", Date.today).first
+    unless rating_yesterday.nil? or rating_yesterday.most_recent?
+      value - rating_yesterday.value
+    else
+      nil
+    end
+  end
+
   def wins
     results = player.results.for_game(game)
     if player.display_game_count
@@ -50,7 +59,7 @@ class Rating < ActiveRecord::Base
     end
   end
 
-  def winsPercentage
+  def wins_percentage
     results = player.results.for_game(game)
     wins = results.wins.size
     losses = results.losses.size
@@ -64,7 +73,7 @@ class Rating < ActiveRecord::Base
     end
   end
 
-  def lossesPercentage
+  def losses_percentage
     results = player.results.for_game(game)
     wins = results.wins.size
     losses = results.losses.size

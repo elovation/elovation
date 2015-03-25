@@ -20,10 +20,13 @@ class RatingsController < ApplicationController
         ratingToJSONise = {
           player: getPlayerToJSONise(rating.player),
           value: rating.value,
-          wins_percentage: rating.winsPercentage,
-          losses_percentage: rating.lossesPercentage
+          wins_percentage: rating.wins_percentage,
+          losses_percentage: rating.losses_percentage
         }
-        if (rating.player.display_game_count)
+        unless rating.change_since_yesterday.nil?
+          ratingToJSONise[:change_since_yesterday] = rating.change_since_yesterday
+        end
+        if rating.player.display_game_count
           ratingToJSONise[:wins] = rating.wins
           ratingToJSONise[:losses] = rating.losses
         end
