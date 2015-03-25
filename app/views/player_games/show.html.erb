@@ -65,8 +65,12 @@
         <% rating_history.take(nr_of_games).zip(differences, results).each do |rating, difference, result| %>
           <tr>
             <td> <%= rating %> </td>
-            <td class="difference <%= difference < 0 ? "lost" : "won" %>">
-              <%= difference %>
+            <td>
+              <% unless difference.nil? %>
+                <span class="difference <%= difference < 0 ? "lost" : "won" %>">
+                  <%= difference %>
+                </span>
+              <% end %>
             </td>
             <td> <%= format_time(result.created_at) %> </td>
             <td>
@@ -82,7 +86,7 @@
             </td>
             <td>
               <% if result.winners.include?(@player) %>
-                <% if not result.losers.empty? %>
+                <% unless result.losers.empty? %>
                   <strong><%= result.winners.reject{ |p| p == @player}.map(&:name).join(", ") %></strong>
                 <% end %>
               <% else %>
