@@ -54,6 +54,7 @@
           <th>Difference</th>
           <th>When</th>
           <th>What</th>
+          <th>With</th>
         </tr>
       </thead>
       <tbody>
@@ -78,11 +79,15 @@
               <% else %>
                 Lost to <strong><%= result.winners.map(&:name).join(", ") %></strong>
               <% end %>
-            <!-- </td>
-            <td> -->
-              <% if result.most_recent? -%>
-                <%= link_to "Delete", game_result_path(@game, result), class: "btn btn-danger", method: :delete, confirm: "Are you sure?" %>
-              <% end -%>
+            </td>
+            <td>
+              <% if result.winners.include?(@player) %>
+                <% if not result.losers.empty? %>
+                  <strong><%= result.winners.reject{ |p| p == @player}.map(&:name).join(", ") %></strong>
+                <% end %>
+              <% else %>
+                <strong><%= result.losers.reject{ |p| p == @player}.map(&:name).join(", ") %></strong>
+              <% end %>
             </td>
           </tr>
         <% end %>
