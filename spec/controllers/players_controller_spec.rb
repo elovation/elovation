@@ -11,9 +11,9 @@ describe PlayersController do
 
   describe "create" do
     it "creates a player and redirects to dashboard" do
-      post :create, player: {name: "Drew", email: "drew@example.com"}
+      post :create, player: {name: "Drew", email: "drew@example.com", display_game_count: true}
 
-      player = Player.where(name: "Drew", email: "drew@example.com").first
+      player = Player.where(name: "Drew", email: "drew@example.com", display_game_count: true).first
 
       player.should_not be_nil
       response.should redirect_to(dashboard_path)
@@ -29,7 +29,7 @@ describe PlayersController do
 
     it "protects against mass assignment" do
       Timecop.freeze(Time.now) do
-        post :create, player: {created_at: 3.days.ago, name: "Drew"}
+        post :create, player: {created_at: 3.days.ago, name: "Drew", display_game_count: false}
 
         player = Player.where(name: "Drew").first
         player.created_at.should > 3.days.ago
