@@ -32,7 +32,7 @@ class GamesController < ApplicationController
     @chart_data = Player.all.map do |player|
       player_events = RatingHistoryEvent.where(rating_id: player.id).select { |e| e.rating.game.id == @game.id }
 
-      last_value = player_events.first.value
+      last_value = player_events.first.value rescue 0
 
       data = every_date.map do |date|
         if player_events.any? { |e| e.created_at.to_s == date.to_s }
