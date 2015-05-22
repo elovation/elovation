@@ -27,6 +27,23 @@ class GamesController < ApplicationController
   end
 
   def show
+    every_date = @game.ratings.flat_map(&:history_events).map(&:created_at)
+
+    @chart_data = Player.all.map do |player|
+      player_events = RatingHistoryEvent.where(rating_id: player.id).select { |e| e.rating.game.id == @game.id }
+
+      last_value = player_events.first.value
+
+      data = every_date.map do |date|
+        if player_events.any? { |e| e.created_at.to_s == date.to_s }
+          last_value = player_events.find {|e| e.created_at.to_s == date.to_s }.value
+        end
+        [date, last_value]
+      end
+
+      {name: player.name, data: data}
+    end
+
     respond_to do |format|
       format.html
       format.json do
