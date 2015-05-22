@@ -10,6 +10,7 @@ gem 'sass-rails', '~> 4.0.3'
 gem 'jquery-rails'
 gem 'coffee-rails'
 gem 'uglifier'
+gem 'chartkick'
 
 gem 'dynamic_form'
 gem 'elo'

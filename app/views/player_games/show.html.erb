@@ -69,3 +69,9 @@
     </ul>
   </div>
 </div>
+
+<div class="row">
+  <h2>Progress</h2>
+    <%= line_chart RatingHistoryEvent.where(rating_id: @player.id).to_a.map { |event| [event.created_at, event.value] } %>
+</div>
+
