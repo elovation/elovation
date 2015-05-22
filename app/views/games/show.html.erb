@@ -41,6 +41,5 @@
 
 <div class="row">
   <h2>Progress</h2>
-  <% all_dates = RatingHistoryEvent.all.map(&:created_at) %>
-  <%= line_chart @chart_data %>
+  <%= line_chart @chart_data, min: nil, max: nil %>
 </div>
