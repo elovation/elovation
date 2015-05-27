@@ -27,7 +27,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    every_date = @game.ratings.flat_map(&:history_events).map { |e| e.created_at.to_s }.sort.uniq
+    every_date = @game.ratings.flat_map(&:history_events).map { |e| e.created_at.to_date.to_s }.sort.uniq
 
     @chart_data = Player.all.map do |player|
       player_events = @game.ratings.where(player_id: player.id).flat_map(&:history_events)
@@ -37,7 +37,7 @@ class GamesController < ApplicationController
         nil
       else
         data = every_date.map do |date|
-          last_value = player_events.find {|e| e.created_at.to_s == date } || last_value
+          last_value = player_events.select {|e| e.created_at.to_date.to_s == date }.last rescue last_value
 
           if last_value
             [date, last_value.value]
