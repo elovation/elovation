@@ -27,28 +27,30 @@ class GamesController < ApplicationController
   end
 
   def show
-    every_date = @game.ratings.flat_map(&:history_events).map { |e| e.created_at.to_date.to_s }.sort.uniq
+    players = Player.all.includes(ratings: :history_events).where(ratings: { game: @game })
 
-    @chart_data = Player.all.map do |player|
-      player_events = @game.ratings.where(player_id: player.id).flat_map(&:history_events)
-      last_value = nil
-
-      if player_events.empty?
-        nil
-      else
-        data = every_date.map do |date|
-          last_value = player_events.select {|e| e.created_at.to_date.to_s == date }.last rescue last_value
-
-          if last_value
-            [date, last_value.value]
-          else
-            nil
-          end
-        end
-
-        {name: player.name, data: data.compact}
+    player_to_days = Hash.new
+    every_day = Set.new
+    players.each do |player|
+      day_to_event = Hash.new
+      RatingHistoryEvent.events(player, @game).each do |event|
+        day_to_event[event.created_at.to_date.to_s] = event.value
+        every_day.add(event.created_at.to_date.to_s)
       end
-    end.compact
+      player_to_days[player.name] = day_to_event
+    end
+
+    players.each do |player|
+      last_rating = nil
+      every_day.to_a.sort.each_with_index do |day, i|
+        last_rating = player_to_days[player.name].fetch(day, last_rating)
+        player_to_days[player.name][day] = last_rating
+      end
+    end
+
+    @chart_data = players.map do |player|
+      {:name => player.name, :data => player_to_days[player.name].to_a}
+    end
 
     respond_to do |format|
       format.html
