@@ -22,7 +22,7 @@
         <% @game.all_ratings.each do |rating| %>
 
           <% opponent = rating.player %>
-          <% wins = @player.results.wins.for_game(@game).against(opponent).size %>
+          <% wins = @player.results.wins.for_game(@game).against(opponent).size - @player.ties(@game, opponent) %>
           <% losses = @player.results.losses.for_game(@game).against(opponent).size %>
           <tr class="<%= "unplayed" if @player != opponent and wins == 0 and losses == 0 %>" >
             <td>
@@ -36,7 +36,7 @@
               <td><%= wins %></td>
               <td><%= losses %></td>
               <% if @game.allow_ties %>
-                <td><%= rating.player.ties(rating.game) %></td>
+                <td><%= @player.ties(@game, opponent) %></td>
               <% end %>
             <% else %>
               <td>–</td>

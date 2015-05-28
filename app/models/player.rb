@@ -48,8 +48,12 @@ class Player < ActiveRecord::Base
     rating.rewind!
   end
 
-  def ties(game)
-    results.to_a.count { |r| r.tie? }
+  def total_ties(game)
+    results.where(game_id: game).to_a.count { |r| r.tie? }
+  end
+
+  def ties(game, opponent)
+    results.where(game_id: game).against(opponent).to_a.count { |r| r.tie? }
   end
 
 end
