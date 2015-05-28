@@ -22,6 +22,7 @@ class Player < ActiveRecord::Base
     def wins
       where(teams: {rank: Team::FIRST_PLACE_RANK})
     end
+
   end
 
   before_destroy do
@@ -46,4 +47,9 @@ class Player < ActiveRecord::Base
     rating = ratings.where(game_id: game.id).first
     rating.rewind!
   end
+
+  def ties(game)
+    results.to_a.count { |r| r.tie? }
+  end
+
 end

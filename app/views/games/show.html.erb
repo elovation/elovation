@@ -29,6 +29,9 @@
           <th>Rating</th>
           <th>W</th>
           <th>L</th>
+          <% if @game.allow_ties %>
+              <th>T</th>
+          <% end %>
         </tr>
       </thead>
       <tbody>

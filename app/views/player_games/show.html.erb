@@ -12,6 +12,9 @@
           <th>Rating</th>
           <th><abbr title='Wins'>W</abbr></th>
           <th><abbr title='Losses'>L</abbr></th>
+          <% if @game.allow_ties %>
+            <th><abbr title='Ties'>T</abbr></th>
+          <% end %>
         </tr>
       </thead>
 
@@ -32,10 +35,16 @@
               <td><%= rating.value %></td>
               <td><%= wins %></td>
               <td><%= losses %></td>
+              <% if @game.allow_ties %>
+                <td><%= rating.player.ties(rating.game) %></td>
+              <% end %>
             <% else %>
               <td>–</td>
               <td>–</td>
               <td>–</td>
+                <% if @game.allow_ties %>
+                    <td>–</td>
+                <% end %>
             <% end %>
           </tr>
 
