@@ -151,12 +151,36 @@ describe Player do
 
   describe "wins" do
     it "finds wins" do
-      player = FactoryGirl.create(:player)
+      player1 = FactoryGirl.create(:player)
+      player1WinTeam = FactoryGirl.create(:team, rank: 1, players: [player1])
+
+      player2 = FactoryGirl.create(:player)
+      player2WinTeam = FactoryGirl.create(:team, rank: 1, players: [player2])
+
       game = FactoryGirl.create(:game)
-      win = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player]), FactoryGirl.create(:team, rank: 2)])
-      loss = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 2, players: [player]), FactoryGirl.create(:team, rank: 1)])
-      player.results.for_game(game).size.should == 2
-      player.results.for_game(game).wins.should == [win]
+      win = FactoryGirl.create(:result, game: game, teams: [player1WinTeam, FactoryGirl.create(:team, players: [player2], rank: 2)])
+      loss = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 2, players: [player1]), player2WinTeam])
+
+      player1.results.for_game(game).size.should == 2
+      player1.total_wins(game).should == 1
+      player1.wins(game, player2).should == 1
+    end
+  end
+
+  describe "ties" do
+    it "finds ties" do
+      player1 = FactoryGirl.create(:player)
+      player1WinTeam = FactoryGirl.create(:team, rank: 1, players: [player1])
+
+      player2 = FactoryGirl.create(:player)
+      player2WinTeam = FactoryGirl.create(:team, rank: 1, players: [player2])
+
+      game = FactoryGirl.create(:game)
+      tie = FactoryGirl.create(:result, game: game, teams: [player1WinTeam, player2WinTeam])
+
+      player1.results.for_game(game).size.should == 1
+      player1.total_ties(game).should == 1
+      player1.ties(game, player2).should == 1
     end
   end
 
