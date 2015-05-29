@@ -7,7 +7,7 @@
 	</td>
 
 	<td><%= rating.value %></td>
-  <td><%= rating.player.results.for_game(rating.game).wins.size %></td>
+  <td><%= rating.player.total_wins(rating.game) %></td>
   <td><%= rating.player.results.for_game(rating.game).losses.size %></td>
   <% if @game.allow_ties %>
       <td><%= rating.player.total_ties(rating.game) %></td>

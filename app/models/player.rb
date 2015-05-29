@@ -19,10 +19,6 @@ class Player < ActiveRecord::Base
       where("teams.rank > ?", Team::FIRST_PLACE_RANK)
     end
 
-    def wins
-      where(teams: {rank: Team::FIRST_PLACE_RANK})
-    end
-
   end
 
   before_destroy do
@@ -55,5 +51,14 @@ class Player < ActiveRecord::Base
   def ties(game, opponent)
     results.where(game_id: game).against(opponent).to_a.count { |r| r.tie? }
   end
+
+  def total_wins(game)
+    results.where(game_id: game, teams: { rank: Team::FIRST_PLACE_RANK }).to_a.count { |r| !r.tie? }
+  end
+
+  def wins(game, opponent)
+    results.where(game_id: game, teams: {rank: Team::FIRST_PLACE_RANK}).against(opponent).to_a.count { |r| !r.tie? }
+  end
+
 
 end
