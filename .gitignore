@@ -19,3 +19,4 @@
 /.ruby-version
 .DS_Store
 elovation_development
+.idea/*
