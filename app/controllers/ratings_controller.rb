@@ -41,7 +41,7 @@ class RatingsController < ApplicationController
   def getRatings(game)
     {
       game_name: game.name,
-      ratings: game.all_ratings.map do |rating|
+      ratings: game.all_ratings.select(&:active?).map do |rating|
         ratingToJSONise = {
           player: getPlayerToJSONise(rating.player),
           value: rating.value,
