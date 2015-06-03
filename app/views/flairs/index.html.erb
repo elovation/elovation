@@ -1,0 +1,23 @@
+<div class="row-fluid">
+  <div class="span2">
+    <h2>All Flairs</h2>
+    <%= link_to "New Flair", new_flair_path, class: "btn" %>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Flair</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @flairs.each do |flair| %>
+          <tr>
+            <td><%= link_to flair.name, flair %></td>
+            <td><%= render partial: 'flair', object: flair %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

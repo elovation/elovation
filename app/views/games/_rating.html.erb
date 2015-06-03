@@ -5,8 +5,16 @@
 		<%= link_to rating.player.name, player_game_path(rating.player, @game) %>
 	  </div>
 	</td>
-
+	<td><%= render partial: 'flairs/flair', object: rating.player.flair %></td>
 	<td><%= rating.value %></td>
-  <td><%= rating.player.results.for_game(rating.game).wins.size %></td>
-  <td><%= rating.player.results.for_game(rating.game).losses.size %></td>
+	<td>
+		<% difference = rating.change_since_yesterday %>
+		<% unless difference.nil? %>
+			<span class="difference <%= difference < 0 ? "lost" : "won" %>">
+				<%= "%+d" % difference %>
+			</span>
+		<% end %>
+	</td>
+  <td><%= rating.wins_percentage %></td>
+  <td><%= rating.wins %></td>
 </tr>

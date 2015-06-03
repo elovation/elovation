@@ -42,4 +42,41 @@ class Rating < ActiveRecord::Base
   def _previous_rating
     history_events.second
   end
+
+  def change_since_yesterday
+    rating_yesterday = history_events.where("created_at < ?", Date.today).first
+    unless rating_yesterday.nil? or rating_yesterday.most_recent?
+      value - rating_yesterday.value
+    else
+      nil
+    end
+  end
+
+  def wins
+    results = player.results.for_game(game)
+    if player.display_game_count
+      results.wins.size
+    end
+  end
+
+  def wins_percentage
+    results = player.results.for_game(game)
+    wins = results.wins.size
+    losses = results.losses.size
+    ActionController::Base.helpers.number_to_percentage((100.0 * wins / (wins + losses)), precision: 0)
+  end
+
+  def losses
+    results = player.results.for_game(game)
+    if player.display_game_count
+      results.losses.size
+    end
+  end
+
+  def losses_percentage
+    results = player.results.for_game(game)
+    wins = results.wins.size
+    losses = results.losses.size
+    ActionController::Base.helpers.number_to_percentage((100.0 * losses / (wins + losses)), precision: 0)
+  end
 end

@@ -20,7 +20,7 @@ class PlayersController < ApplicationController
   end
 
   def new
-    @player = Player.new
+    @player = Player.new display_game_count: true
   end
 
   def show
@@ -41,6 +41,6 @@ class PlayersController < ApplicationController
   end
 
   def player_params
-    params.require(:player).permit(:name, :email)
+    params.require(:player).permit(:name, :email, :display_game_count, :flair_id)
   end
 end

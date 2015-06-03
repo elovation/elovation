@@ -82,24 +82,30 @@ module Rater
     end
 
     def update_ratings game, teams
-      ratings_to_ranks = teams.sort_by(&:rank).each_with_object({}){ |team, hash| hash[team.players.map{|player| player.ratings.find_or_create(game)}] = team.rank }
-
-      ratings_to_trueskill = {}
-      trueskills_to_rank = ratings_to_ranks.each_with_object({}) do |(ratings, rank), hash|
-        trueskills = ratings.map do |rating|
-          ratings_to_trueskill[rating] = to_trueskill(rating)
+      sorted_teams = teams.sort_by(&:rank)
+      ranks = sorted_teams.map(&:rank)
+      # An array of player rating arrays for each team
+      team_ratings = sorted_teams.map(&:players).map do |players|
+        players.map(&:ratings).map do |ratings|
+          ratings.find_or_create(game)
         end
-
-        hash[trueskills] = rank
       end
+      # An array of player trueskill rating arrays for each team
+      team_trueskills = team_ratings.map do |ratings|
+        ratings.map(&method(:to_trueskill))
+      end
+
+      trueskills_to_rank = team_trueskills.zip(ranks).to_h
 
       graph = Saulabs::TrueSkill::FactorGraph.new trueskills_to_rank
       graph.update_skills
 
-      ratings_to_trueskill.each do |rating, trueskill|
+      team_ratings.flatten.zip(team_trueskills.flatten).each do |rating, trueskill|
         _update_rating_from_trueskill rating, trueskill
       end
     end
+
+    private
 
     def to_trueskill rating
       Saulabs::TrueSkill::Rating.new(

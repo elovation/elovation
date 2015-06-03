@@ -1,15 +1,17 @@
 <h1><%= @game.name %></h1>
 
 <div class="row-fluid">
-  <div class="span6">
+  <div class="span4">
     <h2>All Ratings</h2>
     <table>
       <thead>
         <tr>
           <th>Player</th>
+          <th>Flair</th>
           <th>Rating</th>
+          <th>Today's change</th>
+          <th><abbr title='Wins Percentage'>W%</abbr></th>
           <th><abbr title='Wins'>W</abbr></th>
-          <th><abbr title='Losses'>L</abbr></th>
         </tr>
       </thead>
 
@@ -17,5 +19,9 @@
         <%= render partial: 'games/rating', collection: @game.all_ratings %>
       </tbody>
     </table>
+  </div>
+  <div class="span8">
+    <h2>Last 4 weeks</h2>
+    <%= line_chart by_days_game_ratings_path, height: "700px" %>
   </div>
 </div>

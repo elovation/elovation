@@ -6,6 +6,7 @@ class Player < ActiveRecord::Base
   end
 
   has_and_belongs_to_many :teams
+  belongs_to :flair
 
   has_many :results, through: :teams do
     def against(opponent)
@@ -30,6 +31,7 @@ class Player < ActiveRecord::Base
 
   validates :name, uniqueness: true, presence: true
   validates :email, allow_blank: true, format: /@/
+  validates :display_game_count, inclusion: { in: [true, false], message: "must be selected" }
 
   def as_json
     {

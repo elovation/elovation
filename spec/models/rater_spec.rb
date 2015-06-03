@@ -271,6 +271,11 @@ describe Rater do
     end
 
     describe "to_trueskill" do
+      before(:each) do
+        # Allow access to private methods for these tests
+        Rater::TrueSkillRater.send(:public, *Rater::TrueSkillRater.private_instance_methods)
+      end
+
       it "returns an trueskill rating with the correct mean" do
         game = FactoryGirl.create(:game)
         rating = FactoryGirl.build :rating, trueskill_mean: Rater::TrueSkillRater::DefaultMean
@@ -285,4 +290,3 @@ describe Rater do
     end
   end
 end
-

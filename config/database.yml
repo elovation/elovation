@@ -1,3 +1,9 @@
+production:
+  adapter: postgresql
+  database: elovation
+  host: localhost
+  min_messages: WARNING
+
 development:
   adapter: postgresql
   database: elovation_development

@@ -48,18 +48,33 @@
 	<div class='span4'>
 		<div class='well'>
 			<h2>Players</h2>
-			<%= link_to "New Player", new_player_path, class: "btn" %>
 
-			<ul id='players-list'>
+			<table id='players-list'>
+				<thead>
+					<tr>
+						<th> <%= link_to "New Player", new_player_path, class: "btn" %> </th>
+						<th>
+							<%= link_to "New Flair", new_flair_path, class: "btn" %>
+							<%= link_to "All Flairs", flairs_path, class: "btn" %>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
 				<% Player.all.sort_by(&:name).each do |player| %>
-					<li class="<%= "active" if @player == player %>">
-					<%= link_to player_path(player) do %>
-						<%= image_tag(gravatar_url(player, size: 24)) %>
-						<%= player.name %>
-					<% end %>
-					</li>
+					<tr>
+						<td class="player <%= "active" if @player == player %>">
+							<%= link_to player_path(player) do %>
+								<%= image_tag(gravatar_url(player, size: 24)) %>
+								<%= player.name %>
+							<% end %>
+						</td>
+						<td>
+							<%= render partial: 'flairs/flair', object: player.flair %>
+						</td>
+					</tr>
 				<% end %>
-			</ul>
+				</tbody>
+			</table>
 		</div>
 	</div>
 

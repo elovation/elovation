@@ -1,0 +1,5 @@
+<% if defined?(flair) and flair %>
+  <%= link_to flair_path(flair) do %>
+    <%= image_tag flair.avatar.url(:thumb), title: flair.name  %>
+  <% end %>
+<% end %>
