@@ -57,6 +57,13 @@ describe Game do
 
       game.recent_results.should == [new, old]
     end
+
+    it "orders games by updated_at, descending" do
+      game1 = FactoryGirl.create(:game)
+      game2 = FactoryGirl.create(:game)
+
+      expect(Game.all).to eq([game2, game1])
+    end
   end
 
   describe "top_ratings" do
