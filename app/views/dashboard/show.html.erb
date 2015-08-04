@@ -29,7 +29,11 @@
                     </span>
                   <% end %>
                   <% if i == 0 %>
-                    defeated
+                    <% if result.tie? %>
+                      ties
+                    <% else %>
+                      defeated
+                    <% end %>
                   <% end %>
                 <% end %>
                 <br/>
