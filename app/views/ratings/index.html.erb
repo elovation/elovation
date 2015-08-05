@@ -10,6 +10,9 @@
           <th>Rating</th>
           <th><abbr title='Wins'>W</abbr></th>
           <th><abbr title='Losses'>L</abbr></th>
+          <% if @game.allow_ties %>
+            <th><abbr title='Ties'>T</abbr></th>
+          <% end %>
         </tr>
       </thead>
 

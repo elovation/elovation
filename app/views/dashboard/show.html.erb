@@ -5,7 +5,7 @@
 		<%= link_to "New Game", new_game_path, class: "btn btn-primary" %>
 
 		<ul id='games-list'>
-		<% Game.all.sort_by(&:name).each do |game| %>
+		<% @games.each do |game| %>
 		  <li class="<%= "active" if @game == game %> game-list-item">
 		    <%= link_to game_path(game) do %>
 		    	<h3 class='game-title'><%= game.name %></h3>
@@ -29,7 +29,11 @@
                     </span>
                   <% end %>
                   <% if i == 0 %>
-                    defeated
+                    <% if result.tie? %>
+                      ties
+                    <% else %>
+                      defeated
+                    <% end %>
                   <% end %>
                 <% end %>
                 <br/>
@@ -51,8 +55,8 @@
 			<%= link_to "New Player", new_player_path, class: "btn" %>
 
 			<ul id='players-list'>
-				<% Player.all.sort_by(&:name).each do |player| %>
-					<li class="<%= "active" if @player == player %>">
+				<% @players.each do |player| %>
+					<li>
 					<%= link_to player_path(player) do %>
 						<%= image_tag(gravatar_url(player, size: 24)) %>
 						<%= player.name %>

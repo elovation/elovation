@@ -1,6 +1,17 @@
 require "spec_helper"
 
 describe Result do
+  describe "associations" do
+    it "updates its game when modified" do
+      game = FactoryGirl.create(:game)
+      updated = game.updated_at
+      sleep(1)
+      FactoryGirl.create(:result, game_id: game.id)
+
+      expect(updated).to_not eq(game.reload.updated_at)
+    end
+  end
+
   describe "as_json" do
     it "returns the json representation of the result" do
       created_at = Time.now

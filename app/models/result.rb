@@ -1,6 +1,6 @@
 class Result < ActiveRecord::Base
   has_many :teams
-  belongs_to :game
+  belongs_to :game, touch: true
 
   validates :game, presence: true
   scope :most_recent_first, -> { order created_at: :desc }
