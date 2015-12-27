@@ -1,4 +1,5 @@
 language: ruby
 rvm:
   - 2.1.4
+install: bundle install
 before_script: bundle exec rake db:do
