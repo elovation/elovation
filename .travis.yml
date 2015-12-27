@@ -1,6 +1,6 @@
 language: ruby
 rvm:
   - 2.1.4
-before_install: gem install trueskill -v 1.0.0
+before_install: gem update bundler
 install: bundle install --verbose
 before_script: bundle exec rake db:do
