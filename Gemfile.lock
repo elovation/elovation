@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/saulabs/trueskill.git
+  revision: d15b0752cb4be5ff27f26e5dbbac520680446355
+  specs:
+    trueskill (1.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -153,7 +159,6 @@ GEM
     thread_safe (0.3.5)
     tilt (1.4.1)
     timecop (0.8.0)
-    trueskill (1.0.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
@@ -193,7 +198,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   timecop
-  trueskill
+  trueskill!
   uglifier
   unicorn
 

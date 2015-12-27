@@ -14,7 +14,7 @@ gem 'chartkick'
 
 gem 'dynamic_form'
 gem 'elo'
-gem 'trueskill'
+gem 'trueskill', github: 'saulabs/trueskill', require: 'saulabs/trueskill'
 
 group :production do
   gem 'rails_12factor'
