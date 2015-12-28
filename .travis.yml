@@ -1,6 +1,11 @@
 language: ruby
 rvm:
   - 2.1.4
+addons:
+  code_climate:
+      repo_token: 1d94bf5c84636551042e34827bbd457cf0dee1e203b3dfec8fea0003d1d4f340
 before_install: gem update bundler
 install: bundle install --verbose
-before_script: bundle exec rake db:do
+before_script:
+  - cp config/database.yml.example config/database.yml
+  - bundle exec rake db:do

@@ -20,3 +20,4 @@
 .DS_Store
 elovation_development
 .idea/*
+/config/database.yml

@@ -43,4 +43,5 @@ group :test do
   gem 'mocha'
   gem 'rspec-rails', '~> 2.14.2'
   gem 'timecop'
+  gem 'codeclimate-test-reporter', require: nil
 end
