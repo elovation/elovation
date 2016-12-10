@@ -12,6 +12,10 @@ gem 'coffee-rails'
 gem 'uglifier'
 gem 'chartkick'
 
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+# This is necessary for running on linux
+gem 'therubyracer', platforms: :ruby
+
 gem 'dynamic_form'
 gem 'elo'
 gem 'trueskill', github: 'saulabs/trueskill', require: 'saulabs/trueskill'
