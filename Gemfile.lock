@@ -74,7 +74,7 @@ GEM
     jquery-rails (3.1.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
-    json (1.8.3)
+    json (1.8.6)
     kgio (2.10.0)
     libv8 (3.16.14.17)
     mail (2.6.3)
@@ -216,3 +216,9 @@ DEPENDENCIES
   trueskill!
   uglifier
   unicorn
+
+RUBY VERSION
+   ruby 2.4.1p111
+
+BUNDLED WITH
+   1.14.6
