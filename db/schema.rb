@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20170422053345) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email"
+    t.string   "slack_id"
   end
 
   create_table "players_teams", force: :cascade do |t|

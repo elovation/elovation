@@ -60,5 +60,13 @@ class Player < ActiveRecord::Base
     results.where(game_id: game, teams: {rank: Team::FIRST_PLACE_RANK}).against(opponent).to_a.count { |r| !r.tie? }
   end
 
-
+  def self.find_or_create_from_slack(slack_team_id, slack_user_id)
+    token = SlackAuthorization.find_by(team_id: slack_team_id).access_token
+    player = Player.find_or_initialize_by(slack_id: slack_user_id)
+    if player.new_record?
+      user = Slack::Web::Client.new(token: token).users_info(user: slack_user_id).user
+      player.update!(name: user.profile.real_name.present? ? user.profile.real_name : user.name, email: user.profile.email)
+    end
+    player
+  end
 end
