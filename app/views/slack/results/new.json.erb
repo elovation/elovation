@@ -1,6 +1,6 @@
 {
   "response_type": "ephemeral",
-  "text": "<%= @teams.map { |team| team[:players].map { |player| player[:name] }.to_sentence + " #{team[:relation]} " }.join('') %>.",
+  "text": "<%= Slack::Result.human_string(@teams) %>.",
   "attachments": [
     {
       "text": "Which game are you recording?",
