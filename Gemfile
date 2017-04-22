@@ -14,6 +14,7 @@ gem 'chartkick'
 gem 'dynamic_form'
 gem 'elo'
 gem 'trueskill', github: 'saulabs/trueskill', require: 'saulabs/trueskill'
+gem 'slack-ruby-client'
 
 group :production do
   gem 'rails_12factor'
@@ -23,6 +24,8 @@ end
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'dotenv-rails'
+  gem 'pry-byebug'
 end
 
 group :development, :test do
