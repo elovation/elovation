@@ -19,19 +19,19 @@
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="control-group" id='max_players_control_group'>
     <%= f.label :max_number_of_players_per_team, 'Maximum number of players per team', class: "control-label" %>
     <div class="controls">
-      <%= f.number_field :max_number_of_players_per_team, class: "input-mini" %>
-      <span class="help-inline">Leave blank for no restriction</span>
+      <%= f.number_field :max_number_of_players_per_team, value: 2, class: "input-mini" %>
+      <span class="help-inline">Set to blank for no restriction</span>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="control-group" id='max_teams_control_group'>
     <%= f.label :max_number_of_teams, 'Maximum number of teams', class: "control-label" %>
     <div class="controls">
-      <%= f.number_field :max_number_of_teams, class: "input-mini" %>
-      <span class="help-inline">Leave blank for no restriction</span>
+      <%= f.number_field :max_number_of_teams, value: 2, class: "input-mini" %>
+      <span class="help-inline">Set to blank for no restriction</span>
     </div>
   </div>
 
