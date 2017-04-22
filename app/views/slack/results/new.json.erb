@@ -8,14 +8,19 @@
       "color": "#005500",
       "attachment_type": "default",
       "actions": [
-        <%- @games.each do |game| %>
         {
-          "name": "<%= game.name %>",
-          "text": "<%= game.name %>",
-          "type": "button",
-          "value": "<%= URI.encode({ game_id: game.id, teams: @teams }.to_json) %>"
-        },
-        <%- end %>
+          "name": "game_list",
+          "text": "Pick a game...",
+          "type": "select",
+          "options": [
+            <%- @games.each do |game| %>
+            {
+              "text": "<%= game.name %>",
+              "value": "<%= URI.encode({ game_id: game.id, teams: @teams }.to_json) %>"
+            },
+            <%- end %>
+          ]
+        }
       ]
     }
   ]

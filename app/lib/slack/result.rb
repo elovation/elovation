@@ -1,7 +1,7 @@
 module Slack
   class Result
     def self.create(payload)
-      data = JSON.parse(URI.decode(payload['actions'][0]['value']))
+      data = JSON.parse(URI.decode(payload['actions'][0]['selected_options'][0]['value']))
       game = Game.find(data['game_id'])
       result = { teams: {} }
       data['teams'].each_with_index do |team, index|
