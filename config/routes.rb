@@ -10,4 +10,8 @@ Elovation::Application.routes.draw do
 
   get '/dashboard' => 'dashboard#show', as: :dashboard
   root to: 'dashboard#show'
+
+  namespace :slack do
+    get '/authorize', to: 'base#authorize'
+  end
 end

@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 7) do
+ActiveRecord::Schema.define(version: 20170422053345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "games", force: true do |t|
+  create_table "games", force: :cascade do |t|
     t.string   "name",                           null: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -28,30 +27,29 @@ ActiveRecord::Schema.define(version: 7) do
     t.boolean  "allow_ties"
   end
 
-  create_table "players", force: true do |t|
+  create_table "players", force: :cascade do |t|
     t.string   "name",       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email"
   end
 
-  create_table "players_teams", force: true do |t|
+  create_table "players_teams", force: :cascade do |t|
     t.integer "player_id"
     t.integer "team_id"
   end
 
-  create_table "rating_history_events", force: true do |t|
+  create_table "rating_history_events", force: :cascade do |t|
     t.integer  "rating_id",           null: false
     t.integer  "value",               null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "trueskill_mean"
     t.float    "trueskill_deviation"
+    t.index ["rating_id"], name: "index_rating_history_events_on_rating_id", using: :btree
   end
 
-  add_index "rating_history_events", ["rating_id"], name: "index_rating_history_events_on_rating_id", using: :btree
-
-  create_table "ratings", force: true do |t|
+  create_table "ratings", force: :cascade do |t|
     t.integer  "player_id",           null: false
     t.integer  "game_id",             null: false
     t.integer  "value",               null: false
@@ -60,20 +58,27 @@ ActiveRecord::Schema.define(version: 7) do
     t.datetime "updated_at"
     t.float    "trueskill_mean"
     t.float    "trueskill_deviation"
+    t.index ["game_id"], name: "index_ratings_on_game_id", using: :btree
+    t.index ["player_id"], name: "index_ratings_on_player_id", using: :btree
   end
 
-  add_index "ratings", ["game_id"], name: "index_ratings_on_game_id", using: :btree
-  add_index "ratings", ["player_id"], name: "index_ratings_on_player_id", using: :btree
-
-  create_table "results", force: true do |t|
+  create_table "results", force: :cascade do |t|
     t.integer  "game_id",    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["game_id"], name: "index_results_on_game_id", using: :btree
   end
 
-  add_index "results", ["game_id"], name: "index_results_on_game_id", using: :btree
+  create_table "slack_authorizations", force: :cascade do |t|
+    t.string "access_token"
+    t.string "scope"
+    t.string "user_id"
+    t.string "team_name"
+    t.string "team_id"
+    t.index ["team_id"], name: "index_slack_authorizations_on_team_id", using: :btree
+  end
 
-  create_table "teams", force: true do |t|
+  create_table "teams", force: :cascade do |t|
     t.integer  "rank"
     t.integer  "result_id"
     t.datetime "created_at"
