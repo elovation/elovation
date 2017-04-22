@@ -2,19 +2,14 @@ source 'https://rubygems.org'
 
 ruby '2.4.1'
 
-gem 'rails', '~> 4.1.7'
+gem 'rails', '~> 5.0'
 
 gem 'pg'
 
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails', '~> 5.0'
 gem 'jquery-rails'
-gem 'coffee-rails'
 gem 'uglifier'
 gem 'chartkick'
-
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# This is necessary for running on linux
-gem 'therubyracer', platforms: :ruby
 
 gem 'dynamic_form'
 gem 'elo'
@@ -28,7 +23,6 @@ end
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'quiet_assets'
 end
 
 group :development, :test do
@@ -45,7 +39,7 @@ end
 
 group :test do
   gem 'mocha'
-  gem 'rspec-rails', '~> 2.14.2'
+  gem 'rspec-rails', '~> 3.5'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
 end
