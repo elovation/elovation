@@ -1,0 +1,26 @@
+{
+  "response_type": "ephemeral",
+  "attachments": [
+    {
+      "text": "Leaderboard for which game?",
+      "callback_id": "leaderboard",
+      "color": "#005500",
+      "attachment_type": "default",
+      "actions": [
+        {
+          "name": "game_list",
+          "text": "Pick a game...",
+          "type": "select",
+          "options": [
+            <%- Game.all.each do |game| %>
+            {
+              "text": "<%= game.name %>",
+              "value": "<%= game.id %>"
+            },
+            <%- end %>
+          ]
+        }
+      ]
+    }
+  ]
+}

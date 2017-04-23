@@ -18,6 +18,13 @@ Elovation::Application.routes.draw do
       end
     end
 
+    resources :leaderboards, only: [] do
+      collection do
+        post 'new', as: 'new'
+        post 'show', as: 'show'
+      end
+    end
+
     post '/action', to: 'base#action'
     get '/authorize', to: 'base#authorize'
   end

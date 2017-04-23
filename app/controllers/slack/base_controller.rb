@@ -7,6 +7,9 @@ module Slack
       case payload[:callback_id]
         when 'record_result'
           render json: Slack::Result.create(payload)
+        when 'leaderboard'
+          render text: 'Loading Leaderboard...'
+          Thread.new { Slack::Leaderboard.show(payload) }
       end
     end
 
