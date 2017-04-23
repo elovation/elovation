@@ -11,7 +11,7 @@ module Slack
         response = ResultService.create(game, result)
         if response.success?
           slack_client = Slack::Web::Client.new(token: SlackAuthorization.find_by(team_id: payload['team']['id']).access_token)
-          slack_client.chat_postMessage(channel: payload['channel']['id'], text: human_string(data[:teams]) + " at #{game.name}.")
+          slack_client.chat_postMessage(channel: payload['channel']['id'], text: public_success_message(game, data[:teams]))
           'Result recorded!'
         else
           response.result.errors.full_messages.join("\n")
@@ -21,6 +21,21 @@ module Slack
 
     def self.human_string(teams)
       teams.map { |team| team[:players].map { |player| player[:name] }.to_sentence + " #{team[:relation]}" }.join(' ').strip
+    end
+
+    class << self
+
+      private
+
+      def public_success_message(game, teams)
+        ratings = game.all_ratings.select(&:active?)
+        players_with_rankings = teams.map { |team| team[:players] }.flatten.map do |player|
+          ranking = ratings.index { |rating| rating.player_id == player[:id]} + 1
+          rating = Player.find(player[:id]).ratings.find_by_game_id(game).value
+          player.merge ranking: ranking, message: "#{player[:name]} is now in #{ranking.ordinalize} place with a rating of #{rating}"
+        end.sort_by { |player| player[:ranking] }
+        human_string(teams) + " at #{game.name}.\n" + players_with_rankings.map { |player| player[:message] }.join("\n")
+      end
     end
   end
 end
