@@ -17,6 +17,8 @@ module Slack
                    end
         { players: players, relation: relation }
       end
+      return render text: "At least two teams are required\nSeparate teams with 'beat' or 'tied'" if @teams.size < 2
+      render text: "Each team needs ay least one player\nMake sure you're @mentioning every player" if @teams.any? { |team| team[:players].size == 0 }
     end
   end
 end
