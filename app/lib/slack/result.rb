@@ -9,12 +9,11 @@ module Slack
       end
       ::Result.transaction do
         response = ResultService.create(game, result)
+        slack_client = Slack::Web::Client.new(token: SlackAuthorization.find_by(team_id: payload['team']['id']).access_token)
         if response.success?
-          slack_client = Slack::Web::Client.new(token: SlackAuthorization.find_by(team_id: payload['team']['id']).access_token)
           slack_client.chat_postMessage(channel: payload['channel']['id'], text: public_success_message(game, data[:teams]))
-          'Result recorded!'
         else
-          response.result.errors.full_messages.join("\n")
+          slack_client.chat_postMessage(channel: payload['user']['id'], text: response.result.errors.full_messages.join("\n"))
         end
       end
     end
