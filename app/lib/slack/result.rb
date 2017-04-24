@@ -33,7 +33,7 @@ module Slack
           rating = Player.find(player[:id]).ratings.find_by_game_id(game).value
           player.merge ranking: ranking, message: "#{player[:name]} is now in #{ranking.ordinalize} place with a rating of #{rating}"
         end.sort_by { |player| player[:ranking] }
-        human_string(teams) + " at #{game.name}.\n" + players_with_rankings.map { |player| player[:message] }.join("\n")
+        human_string(teams) + " at #{game.name}\n" + players_with_rankings.map { |player| player[:message] }.join("\n")
       end
     end
   end
