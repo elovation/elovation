@@ -31,9 +31,11 @@ module Slack
         players_with_rankings = teams.map { |team| team[:players] }.flatten.map do |player|
           ranking = ratings.index { |rating| rating.player_id == player[:id]} + 1
           rating = Player.find(player[:id]).ratings.find_by_game_id(game).value
-          player.merge ranking: ranking, message: "#{player[:name]} is now in #{ranking.ordinalize} place with a rating of #{rating}"
+          player_url = Rails.application.routes.url_helpers.player_url(player[:id], host: ENV['HOST'])
+          player.merge ranking: ranking, message: "<#{player_url}|#{player[:name]}> is now in #{ranking.ordinalize} place with a rating of #{rating}"
         end.sort_by { |player| player[:ranking] }
-        human_string(teams) + " at #{game.name}\n" + players_with_rankings.map { |player| player[:message] }.join("\n")
+        game_url = Rails.application.routes.url_helpers.game_url(game, host: ENV['HOST'])
+        human_string(teams) + " at <#{game_url}|#{game.name}>\n" + players_with_rankings.map { |player| player[:message] }.join("\n")
       end
     end
   end
