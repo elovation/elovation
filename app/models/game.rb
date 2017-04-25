@@ -1,6 +1,8 @@
 class Game < ActiveRecord::Base
 
   default_scope { order("updated_at DESC") }
+  scope :active, -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
 
   has_many :ratings, dependent: :destroy
   has_many :results, dependent: :destroy
@@ -77,5 +79,9 @@ class Game < ActiveRecord::Base
     results.order("id ASC").all.each do |result|
       rater.update_ratings self, result.teams.order("rank ASC")
     end
+  end
+
+  def inactive?
+    !active?
   end
 end

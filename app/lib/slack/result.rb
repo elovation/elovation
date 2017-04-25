@@ -3,13 +3,14 @@ module Slack
     def self.create(payload)
       data = JSON.parse(URI.decode(payload['actions'][0]['selected_options'][0]['value'])).deep_symbolize_keys
       game = Game.find(data[:game_id])
+      slack_client = Slack::Web::Client.new(token: SlackAuthorization.find_by(team_id: payload['team']['id']).access_token)
+      return slack_client.chat_postMessage(channel: payload['user']['id'], text: "#{game.name} is inactive") if game.inactive?
       result = { teams: {} }
       data[:teams].each_with_index do |team, index|
         result[:teams][index] = { players: team[:players].map { |player| player[:id] }, relation: team[:relation] }
       end
       ::Result.transaction do
         response = ResultService.create(game, result)
-        slack_client = Slack::Web::Client.new(token: SlackAuthorization.find_by(team_id: payload['team']['id']).access_token)
         if response.success?
           slack_client.chat_postMessage(channel: payload['channel']['id'], text: public_success_message(game, data[:teams]))
         else
