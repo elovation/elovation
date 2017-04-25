@@ -1,6 +1,6 @@
 class DashboardController < ApplicationController
   def show
     @players = Player.all.sort_by(&:name)
-    @games = Game.all
+    @games = Game.active
   end
 end
