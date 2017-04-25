@@ -3,7 +3,7 @@ module Slack
     SLACK_USER_ID_REGEX = /<@(U[A-Z0-9]+)\|[A-z0-9_-]+>/
 
     def new
-      @games = Game.all
+      @games = Game.active
       @teams = params[:text].split(/(?<=beat|tied)/).map do |team|
         player_ids = team.scan(SLACK_USER_ID_REGEX).flatten
         players = player_ids.map do |player_id|
