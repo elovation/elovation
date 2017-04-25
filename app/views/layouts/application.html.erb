@@ -22,6 +22,9 @@
       <% end %>
     </header>
 
+    <div class='flash-error'>
+      <%= flash[:error] %>
+    </div>
     <div id='main'>
       <%= yield %>
     </div>

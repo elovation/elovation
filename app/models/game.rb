@@ -79,4 +79,8 @@ class Game < ActiveRecord::Base
       rater.update_ratings self, result.teams.order("rank ASC")
     end
   end
+
+  def inactive?
+    !active?
+  end
 end

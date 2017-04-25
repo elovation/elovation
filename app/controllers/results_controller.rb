@@ -29,5 +29,9 @@ class ResultsController < ApplicationController
 
   def set_game
     @game = Game.find(params[:game_id])
+    if @game.inactive?
+      flash[:error] = "#{@game.name} is inactive."
+      redirect_to game_path(@game)
+    end
   end
 end
