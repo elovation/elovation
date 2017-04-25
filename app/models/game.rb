@@ -1,6 +1,7 @@
 class Game < ActiveRecord::Base
 
   default_scope { order("updated_at DESC") }
+  scope :active, -> { where(active: true) }
 
   has_many :ratings, dependent: :destroy
   has_many :results, dependent: :destroy
