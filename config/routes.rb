@@ -1,4 +1,4 @@
-Elovation::Application.routes.draw do
+Rails.application.routes.draw do
   resources :games do
     resources :results, only: [:create, :destroy, :new]
     resources :ratings, only: [:index]

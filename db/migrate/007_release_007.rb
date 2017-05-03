@@ -1,4 +1,4 @@
-class Release007 < ActiveRecord::Migration
+class Release007 < ActiveRecord::Migration[4.2]
   class Rating < ActiveRecord::Base
   end
 
