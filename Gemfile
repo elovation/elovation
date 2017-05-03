@@ -9,6 +9,7 @@ gem 'pg'
 gem 'sass-rails', '~> 5.0'
 gem 'jquery-rails'
 gem 'uglifier'
+gem 'coffee-rails'
 gem 'chartkick'
 
 gem 'dynamic_form'
