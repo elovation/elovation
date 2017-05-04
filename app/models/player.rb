@@ -60,6 +60,14 @@ class Player < ActiveRecord::Base
     results.where(game_id: game, teams: {rank: Team::FIRST_PLACE_RANK}).against(opponent).to_a.count { |r| !r.tie? }
   end
 
+  def rating_for(game)
+    ratings.find_by_game_id(game).try(:value) || 'NR'
+  end
+
+  def current_rating_for(game)
+    { player_id: id, ranking: game.ranking_for(self), rating: rating_for(game) }
+  end
+
   def self.find_or_create_from_slack(slack_team_id, slack_user_id)
     token = SlackAuthorization.find_by(team_id: slack_team_id).access_token
     player = Player.find_or_initialize_by(slack_id: slack_user_id)

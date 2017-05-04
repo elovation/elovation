@@ -1,3 +1,5 @@
+require_relative 'decorators/result_decorator'
+
 module Slack
   class Result
     def self.create(payload)
@@ -9,10 +11,12 @@ module Slack
       data[:teams].each_with_index do |team, index|
         result[:teams][index] = { players: team[:players].map { |player| player[:id] }, relation: team[:relation] }
       end
+      players = data[:teams].map { |team| team[:players] }.flatten.map { |player| Player.find(player[:id]) }
       ::Result.transaction do
+        previous_ratings = players.map { |player| player.current_rating_for(game) }
         response = ResultService.create(game, result)
         if response.success?
-          slack_client.chat_postMessage(channel: payload['channel']['id'], text: public_success_message(game, data[:teams]))
+          slack_client.chat_postMessage(channel: payload['channel']['id'], text: public_success_message(game, players, data[:teams], previous_ratings))
         else
           slack_client.chat_postMessage(channel: payload['user']['id'], text: response.result.errors.full_messages.join("\n"))
         end
@@ -27,14 +31,11 @@ module Slack
 
       private
 
-      def public_success_message(game, teams)
-        ratings = game.all_ratings.select(&:active?)
-        players_with_rankings = teams.map { |team| team[:players] }.flatten.map do |player|
-          ranking = ratings.index { |rating| rating.player_id == player[:id]} + 1
-          rating = Player.find(player[:id]).ratings.find_by_game_id(game).value
-          player_url = Rails.application.routes.url_helpers.player_url(player[:id], host: ENV['HOST'])
-          player.merge ranking: ranking, message: "<#{player_url}|#{player[:name]}> is now in #{ranking.ordinalize} place with a rating of #{rating}"
-        end.sort_by { |player| player[:ranking] }
+      def public_success_message(game, players, teams, previous_ratings)
+        players_with_rankings = players.map do |player|
+          previous_rating = previous_ratings.find { |rating| rating[:player_id] == player.id }
+          player.attributes.merge rating: player.rating_for(game), message: Slack::Decorators::RatingDecorator.new(player, previous_rating, game).message
+        end.sort_by { |player| -player[:rating] }
         game_url = Rails.application.routes.url_helpers.game_url(game, host: ENV['HOST'])
         human_string(teams) + " at <#{game_url}|#{game.name}>\n" + players_with_rankings.map { |player| player[:message] }.join("\n")
       end
