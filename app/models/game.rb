@@ -84,4 +84,9 @@ class Game < ActiveRecord::Base
   def inactive?
     !active?
   end
+
+  def ranking_for(player)
+    ranking = all_ratings.select(&:active?).index { |rating| rating.player == player}
+    ranking.present? ? (ranking + 1) : 'NR'
+  end
 end
