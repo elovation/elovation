@@ -27,7 +27,8 @@ class GamesController < ApplicationController
   end
 
   def show
-    players = Player.all.includes(ratings: :history_events).where(ratings: { game: @game }).select { |player| player.ratings.any?(&:active?) }
+    players = Player.all.includes(ratings: :history_events).where(ratings: { game: @game })
+    players = players.select { |player| player.ratings.any?(&:active?) } if @game.active?
 
     player_to_days = Hash.new
     every_day = Set.new

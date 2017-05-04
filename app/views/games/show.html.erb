@@ -37,7 +37,8 @@
         </tr>
       </thead>
       <tbody>
-        <%= render partial: 'rating', collection: @game.all_ratings.select(&:active?) %>
+        <%- chart_ratings = @game.active? ? @game.all_ratings.select(&:active?) : @game.all_ratings %>
+        <%= render partial: 'rating', collection: chart_ratings %>
       </tbody>
     </table>
     <%= link_to "View All", game_ratings_path(@game) %>
