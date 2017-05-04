@@ -42,6 +42,15 @@
     </div>
   </div>
 
+  <% unless @game.new_record? %>
+    <div class="control-group">
+      <div class="controls">
+        <%= f.check_box :active, class: "input-mini" %>
+        <%= f.label :active, class: "control-label" %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="form-actions">
     <%= f.submit class: "btn btn-primary" %>
     <%= link_to "Cancel", root_path, class: "btn btn-warning" %>

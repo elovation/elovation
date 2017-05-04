@@ -10,7 +10,9 @@
 <div class="row-fluid">
   <div class="span8">
     <h2>Recent Results</h2>
-    <%= link_to "Add Result", new_game_result_path(@game), class: "btn btn-primary" %>
+    <% if @game.active? %>
+      <%= link_to "Add Result", new_game_result_path(@game), class: "btn btn-primary" %>
+    <% end %>
 
     <% if @game.recent_results.any? %>
       <%= render partial: 'shared/results', object: @game.recent_results, locals: {show_game: false} %>
@@ -35,7 +37,8 @@
         </tr>
       </thead>
       <tbody>
-        <%= render partial: 'rating', collection: @game.all_ratings.select(&:active?) %>
+        <%- chart_ratings = @game.active? ? @game.all_ratings.select(&:active?) : @game.all_ratings %>
+        <%= render partial: 'rating', collection: chart_ratings %>
       </tbody>
     </table>
     <%= link_to "View All", game_ratings_path(@game) %>

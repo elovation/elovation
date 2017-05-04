@@ -1,0 +1,27 @@
+{
+  "response_type": "ephemeral",
+  "text": "<%= Slack::Result.human_string(@teams) %>",
+  "attachments": [
+    {
+      "text": "Which game are you recording?",
+      "callback_id": "record_result",
+      "color": "#005500",
+      "attachment_type": "default",
+      "actions": [
+        {
+          "name": "game_list",
+          "text": "Pick a game...",
+          "type": "select",
+          "options": [
+            <%- @games.each do |game| %>
+            {
+              "text": "<%= game.name %>",
+              "value": "<%= URI.encode({ game_id: game.id, teams: @teams }.to_json) %>"
+            },
+            <%- end %>
+          ]
+        }
+      ]
+    }
+  ]
+}
