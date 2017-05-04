@@ -9,3 +9,5 @@ install: bundle install --verbose
 before_script:
   - cp config/database.yml.example config/database.yml
   - bundle exec rake db:do
+after_success:
+  - bundle exec codeclimate-test-reporter
