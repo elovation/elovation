@@ -47,4 +47,5 @@ group :test do
   gem 'rspec-rails', '~> 3.5'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
+  gem 'rails-controller-testing'
 end

@@ -74,7 +74,7 @@ describe Rater do
 
         game.rater.update_ratings(game, [team1, team2])
 
-        rating1.reload.pro?.should be_true
+        rating1.reload.pro?.should be true
       end
 
       it "creates rating history events" do

@@ -21,3 +21,4 @@
 elovation_development
 .idea/*
 /config/database.yml
+/coverage
