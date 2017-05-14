@@ -259,14 +259,20 @@ describe Rater do
       end
 
       it "returns the same result regardless of team order" do
+        team1b = team1.clone
+        team2b = team2.clone
+        team3b = team3.clone
+        team4b = team4.clone
+        gameb  = game.clone
+
         game.rater.update_ratings(game, [team1, team2, team3, team4])
         old_ratings = game.ratings.map(&:value)
 
-        game.ratings.destroy_all
-        game.reload
+        # game.ratings.each { |r| r.destroy }
+        # game.reload
 
-        game.rater.update_ratings(game, [team4, team2, team3, team1])
-        game.ratings.map(&:value).should == old_ratings
+        gameb.rater.update_ratings(gameb, [team4b, team2b, team3b, team1b])
+        gameb.ratings.map(&:value).should == old_ratings
       end
     end
 
@@ -285,4 +291,3 @@ describe Rater do
     end
   end
 end
-

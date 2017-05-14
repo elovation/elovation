@@ -67,6 +67,8 @@ describe Rating do
 
       RatingHistoryEvent.find_by_id(history_event.id).should be_nil
     end
+
+    # TODO: .destroy_all should update player rankings and attributes appropriately refer to line 272 rater_spec.rb
   end
 
   describe "rewind!" do
