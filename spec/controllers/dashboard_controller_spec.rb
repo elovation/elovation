@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe DashboardController do
+describe DashboardController, :type => :controller do
   describe "show" do
     it "displays all players and games" do
       player = FactoryGirl.create(:player)

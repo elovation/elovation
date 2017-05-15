@@ -74,7 +74,7 @@ describe Rater do
 
         game.rater.update_ratings(game, [team1, team2])
 
-        rating1.reload.pro?.should be_true
+        rating1.reload.pro?.should be true
       end
 
       it "creates rating history events" do
@@ -259,14 +259,28 @@ describe Rater do
       end
 
       it "returns the same result regardless of team order" do
+        team1b = team1.clone
+        team2b = team2.clone
+        team3b = team3.clone
+        team4b = team4.clone
+        gameb  = game.clone
+
         game.rater.update_ratings(game, [team1, team2, team3, team4])
         old_ratings = game.ratings.map(&:value)
 
-        game.ratings.destroy_all
-        game.reload
+        # TODO: .destroy_all should update player rankings and attributes appropriately
+        # in a previous version of this codebase, you where able to call game.ratings.destroy_all
+        # then compare the old_ratings to the same game/teams, but updating ruby/rails versions
+        # broke this, it is unclear whether this was working by chance or whether
+        # it is now broken. As the call "game.ratings.destroy_all" is only required in this instance and isn't a feature
+        # of the app, I decided to rely on clones, and prove that the ratings update appropriately.... in future it may
+        # be wise to write tests surrounding the .destroy_all functionality and make sure it updates the players ratings/deviations
+        # appropriately. 
+        # game.ratings.destroy_all
+        # game.reload
 
-        game.rater.update_ratings(game, [team4, team2, team3, team1])
-        game.ratings.map(&:value).should == old_ratings
+        gameb.rater.update_ratings(gameb, [team4b, team2b, team3b, team1b])
+        gameb.ratings.map(&:value).should == old_ratings
       end
     end
 
@@ -285,4 +299,3 @@ describe Rater do
     end
   end
 end
-

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe GamesController do
+describe GamesController, :type => :controller do
   describe "new" do
     it "exposes a new game" do
       get :new
@@ -13,7 +13,7 @@ describe GamesController do
     it "exposes the game for editing" do
       game = FactoryGirl.create(:game)
 
-      get :edit, id: game
+      get :edit, params: {id: game}
 
       assigns(:game).should == game
     end
@@ -23,14 +23,14 @@ describe GamesController do
     context "with valid params" do
       it "creates a game" do
         game_attributes = FactoryGirl.attributes_for(:game)
-        post :create, game: game_attributes
+        post :create, params: {game: game_attributes}
 
         Game.where(name: game_attributes[:name]).first.should_not be_nil
       end
 
       it "redirects to the game's show page" do
         game_attributes = FactoryGirl.attributes_for(:game)
-        post :create, game: game_attributes
+        post :create, params: {game: game_attributes}
 
         game = Game.where(name: game_attributes[:name]).first
 
@@ -40,7 +40,7 @@ describe GamesController do
       it "protects against mass assignment" do
         Timecop.freeze(Time.now) do
           game_attributes = FactoryGirl.attributes_for(:game, created_at: 3.days.ago)
-          post :create, game: game_attributes
+          post :create, params: {game: game_attributes}
 
           game = Game.where(name: game_attributes[:name]).first
           game.created_at.should > 3.days.ago
@@ -50,7 +50,7 @@ describe GamesController do
 
     context "with invalid params" do
       it "renders new given invalid params" do
-        post :create, game: {name: nil}
+        post :create, params: {game: {name: nil}}
 
         response.should render_template(:new)
       end
@@ -61,7 +61,7 @@ describe GamesController do
     it "allows deleting games without results" do
       game = FactoryGirl.create(:game, name: "First name")
 
-      delete :destroy, id: game
+      delete :destroy, params: {id: game}
 
       response.should redirect_to(dashboard_path)
       Game.find_by_id(game.id).should be_nil
@@ -71,7 +71,7 @@ describe GamesController do
       game = FactoryGirl.create(:game, name: "First name")
       FactoryGirl.create(:result, game: game)
 
-      delete :destroy, id: game
+      delete :destroy, params: {id: game}
 
       response.should redirect_to(dashboard_path)
       Game.find_by_id(game.id).should == game
@@ -83,7 +83,7 @@ describe GamesController do
       it "redirects to the game's show page" do
         game = FactoryGirl.create(:game, name: "First name")
 
-        put :update, id: game, game: {name: "Second name"}
+        put :update, params: {id: game, game: {name: "Second name"}}
 
         response.should redirect_to(game_path(game))
       end
@@ -91,7 +91,7 @@ describe GamesController do
       it "updates the game with the provided attributes" do
         game = FactoryGirl.create(:game, name: "First name")
 
-        put :update, id: game, game: {name: "Second name"}
+        put :update, params: {id: game, game: {name: "Second name"}}
 
         game.reload.name.should == "Second name"
       end
@@ -100,7 +100,7 @@ describe GamesController do
         Timecop.freeze(Time.now) do
           game = FactoryGirl.create(:game, name: "First name")
 
-          put :update, id: game, game: {created_at: 3.days.ago}
+          put :update, params: {id: game, game: {created_at: 3.days.ago}}
 
           game.created_at.should > 3.days.ago
         end
@@ -111,7 +111,7 @@ describe GamesController do
       it "renders the edit page" do
         game = FactoryGirl.create(:game, name: "First name")
 
-        put :update, id: game, game: {name: nil}
+        put :update, params: {id: game, game: {name: nil}}
 
         response.should render_template(:edit)
       end
@@ -122,7 +122,7 @@ describe GamesController do
     it "exposes the game" do
       game = FactoryGirl.create(:game)
 
-      get :show, id: game
+      get :show, params: {id: game}
 
       assigns(:game).should == game
     end
@@ -143,7 +143,7 @@ describe GamesController do
         result2 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player2]), FactoryGirl.create(:team, rank: 2, players: [player3])])
         result3 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player3]), FactoryGirl.create(:team, rank: 2, players: [player1])])
 
-        get :show, id: game, format: :json
+        get :show, params: {id: game, format: :json}
 
         json_data = JSON.parse(response.body)
         json_data.should == {

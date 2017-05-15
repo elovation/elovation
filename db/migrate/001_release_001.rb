@@ -1,4 +1,4 @@
-class Release001 < ActiveRecord::Migration
+class Release001 < ActiveRecord::Migration[4.2]
   def up
     create_table :games do |t|
       t.string :name, null: false

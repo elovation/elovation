@@ -17,7 +17,7 @@ class ResultsController < ApplicationController
 
     response = ResultService.destroy(result)
 
-    redirect_to :back
+    redirect_to request.referer
   end
 
   def new

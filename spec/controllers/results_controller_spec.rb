@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe ResultsController do
+describe ResultsController, :type => :controller do
   describe "new" do
     it "exposes a new result" do
       game = FactoryGirl.create(:game)
 
-      get :new, game_id: game
+      get :new, params: {game_id: game}
 
       assigns(:result).should_not be_nil
     end
@@ -13,7 +13,7 @@ describe ResultsController do
     it "exposes the game" do
       game = FactoryGirl.create(:game)
 
-      get :new, game_id: game
+      get :new, params: {game_id: game}
 
       assigns(:game).should == game
     end
@@ -26,12 +26,12 @@ describe ResultsController do
         player_1 = FactoryGirl.create(:player)
         player_2 = FactoryGirl.create(:player)
 
-        post :create, game_id: game, result: {
+        post :create, params: {game_id: game, result: {
           teams: {
             "0" => { players: [player_1.id.to_s] },
             "1" => { players: [player_2.id.to_s] }
           }
-        }
+        }}
 
         result = game.reload.results.first
 
@@ -46,12 +46,12 @@ describe ResultsController do
         game = FactoryGirl.create(:game, results: [])
         player = FactoryGirl.create(:player)
 
-        post :create, game_id: game, result: {
+        post :create, params: {game_id: game, result: {
           teams: {
             "0" => { players: [player.id.to_s] },
             "1" => { players: [player.id.to_s] }
           }
-        }
+        }}
 
         response.should render_template(:new)
       end
@@ -90,7 +90,7 @@ describe ResultsController do
 
         request.env['HTTP_REFERER'] = game_path(game)
 
-        delete :destroy, game_id: game, id: result
+        delete :destroy, params: {game_id: game, id: result}
 
         response.should redirect_to(game_path(game))
 

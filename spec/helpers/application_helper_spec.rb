@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe ApplicationHelper do
+describe ApplicationHelper, :type => :helper do
   describe "gravatar" do
     it "uses a default image if the player doesn't have an email address" do
       player = FactoryGirl.build(:player, email: "")

@@ -1,4 +1,4 @@
-class Release005 < ActiveRecord::Migration
+class Release005 < ActiveRecord::Migration[4.2]
   def up
     remove_column :players, :gravatar
     add_column :players, :email, :string

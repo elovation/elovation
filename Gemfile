@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby '2.1.4'
+ruby '2.4.0'
 
-gem 'rails', '~> 4.1.7'
+gem 'rails', '~> 5.1'
 
 gem 'pg'
 
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails', '~> 5.0'
 gem 'jquery-rails'
 gem 'coffee-rails'
 gem 'uglifier'
@@ -21,14 +21,13 @@ gem 'elo'
 gem 'trueskill', github: 'saulabs/trueskill', require: 'saulabs/trueskill'
 
 group :production do
-  gem 'rails_12factor'
   gem 'unicorn'
 end
 
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'quiet_assets'
+  gem 'listen'
 end
 
 group :development, :test do
@@ -45,7 +44,8 @@ end
 
 group :test do
   gem 'mocha'
-  gem 'rspec-rails', '~> 2.14.2'
+  gem 'rspec-rails', '~> 3.5'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
+  gem 'rails-controller-testing'
 end

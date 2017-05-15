@@ -1,4 +1,4 @@
-class Release004 < ActiveRecord::Migration
+class Release004 < ActiveRecord::Migration[4.2]
   def up
     add_index :players_results, :player_id
     add_index :players_results, :result_id

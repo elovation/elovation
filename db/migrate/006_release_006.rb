@@ -1,4 +1,4 @@
-class Release006 < ActiveRecord::Migration
+class Release006 < ActiveRecord::Migration[4.2]
   class Result < ActiveRecord::Base
     has_many :teams
   end
