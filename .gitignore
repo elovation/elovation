@@ -15,10 +15,12 @@
 /tmp
 
 /vendor/bundle
+/vendor/cache
 /.rvmrc
 /.ruby-version
 .DS_Store
-elovation_development
 .idea/*
 /config/database.yml
 /coverage
+!/.env
+.env

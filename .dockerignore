@@ -1,0 +1,13 @@
+/config/database.yml
+/config/database.yml.example
+/vendor/cache
+Dockerfile-web
+Dockerfile-db
+docker-compose.yml
+.travis.yml
+.idea
+.gitignore
+.git
+tmp
+/log/*.log
+!/.env
