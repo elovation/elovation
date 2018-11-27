@@ -1,0 +1,30 @@
+version: '3'
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile-db
+    environment:
+      - POSTGRESS_PASSWORD=$POSTGRESS_PASSWORD
+      - ELOVATION_DB_USER_PASSWORD=$ELOVATION_DB_USER_PASSWORD
+      - ELOVATION_DB_ADMIN_PASSWORD=$ELOVATION_DB_ADMIN_PASSWORD
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-web
+    environment:
+      - ELOVATION_DB_USER_PASSWORD=$ELOVATION_DB_USER_PASSWORD
+      - ELOVATION_DB_ADMIN_PASSWORD=$ELOVATION_DB_ADMIN_PASSWORD
+    volumes:
+      - web_application:/var/elovation
+      - web_bundle:/var/bundle
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+volumes:
+  postgres_data:
+  web_application:
+  web_bundle:
