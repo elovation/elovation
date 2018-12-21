@@ -8,19 +8,10 @@ RUN apt-get install -y --no-install-recommends \
     && apt-get install -y build-essential patch libpq-dev ruby-dev nodejs zlib1g-dev liblzma-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Add 'web' user which will run the application
-RUN adduser web --home /home/web --shell /bin/bash --disabled-password --gecos ""
-
-## Create user and group
-#RUN groupadd --gid 9999 web && \
-#    useradd --uid 9999 --gid web web && \
-#    chown -R web:web /var/elovation
-
 RUN gem update --system
 
 RUN gem install bundler foreman
 
-#RUN mkdir /var/log/elovation
 RUN mkdir /var/elovation
 RUN mkdir /var/elovation/public
 RUN mkdir /var/elovation/public/assets
@@ -28,10 +19,7 @@ RUN mkdir /var/elovation/public/assets
 COPY Gemfile /var/elovation/
 COPY Gemfile.lock /var/elovation/
 
-RUN chown -R web:web /var/elovation &&\
-  mkdir -p /var/bundle &&\
-  chown -R web:web /var/bundle &&\
-  chown -R web:web /usr/local/bundle
+RUN mkdir -p /var/bundle
 
 # Add application source
 WORKDIR /var/elovation
@@ -39,21 +27,13 @@ WORKDIR /var/elovation
 ADD . /var/elovation
 
 ADD config/database.yml.docker /var/elovation/config/database.yml
-RUN chown -R web:web /var/elovation/*
-RUN ls -lsat /var/elovation
-RUN ls -lsat /var/elovation/public
 COPY ./web-entrypoint.sh /
 RUN ["chmod", "+x", "/web-entrypoint.sh"]
-RUN ls -lsat /web-entrypoint.sh
 RUN npm install yarn -g
-
-USER web
 
 ENV RAILS_ENV production
 ENV RAILS_LOG_TO_STDOUT yes
 ENV RAILS_SERVE_STATIC_FILES yes
-
-RUN bundle env
 
 EXPOSE 5000
 
