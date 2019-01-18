@@ -11,6 +11,6 @@ module ApplicationHelper
   end
 
   def brand_title
-    ENV["ELOVATION_TITLE"]
+    ENV["ELOVATION_TITLE"] || "Elovation"
   end
 end
