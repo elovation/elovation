@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Elovation</title>
+  <title> <%= brand_title %> Elovation</title>
   <meta name='apple-mobile-web-app-capable' content='yes' />
   <meta name='apple-mobile-web-app-status-bar-style' content='black' />
   <meta name='viewport', content='width = device-width, initial-scale = 1, maximum-scale = 1, user-scalable = yes' />
@@ -17,7 +17,7 @@
   <div id='container'>
     <header>
       <%= link_to root_path, class: "brand" do %>
-        <div class='brand-name'>Elovation</div>
+        <div class='brand-name'><%= brand_title %></div>
         <div class='brand-label'>Home</div>
       <% end %>
     </header>
@@ -26,5 +26,6 @@
       <%= yield %>
     </div>
   </div>
+  <div class="footer">Powered by Elovation</div>
 </body>
 </html>
