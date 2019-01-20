@@ -18,6 +18,8 @@ The fastest way to get started with Elovation is to click the deploy to [Heroku]
 
 If you would like to add a level of authentication security to your app on Heroku, on the setup screen set the "BASIC_AUTH" to "true", and set a username and password in their respective fields. When you try to access your app in future, you will be prompted for your credentials.
 
+You can set the branding on Elovation by defining the "ELOVATION_TITLE" variable in Heroku with your desired name.
+
 The click to deploy button will automatically migrate your database.
 
 Game Options

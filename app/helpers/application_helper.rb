@@ -9,4 +9,8 @@ module ApplicationHelper
   def format_time(time)
     "#{time_ago_in_words(time)} ago"
   end
+
+  def brand_title
+    ENV["ELOVATION_TITLE"] || "Elovation"
+  end
 end
