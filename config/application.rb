@@ -16,7 +16,7 @@ module Elovation
     # -- all .rb files in that directory are automatically loaded.
 
     if ENV['BASIC_AUTH'] == "true"
-      config.middleware.use("::Rack::Auth::Basic") do |u, p|
+      config.middleware.use(::Rack::Auth::Basic) do |u, p|
         [u, p] == [ENV['BASIC_AUTH_USER'], ENV['BASIC_AUTH_PASSWORD']]
       end
     end
