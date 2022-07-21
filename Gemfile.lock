@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/saulabs/trueskill.git
+  remote: https://github.com/saulabs/trueskill.git
   revision: d15b0752cb4be5ff27f26e5dbbac520680446355
   specs:
     trueskill (1.0.0)
@@ -211,7 +211,7 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.7)
     timecop (0.8.1)
-    tzinfo (1.2.3)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
