@@ -9,10 +9,10 @@ At Braintree, we play ping pong in the office. We wanted a way to track results 
 This also supports individual player rankings within multi-player teams, using the [Trueskill ranking system](http://research.microsoft.com/en-us/projects/trueskill/)
 
 
-Quick Start with Heroku
+Heroku
 ---------------------------
 
-The fastest way to get started with Elovation is to click the deploy to [Heroku](http://www.heroku.com) button below. Elovation can be run on the free tier, so all you will require is a Heroku account to get started with no running costs.
+The fastest way to get started with Elovation is to click the deploy to [Heroku](http://www.heroku.com) button below. Heroku was initially chosen for it's free tier, but this no longer exists. We are currently seeking contributors to help migrate this application to another service. Heroku deployment is currently untested as per Elovations last update many years ago.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/elovation/elovation)
 
