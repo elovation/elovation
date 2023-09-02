@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  game: one
+  player: one
+  value: 1
+  pro: false
+  trueskill_mean: 1.5
+  trueskill_deviation: 1.5
+
+two:
+  game: two
+  player: two
+  value: 1
+  pro: false
+  trueskill_mean: 1.5
+  trueskill_deviation: 1.5
