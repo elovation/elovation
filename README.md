@@ -8,20 +8,6 @@ At Braintree, we play ping pong in the office. We wanted a way to track results 
 
 This also supports individual player rankings within multi-player teams, using the [Trueskill ranking system](http://research.microsoft.com/en-us/projects/trueskill/)
 
-
-Heroku
----------------------------
-
-The fastest way to get started with Elovation is to click the deploy to [Heroku](http://www.heroku.com) button below. Heroku was initially chosen for it's free tier, but this no longer exists. We are currently seeking contributors to help migrate this application to another service. Heroku deployment is currently untested as per Elovations last update many years ago.
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/elovation/elovation)
-
-If you would like to add a level of authentication security to your app on Heroku, on the setup screen set the "BASIC_AUTH" to "true", and set a username and password in their respective fields. When you try to access your app in future, you will be prompted for your credentials.
-
-You can set the branding on Elovation by defining the "ELOVATION_TITLE" variable in Heroku with your desired name.
-
-The click to deploy button will automatically migrate your database.
-
 Game Options
 ------------
 There are two types of "Games" that Elovation allows for: [Trueskill](https://en.wikipedia.org/wiki/TrueSkill) & [Elo](https://en.wikipedia.org/wiki/Elo_rating_system)
@@ -51,3 +37,43 @@ Suitable for:
 Caution
 -------
 If you intend to use this software commercially, you must remove the Trueskill implementation as it is patented by Microsoft.
+
+
+
+Contribution
+------------
+
+[Reference to rebuild Rails 7 application](https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/rails/
+)
+
+
+To generate a Rails skeleton:
+
+```bash
+docker compose run --no-deps web rails new . --force --database=postgresql
+```
+
+To boot the app:
+
+```bash
+docker compose up
+```
+
+To create a database:
+
+```bash
+docker compose run web rake db:create
+```
+
+To stop the app:
+
+```bash
+docker compose down
+```
+
+To rebuild the app, after a gemfile/compose update:
+
+```bash
+docker compose run web bundle install # Will regen Gemfile.lock
+docker compose up --build
+```

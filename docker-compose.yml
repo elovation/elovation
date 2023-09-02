@@ -1,30 +1,16 @@
-version: '3'
 services:
   db:
-    build:
-      context: .
-      dockerfile: Dockerfile-db
-    environment:
-      - POSTGRESS_PASSWORD=$POSTGRESS_PASSWORD
-      - ELOVATION_DB_USER_PASSWORD=$ELOVATION_DB_USER_PASSWORD
-      - ELOVATION_DB_ADMIN_PASSWORD=$ELOVATION_DB_ADMIN_PASSWORD
+    image: postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile-web
-    environment:
-      - ELOVATION_DB_USER_PASSWORD=$ELOVATION_DB_USER_PASSWORD
-      - ELOVATION_DB_ADMIN_PASSWORD=$ELOVATION_DB_ADMIN_PASSWORD
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
-      - web_application:/var/elovation
-      - web_bundle:/var/bundle
+      - .:/elovation
     ports:
-      - "5000:5000"
+      - "4321:3000"
     depends_on:
       - db
-volumes:
-  postgres_data:
-  web_application:
-  web_bundle:
