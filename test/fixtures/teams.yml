@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  rank: 1
+  result: one
+
+two:
+  rank: 1
+  result: two
