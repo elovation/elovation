@@ -1,0 +1,15 @@
+<div class="row-fluid">
+  <div class='span8'>
+    <h1>Games</h1>
+    <ul id='games-list'>
+      <% @games.each do |game| %>
+        <li class="<%= "active" if @game == game %> game-list-item">
+          <h3 class='game-title'><%= game.name %></h3>
+          <ul class='game-params'>
+            <li class='rating-type'><%= game.rating_type %> – <%= game.allow_ties ? 'Ties allowed' : 'No ties' %></li>
+            </ul>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
