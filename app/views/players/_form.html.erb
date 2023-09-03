@@ -1,0 +1,20 @@
+<div class="player-card">
+  <%= form_with model: player do |f| %>
+    <div>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+      <%= errors_for player, :name %>
+    </div>
+
+    <div>
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+      <%= errors_for player, :email %>
+    </div>
+
+    <div>
+      <%= f.button %>
+      <%= link_to "Cancel", players_path %>
+    </div>
+  <% end %>
+</div>

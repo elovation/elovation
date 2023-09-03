@@ -1,0 +1,10 @@
+<div class="players-header">
+  <h1>Players</h1>
+  <div><%= link_to "New player", new_player_path, data: { turbo_frame: "new_player" } %></div>
+</div>
+
+<%= turbo_frame_tag "new_player", target: "_top" %>
+
+<div id="players">
+  <%= render @players %>
+</div>

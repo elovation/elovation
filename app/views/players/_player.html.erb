@@ -1,0 +1,8 @@
+<%= turbo_frame_tag player do %>
+  <div class="player-card">
+    <h3><%= player.name %></h3>
+    <p><%= player.email %></p>
+    <%= link_to "Edit", edit_player_path(player), data: { turbo_frame: dom_id(player) } %>
+    <%= button_to "Delete", player, method: :delete, form: { data: { turbo_confirm: "Are you sure?" } } %>
+  </div>
+<% end %>
