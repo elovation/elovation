@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/saulabs/trueskill.git
+  revision: d15b0752cb4be5ff27f26e5dbbac520680446355
+  specs:
+    trueskill (1.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -87,6 +93,7 @@ GEM
     debug (1.8.0)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
+    elo (0.1.0)
     erubi (1.12.0)
     globalid (1.2.0)
       activesupport (>= 6.1)
@@ -220,6 +227,7 @@ DEPENDENCIES
   bootsnap
   capybara
   debug
+  elo
   importmap-rails
   jbuilder
   pg (~> 1.1)
@@ -228,6 +236,7 @@ DEPENDENCIES
   selenium-webdriver
   sprockets-rails
   stimulus-rails
+  trueskill!
   turbo-rails
   tzinfo-data
   web-console
