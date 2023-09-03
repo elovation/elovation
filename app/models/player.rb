@@ -12,14 +12,13 @@ class Player < ApplicationRecord
     def against(opponent)
       joins("INNER JOIN teams AS other_teams ON results.id = other_teams.result_id")
         .where("other_teams.id != teams.id")
-        .joins("INNER JOIN players_teams AS other_players_teams ON other_teams.id = other_players_teams.team_id")
+        .joins("INNER JOIN memberships AS other_players_teams ON other_teams.id = other_players_teams.team_id")
         .where("other_players_teams.player_id = ?", opponent)
     end
 
     def losses
       where("teams.rank > ?", Team::FIRST_PLACE_RANK)
     end
-
   end
 
   before_destroy do
@@ -58,6 +57,6 @@ class Player < ApplicationRecord
   end
 
   def wins(game, opponent)
-    results.where(game_id: game, teams: {rank: Team::FIRST_PLACE_RANK}).against(opponent).to_a.count { |r| !r.tie? }
+    results.where(game_id: game, teams: { rank: Team::FIRST_PLACE_RANK }).against(opponent).to_a.count { |r| !r.tie? }
   end
 end
