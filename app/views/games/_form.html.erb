@@ -1,0 +1,43 @@
+<div class="game-card">
+  <%= form_with model: game do |f| %>
+    <%= f.hidden_field :min_number_of_players_per_team, value: 1 %>
+    <%= f.hidden_field :min_number_of_teams, value: 2 %>
+    <h1>New Game</h1>
+    <div>
+      <%= f.label :name %>
+      <div>
+        <%= f.text_field :name %>
+      </div>
+    </div>
+    <div>
+      <%= f.label :rating_type %>
+      <div>
+        <%= f.select :rating_type, Game::RATER_MAPPINGS.map{|k, v| [v.description, k]}, {} %>
+      </div>
+    </div>
+    <div id='max_players_control_group'>
+      <%= f.label :max_number_of_players_per_team, 'Maximum number of players per team' %>
+      <div>
+        <%= f.number_field :max_number_of_players_per_team %>
+        <span>Set to blank for no restriction</span>
+      </div>
+    </div>
+    <div id='max_teams_control_group'>
+      <%= f.label :max_number_of_teams, 'Maximum number of teams' %>
+      <div>
+        <%= f.number_field :max_number_of_teams %>
+        <span>Set to blank for no restriction</span>
+      </div>
+    </div>
+    <div>
+      <div>
+        <%= f.check_box :allow_ties %>
+        <%= f.label :allow_ties %>
+      </div>
+    </div>
+    <div>
+      <%= f.button %>
+      <%= link_to "Cancel", games_path %>
+    </div>
+  <% end %>
+</div>
