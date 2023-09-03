@@ -59,7 +59,7 @@ module Rater
 
     def _update_rating_from_elo(rating, elo)
       Rating.transaction do
-        rating.update_attributes!(value: elo.rating, pro: elo.pro?)
+        rating.update!(value: elo.rating, pro: elo.pro?)
         rating.history_events.create!(value: elo.rating)
       end
     end
@@ -113,7 +113,7 @@ module Rater
         attributes = { value: (trueskill.mean - (3.0 * trueskill.deviation)) * 100,
                        trueskill_mean: trueskill.mean,
                        trueskill_deviation: trueskill.deviation }
-        rating.update_attributes! attributes
+        rating.update! attributes
         rating.history_events.create! attributes
       end
     end
