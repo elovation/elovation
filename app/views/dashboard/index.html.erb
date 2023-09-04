@@ -1,57 +1,59 @@
-<div>
-  <h1>Games</h1>
-  <%= link_to "New Game", new_game_path %>
-  <ul id='games-list'>
-    <% @games.each do |game| %>
-      <li>
-        <%= link_to game_path(game) do %>
-          <h3 class='game-title'><%= game.name %></h3>
-          <ul class='game-params'>
-            <li class='rating-type'><%= game.rating_type %> – <%= game.allow_ties ? 'Ties allowed' : 'No ties' %></li>
-            <li class='num-players'><%= game.players.length %> players</li>
-            <li class='games-played'><%= game.results.length %> games played</li>
-          </ul>
-          <% result = game.recent_results.limit(1).first %>
-          <% if result %>
-            <div class='recent-result'>
-              <h4>Last game</h4>
-              <div class='description'>
-                <% result.teams.each_with_index do |team, i| %>
-                  <% team.players.each do |winner| %>
-                    <span class='player'>
-                      <strong><%= winner.name %></strong>
-                    </span>
-                  <% end %>
-                  <% if i == 0 %>
-                    <% if result.tie? %>
-                      ties
-                    <% else %>
-                      defeated
+<div class="row-fluid">
+  <div class="span8">
+    <h1>Games</h1>
+    <%= link_to "New Game", new_game_path, class: "btn btn-primary" %>
+    <ul id='games-list'>
+      <% @games.each do |game| %>
+        <li class="<%= "active" if @game == game %> game-list-item">
+          <%= link_to game_path(game) do %>
+            <h3 class='game-title'><%= game.name %></h3>
+            <ul class='game-params'>
+              <li class='rating-type'><%= game.rating_type %> – <%= game.allow_ties ? 'Ties allowed' : 'No ties' %></li>
+              <li class='num-players'><%= game.players.length %> players</li>
+              <li class='games-played'><%= game.results.length %> games played</li>
+            </ul>
+            <% result = game.recent_results.limit(1).first %>
+            <% if result %>
+              <div class='recent-result'>
+                <h4>Last game</h4>
+                <div class='description'>
+                  <% result.teams.each_with_index do |team, i| %>
+                    <% team.players.each do |winner| %>
+                      <span class='player'>
+                        <strong><%= winner.name %></strong>
+                      </span>
+                    <% end %>
+                    <% if i == 0 %>
+                      <% if result.tie? %>
+                        ties
+                      <% else %>
+                        defeated
+                      <% end %>
                     <% end %>
                   <% end %>
-                <% end %>
-                <br/>
-                <time><%= format_time(result.created_at) %></time>
+                  <br/>
+                  <time><%= format_time(result.created_at) %></time>
+                </div>
               </div>
-            </div>
-          <% end %>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
-</div>
-<div>
-  <div>
-    <h2>Players</h2>
-    <%= link_to "See all players", players_path %>
-    <ul id='players-list'>
-      <% @players.each do |player| %>
-        <li>
-          <%= link_to player_path(player) do %>
-            <%= player.name %>
+            <% end %>
           <% end %>
         </li>
       <% end %>
     </ul>
+  </div>
+  <div class="span4">
+    <div>
+      <h2>Players</h2>
+      <%= link_to "See all players", players_path, class: "btn" %>
+      <ul id='players-list'>
+        <% @players.each do |player| %>
+          <li>
+            <%= link_to player_path(player) do %>
+              <%= player.name %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>

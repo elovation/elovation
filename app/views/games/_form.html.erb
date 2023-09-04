@@ -3,10 +3,10 @@
     <%= f.hidden_field :min_number_of_players_per_team, value: 1 %>
     <%= f.hidden_field :min_number_of_teams, value: 2 %>
     <h1>New Game</h1>
-    <div>
-      <%= f.label :name %>
-      <div>
-        <%= f.text_field :name %>
+    <div class="control-group">
+      <%= f.label :name, class: "control-label" %>
+      <div class="controls">
+        <%= f.text_field :name, class: "input-xlarge" %>
       </div>
     </div>
     <div>
