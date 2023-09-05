@@ -1,7 +1,11 @@
 <div class="row-fluid">
   <div class="span8">
-    <h1>Games</h1>
-    <%= link_to "New Game", new_game_path, class: "btn btn-primary" %>
+    <h1><%= brand_title %> Games</h1>
+
+    <%= turbo_frame_tag "new_game", target: "_top" do %>
+      <%= link_to "New Game", new_game_path, class: "btn btn-primary", data: { turbo_frame: "new_game" } %>
+    <% end %>
+
     <ul id='games-list'>
       <% @games.each do |game| %>
         <li class="<%= "active" if @game == game %> game-list-item">
@@ -49,6 +53,7 @@
         <% @players.each do |player| %>
           <li>
             <%= link_to player_path(player) do %>
+              <%= image_tag(gravatar_url(player, size: 24)) %>
               <%= player.name %>
             <% end %>
           </li>
