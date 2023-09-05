@@ -1,4 +1,4 @@
-<div class="player-card">
+<div class="player-card form-well">
   <%= form_with model: player do |f| %>
     <div class="control-group">
       <%= f.label :name, class: "control-label" %>
@@ -16,7 +16,7 @@
     </div>
     <div class="form-actions">
       <%= f.button class: "btn btn-primary" %>
-      <%= link_to "Cancel", players_path, class: "btn btn-warning" %>
+      <%= link_to "Cancel", player_path(player), class: "btn btn-warning" %>
     </div>
     <small class="description attribution">
       Avatar provided by <a href="http://gravatar.com/">Gravatar</a>, a global avatar service.

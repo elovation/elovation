@@ -15,11 +15,11 @@ class PlayersController < ApplicationController
     end
   end
 
-  def update
+  def update 
     if @player.update(player_params)
-      redirect_to players_path
+      redirect_to player_path(@player)
     else
-      render :edit, status: :unprocessable_entity
+      redirect_to player_path(@player), status: :unprocessable_entity
     end
   end
 
