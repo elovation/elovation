@@ -1,20 +1,25 @@
 <div class="player-card">
   <%= form_with model: player do |f| %>
-    <div>
-      <%= f.label :name %>
-      <%= f.text_field :name %>
+    <div class="control-group">
+      <%= f.label :name, class: "control-label" %>
+      <div class="controls">
+        <%= f.text_field :name, class: "input-xlarge" %>
+      </div>
       <%= errors_for player, :name %>
     </div>
-
-    <div>
-      <%= f.label :email %>
-      <%= f.text_field :email %>
+    <div class="control-group">
+      <%= f.label :email, class: "control-label" %>
+      <div class="controls">
+        <%= f.text_field :email, class: "input-xlarge" %>
+      </div>
       <%= errors_for player, :email %>
     </div>
-
-    <div>
-      <%= f.button %>
-      <%= link_to "Cancel", players_path %>
+    <div class="form-actions">
+      <%= f.button class: "btn btn-primary" %>
+      <%= link_to "Cancel", players_path, class: "btn btn-warning" %>
     </div>
+    <small class="description attribution">
+      Avatar provided by <a href="http://gravatar.com/">Gravatar</a>, a global avatar service.
+    </small>
   <% end %>
 </div>
