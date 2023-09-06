@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show]
+  before_action :set_game, only: [:show, :destroy]
 
   def index
     @games = Game.order(id: :desc)
@@ -13,6 +13,14 @@ class GamesController < ApplicationController
     else
       render :new
     end
+  end
+
+  def destroy
+    @game.destroy if @game.results.empty?
+    redirect_to root_path
+  end
+
+  def edit
   end
 
   def new

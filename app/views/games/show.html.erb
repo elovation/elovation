@@ -1,10 +1,13 @@
 <h1>Games / <%= @game.name %></h1>
-<section class="action-buttons">
-  <%= link_to 'Edit', edit_game_path(@game), class: "btn" %>
-  <% if @game.results.empty? %>
-    <%= link_to "Delete", game_path(@game), method: :delete, confirm: "Are you sure?", class: "btn btn-danger" %>
+<% if @game.results.empty? %>
+  <%= button_to "Delete", game_path(@game), method: :delete, form: { data: { turbo_confirm: 'Are you sure?' } }, class: "btn btn-danger" %>
+<% else %>
+  <%= turbo_frame_tag dom_id(@game), target: "_top" do %>
+    <section class="action-buttons">
+      <%= link_to 'Rename', edit_game_path(@game), data: { turbo_frame: dom_id(@game) }, class: "btn" %>
+    </section>
   <% end %>
-</section>
+<% end %>
 <div class="row-fluid">
   <div class="span8">
     <h2>Recent Results</h2>

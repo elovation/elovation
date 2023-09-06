@@ -222,8 +222,9 @@ fieldset {
   transition: box-shadow 0.2s ease;
   -webkit-transition: box-shadow 0.2s ease;
   -moz-transition: box-shadow 0.2s ease;
-  font-weight: 700;
+  font-family: "IBM Plex Mono", "Helvetica Neue", Helvetica, Arial, sans-serif; 
   font-size: 1.4rem;
+  font-weight: 700;
   height: 28px;
   user-select: none;
   will-change: box-shadow;
