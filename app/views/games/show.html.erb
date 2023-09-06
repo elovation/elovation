@@ -1,15 +1,15 @@
 <h1>Games / <%= @game.name %></h1>
-<% if @game.results.empty? %>
-  <%= button_to "Delete", game_path(@game), method: :delete, form: { data: { turbo_confirm: 'Are you sure?' } }, class: "btn btn-danger" %>
-<% else %>
-  <%= turbo_frame_tag dom_id(@game), target: "_top" do %>
-    <section class="action-buttons">
-      <%= link_to 'Rename', edit_game_path(@game), data: { turbo_frame: dom_id(@game) }, class: "btn" %>
-    </section>
-  <% end %>
-<% end %>
 <div class="row-fluid">
   <div class="span8">
+    <% if @game.results.empty? %>
+      <%= button_to "Delete", game_path(@game), method: :delete, form: { data: { turbo_confirm: 'Are you sure?' } }, class: "btn btn-danger" %>
+    <% else %>
+      <%= turbo_frame_tag dom_id(@game), target: "_top" do %>
+        <section class="action-buttons">
+          <%= link_to 'Edit', edit_game_path(@game), data: { turbo_frame: dom_id(@game) }, class: "btn" %>
+        </section>
+      <% end %>
+    <% end %>
     <h2>Recent Results</h2>
     <%= link_to "Add Result", new_game_result_path(@game), class: "btn btn-primary" %>
     <% if @game.recent_results.any? %>

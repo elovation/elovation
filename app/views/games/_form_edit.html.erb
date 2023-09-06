@@ -1,0 +1,40 @@
+<div class="form-well game-card" data-controller="game">
+  <%= form_with model: game do |f| %>
+    <div class="control-group">
+      <%= f.label :name, class: "control-label" %>
+      <div class="controls">
+        <%= f.text_field :name, class: "input-xlarge" %>
+      </div>
+    </div>
+    <div class="control-group">
+      <span class="control-label">Rating type</span>
+      <p><%= game.rater.description %></p>
+    </div>
+    <% if game.rating_type != 'elo' %>
+      <div class="control-group" data-game-target="maxPlayersGroup">
+        <%= f.label :max_number_of_players_per_team, 'Maximum number of players per team', class: "control-label" %>
+        <div class="controls">
+          <%= f.number_field :max_number_of_players_per_team, class: "input-mini", data: { 'game-target': 'maxPlayers' } %>
+          <span class="help-inline">Set to blank for no restriction</span>
+        </div>
+      </div>
+      <div class="control-group" data-game-target="maxTeamsGroup">
+        <%= f.label :max_number_of_teams, 'Maximum number of teams', class: "control-label" %>
+        <div class="controls">
+          <%= f.number_field :max_number_of_teams, class: "input-mini" %>
+          <span class="help-inline">Set to blank for no restriction</span>
+        </div>
+      </div>
+    <% end %>
+    <div class="control-group">
+      <div class="controls">
+        <%= f.check_box :allow_ties, class: "input-mini" %>
+        <%= f.label :allow_ties, class: "control-label" %>
+      </div>
+    </div>
+    <div class="form-actions">
+      <%= f.button class: "btn btn-primary" %>
+      <%= link_to "Cancel", game_path(game), class: "btn btn-warning" %>
+    </div>
+  <% end %>
+</div>

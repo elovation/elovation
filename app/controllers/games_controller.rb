@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :destroy]
+  before_action :set_game, only: [:edit, :update, :show, :destroy]
 
   def index
     @games = Game.order(id: :desc)
@@ -69,10 +69,30 @@ class GamesController < ApplicationController
     end
   end
 
+  def update
+    if @game.update(game_update_params)
+      redirect_to game_path(@game)
+    else
+      redirect_to game_path(@game), status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_game
     @game = Game.find(params[:id])
+  end
+
+  def game_update_params
+    if params[:rating_type] == 'elo'
+      params.require(:game).permit(:name,
+        :allow_ties)
+    else
+      params.require(:game).permit(:name,
+        :max_number_of_teams,
+        :max_number_of_players_per_team,
+        :allow_ties)
+    end
   end
 
   def games_params

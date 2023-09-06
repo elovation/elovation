@@ -401,6 +401,9 @@ label {
   font-weight: 400;
   color: #999; }
 
+.control-label {
+  color: #999; }
+
 input[type='text'], input[type='number'], input[type='submit'], select {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
