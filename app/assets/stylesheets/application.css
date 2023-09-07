@@ -251,6 +251,7 @@ fieldset {
 .players-list .player-card {
   background-color: white;
   border: 1px solid #fff;
+  height: 100%;
   padding: 0;
   text-align: center;
 }
@@ -261,6 +262,7 @@ fieldset {
   padding: 20px;
   color: #666;
   border: 1px solid #fff;
+  height: 100%;
   transition: color 0.2s ease, border 0.2s ease;
   -webkit-transition: color 0.2s ease, border 0.2s ease;
   -moz-transition: color 0.2s ease, border 0.2s ease;
