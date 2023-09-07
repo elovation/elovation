@@ -1,8 +1,9 @@
 <%= turbo_frame_tag player do %>
-  <div class="player-card">
-    <h3><%= player.name %></h3>
-    <p><%= player.email %></p>
-    <%= link_to "Edit", edit_player_path(player), data: { turbo_frame: dom_id(player) } %>
-    <%= button_to "Delete", player, method: :delete, form: { data: { turbo_confirm: "Are you sure?" } } %>
-  </div>
+  <li class="player-card">
+    <%= link_to player_path(player), data: { turbo: false } do %>
+      <%= image_tag(gravatar_url(player, size: 80)) %>
+      <h3> <%= player.name %> </h3>
+      <p> <%= player.email %> </p>
+    <% end %>
+  </li>
 <% end %>
