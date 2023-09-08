@@ -2,6 +2,10 @@
   <h1><%= @player.name %> — <%= @game.name %> <strong><%= @player.ratings.find_by_game_id(@game).value %></strong></h1>
 </div>
 
+<section class="action-buttons">
+  <%= link_to 'Return to game', game_path(@game), class: "btn" %>
+</section>
+
 <div class="row">
   <div class="span6">
     <h2>Head-to-Head Records</h2>
