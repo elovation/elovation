@@ -20,23 +20,27 @@
   </div>
   <div class="span4">
     <h2>Player Ratings</h2>
-    <table id='ratings'>
-      <thead>
-        <tr>
-          <th>Player</th>
-          <th>Rating</th>
-          <th>W</th>
-          <th>L</th>
-          <% if @game.allow_ties %>
-            <th>T</th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <%= render partial: 'rating', collection: @game.all_ratings.select(&:active?) %>
-      </tbody>
-    </table>
-    <%= link_to "View All", game_ratings_path(@game) %>
+    <%= turbo_frame_tag "ratings", target: "_top" do %>
+      <table id='ratings'>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Rating</th>
+            <th>W</th>
+            <th>L</th>
+            <% if @game.allow_ties %>
+              <th>T</th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render partial: 'rating', collection: @ratings.select(&:active?) %>
+        </tbody>
+      </table>
+      <% if @ratings.count > @ratings.select(&:active?).count %>
+        <%= link_to "View All", game_ratings_path(@game), data: { turbo_frame: "ratings" }, class: "btn" %>
+      <% end %>
+    <% end %>
   </div>
 </div>
 <div>

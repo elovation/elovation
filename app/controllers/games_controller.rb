@@ -61,6 +61,8 @@ class GamesController < ApplicationController
       {:name => player.name, :data => player_to_days[player.name].to_a}
     end
 
+    @ratings = @game.all_ratings
+
     respond_to do |format|
       format.html
       format.json do
