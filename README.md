@@ -41,6 +41,12 @@ If you intend to use this software commercially, you must remove the Trueskill i
 Contributing & Development
 --------------------------
 
+*Docker*
+
 The root directory of this app contains a `Dockerfile.dev` file, and a `docker-compose.yml` as helpers to make the development experience easier.
 
 Assuming you have Docker installed, you should be able to run `docker compose up` from the root directory, and get your dev instance running and accessible from `http://localhost:4321`
+
+*ASDF*
+
+The root directory contains a .tool-versions file, this is used by a version management tool called (ASDF)[https://asdf-vm.com]. If you are running Mac OS, you may find you need to run ASDF to help manage your ruby version.
