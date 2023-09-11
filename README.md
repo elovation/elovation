@@ -37,3 +37,10 @@ Suitable for:
 Caution
 -------
 If you intend to use this software commercially, you must remove the Trueskill implementation as it is patented by Microsoft.
+
+Contributing & Development
+--------------------------
+
+The root directory of this app contains a `Dockerfile.dev` file, and a `docker-compose.yml` as helpers to make the development experience easier.
+
+Assuming you have Docker installed, you should be able to run `docker compose up` from the root directory, and get your dev instance running and accessible from `http://localhost:4321`

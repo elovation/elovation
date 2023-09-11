@@ -1,0 +1,14 @@
+FROM timbru31/ruby-node:3.2
+
+RUN apt-get update -qq && apt-get install -y postgresql-client
+
+WORKDIR /elovation
+COPY Gemfile /elovation/Gemfile
+COPY Gemfile.lock /elovation/Gemfile.lock
+RUN bundle install
+
+ENTRYPOINT ["./bin/docker-entrypoint"]
+EXPOSE 3000
+
+# Configure the main process to run when running the image
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
