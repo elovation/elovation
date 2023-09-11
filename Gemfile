@@ -57,6 +57,8 @@ group :development do
   gem "better_errors"
   gem "binding_of_caller"
 
+  # https://github.com/fly-apps/dockerfile-rails
+  gem "dockerfile-rails", ">= 1.5"
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
 
@@ -70,3 +72,7 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem "sentry-ruby", "~> 5.11"
+
+gem "sentry-rails", "~> 5.11"

@@ -100,6 +100,8 @@ GEM
       irb (>= 1.5.0)
       reline (>= 0.3.1)
     debug_inspector (1.1.0)
+    dockerfile-rails (1.5.5)
+      rails
     elo (0.1.0)
     erubi (1.12.0)
     globalid (1.2.0)
@@ -140,6 +142,8 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
+    nokogiri (1.15.4-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
     pg (1.5.4)
@@ -193,6 +197,11 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    sentry-rails (5.11.0)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.11.0)
+    sentry-ruby (5.11.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -224,6 +233,7 @@ GEM
     zeitwerk (2.6.11)
 
 PLATFORMS
+  x86_64-darwin-22
   x86_64-linux
 
 DEPENDENCIES
@@ -233,6 +243,7 @@ DEPENDENCIES
   capybara
   chartkick
   debug
+  dockerfile-rails (>= 1.5)
   elo
   importmap-rails
   jbuilder
@@ -240,6 +251,8 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.7, >= 7.0.7.2)
   selenium-webdriver
+  sentry-rails (~> 5.11)
+  sentry-ruby (~> 5.11)
   sprockets-rails
   stimulus-rails
   trueskill!

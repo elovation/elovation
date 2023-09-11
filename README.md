@@ -8,6 +8,18 @@ At Braintree, we play ping pong in the office. We wanted a way to track results 
 
 This also supports individual player rankings within multi-player teams, using the [Trueskill ranking system](http://research.microsoft.com/en-us/projects/trueskill/)
 
+Deploy yourself with Fly.io for free
+-------------------------------------
+The root of this directory is setup with a Dockerfile ready to deploy to [fly.io](https://fly.io).
+
+To deploy to fly, you must install a command line tool and sign up [using the following instructions](https://fly.io/docs/hands-on/install-flyctl/)
+
+Once you have installed and signed up to fly.io (you can skip the suggested example launcher), you can proceed to generate a fly.toml file for this project to deploy to fly.io
+
+To do this, run `fly launch --dockerfile Dockerfile`, you will be prompted to generate a new project, with a new name. When prompted to setup a postgres database, select yes. You do not need to setup redis, so skip that step.
+
+It should "just work", if it doesn't, please file an issue.
+
 Game Options
 ------------
 There are two types of "Games" that Elovation allows for: [Trueskill](https://en.wikipedia.org/wiki/TrueSkill) & [Elo](https://en.wikipedia.org/wiki/Elo_rating_system)
@@ -49,4 +61,4 @@ Assuming you have Docker installed, you should be able to run `docker compose up
 
 *ASDF*
 
-The root directory contains a .tool-versions file, this is used by a version management tool called (ASDF)[https://asdf-vm.com]. If you are running Mac OS, you may find you need to run ASDF to help manage your ruby version.
+The root directory contains a .tool-versions file, this is used by a version management tool called [ASDF](https://asdf-vm.com). If you are running Mac OS, you may find you need to run ASDF to help manage your ruby version if you're trying to run without docker, or you wish to make a custom fly.io deployment.
