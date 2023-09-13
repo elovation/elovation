@@ -13,7 +13,7 @@ module ApplicationHelper
     options.assert_valid_keys :size
     size = options[:size] || 32
     if player.email.blank?
-      digest = Digest::MD5.hexdigest(player.email)
+      digest = Digest::MD5.hexdigest(player.name)
       "https://robohash.org/#{digest}?size=#{size}x#{size}"
     else
       digest = Digest::MD5.hexdigest(player.email)
