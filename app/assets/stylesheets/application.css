@@ -384,8 +384,6 @@ time {
   vertical-align: middle;
   margin: -2px 6px -2px 10px; }
 
-
-
 .form-well {
   background-color: #F5F5F5;
   box-sizing: border-box;
@@ -393,24 +391,6 @@ time {
   padding: 20px; }
   .form-well form > .control-group:nth-of-type(1) {
     margin-top: 0; }
-
-.chzn-container, .chzn-choices, .chzn-container .search-field input,
-.chzn-default, .chzn-default span {
-  display: inline-block;
-  vertical-align: bottom;
-  min-height: 32px; }
-
-.chzn-container, .chzn-choices {
-  width: 300px; }
-
-.chzn-container .search-field {
-  border-bottom: none; }
-
-.chzn-default span {
-  padding: 5px 0; }
-
-.chzn-container.chzn-container-single .chzn-single div b {
-  background-position: 0 7px; }
 
 .control-group {
   margin: 1em 0; }
@@ -436,7 +416,13 @@ label {
 .control-label {
   color: #999; }
 
-input[type='text'], input[type='number'], input[type='submit'], select {
+select {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  margin: 0;
+}
+
+input[type='text'], input[type='number'], input[type='submit'] {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   height: 34px;
@@ -469,8 +455,18 @@ input[type='submit'] {
 select {
   border: 1px solid #999; }
 
-#form-results .chzn-container, #form-results select {
+#form-results .form-fields {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#form-results select {
   margin: 6px; }
+
+#form-results small {
+  display: block;
+}
 
 @media screen and (max-width: 1024px) {
   #games-list {
