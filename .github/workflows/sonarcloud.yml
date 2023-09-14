@@ -42,11 +42,17 @@ jobs:
   Analysis:
     runs-on: ubuntu-latest
 
+    container:
+      image: ruby:3.2.2
+
     services:
       postgres:
-        image: postgres
+        image: postgres:10.8
         env:
-          POSTGRES_PASSWORD: password
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
         - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -55,26 +61,45 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
+      - name: Gem cache
+        id: cache-bundle
+        uses: actions/cache@v1
         with:
-          ruby-version: 'head'
+          path: vendor/bundle
+          key: bundle-${{ hashFiles('**/Gemfile.lock') }}
 
-      - name: Setup DB
+      - name: Bundle install
+        env:
+          RAILS_ENV: test
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3 --path vendor/bundle
+
+      - name: Setup DB, Run tests
         env:
           PGHOST: postgres
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
-        run: bin/rails db:prepare
+        run: |
+          bin/rails db:create db:schema:load
+          bundle exec rspec
 
-      - name: Unit tests and coverage report
-        env:
-          PGHOST: postgres
-          PGUSER: postgres
-          PGPORT: ${{ job.services.postgres.ports[5432] }}
-          RAILS_ENV: test
-        run: bundle exec rspec --format doc
+      # - name: Setup DB
+      #   env:
+      #     PGHOST: postgres
+      #     PGUSER: postgres
+      #     PGPORT: ${{ job.services.postgres.ports[5432] }}
+      #     RAILS_ENV: test
+      #   run: bin/rails db:prepare
+
+      # - name: Unit tests and coverage report
+      #   env:
+      #     PGHOST: postgres
+      #     PGUSER: postgres
+      #     PGPORT: ${{ job.services.postgres.ports[5432] }}
+      #     RAILS_ENV: test
+      #   run: bundle exec rspec --format doc
   
       - name: Analyze with SonarCloud
         # You can pin the exact commit or the version.
