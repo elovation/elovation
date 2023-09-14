@@ -46,6 +46,7 @@ jobs:
       postgres:
         image: postgres
         env:
+          POSTGRES_DB: postgres
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
         ports:
