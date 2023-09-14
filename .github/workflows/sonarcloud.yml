@@ -41,16 +41,42 @@ permissions:
 jobs:
   Analysis:
     runs-on: ubuntu-latest
+    container:
+      image: timbru31/ruby-node:3.2
 
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: postgres
+        ports:
+        - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+  
     steps:
       - uses: actions/checkout@v2
+
       - uses: ruby/setup-ruby@v1
+        env:
+          RAILS_ENV: test
         with:
           bundler-cache: true
+
+      - name: Setup DB, Run tests
+        env:
+          PGHOST: postgres
+          PGUSER: postgres
+          PGPORT: ${{ job.services.postgres.ports[5432] }}
+          RAILS_ENV: test
+        run: rails db:create db:schema:load
+
       - name: Unit tests and coverage report
         run: bundle exec rspec --format doc
+  
       - name: Analyze with SonarCloud
-
         # You can pin the exact commit or the version.
         # uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
         uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
