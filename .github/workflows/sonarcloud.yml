@@ -55,8 +55,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby
+      - uses: ruby/setup-ruby
         with:
           ruby-version: '3.1'
 
