@@ -289,6 +289,7 @@ DEPENDENCIES
   sentry-rails (~> 5.11)
   sentry-ruby (~> 5.11)
   simplecov
+  simplecov_json_formatter
   sprockets-rails
   stimulus-rails
   trueskill!

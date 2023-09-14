@@ -81,7 +81,10 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 
+  # https://github.com/simplecov-ruby/simplecov
   gem 'simplecov'
+  # https://github.com/codeclimate-community/simplecov_json_formatter
+  gem 'simplecov_json_formatter'
 end
 
 gem "sentry-ruby", "~> 5.11"

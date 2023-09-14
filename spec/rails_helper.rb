@@ -1,5 +1,9 @@
 require 'simplecov'
-SimpleCov.start 'rails'
+require 'simplecov_json_formatter'
+SimpleCov.formatter = SimpleCov::Formatter::JSONFormatter
+SimpleCov.start('rails') do
+  add_filter ['/channels/', '/jobs/', '/mailers/']
+end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
