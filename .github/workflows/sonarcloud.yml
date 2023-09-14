@@ -41,48 +41,39 @@ permissions:
 jobs:
   Analysis:
     runs-on: ubuntu-latest
-    container:
-      image: ruby:3.2.2
 
     services:
       postgres:
-        image: postgres:10.8
+        image: postgres
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
-          POSTGRES_DB: postgres
-          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_PASSWORD: password
         ports:
         - 5432:5432
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
   
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Gem cache
-        id: cache-bundle
-        uses: actions/cache@v1
+      - name: Set up Ruby
+        uses: ruby/setup-ruby
         with:
-          path: vendor/bundle
-          key: bundle-${{ hashFiles('**/Gemfile.lock') }}
-
-      - name: Bundle install
-        env:
-          RAILS_ENV: test
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3 --path vendor/bundle
+          ruby-version: '3.1'
 
       - name: Setup DB
         env:
-          PGHOST: localhost
+          PGHOST: 127.0.0.1
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: bin/rails db:prepare
 
       - name: Unit tests and coverage report
+        env:
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          PGPORT: ${{ job.services.postgres.ports[5432] }}
+          RAILS_ENV: test
         run: bundle exec rspec --format doc
   
       - name: Analyze with SonarCloud
