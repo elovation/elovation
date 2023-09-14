@@ -46,7 +46,7 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_DB: postgres
+          POSTGRES_DB: postgres_db
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
         ports:
@@ -55,6 +55,17 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
   
     steps:
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+
+      # queries database with postgres client
+      - name: Query database
+        run: psql -h postgres -d postgres_db -U postgres -c 'SELECT 1;'
+        env:
+          PGPASSWORD: password
+
       - uses: actions/checkout@v2
 
       - uses: ruby/setup-ruby@v1
