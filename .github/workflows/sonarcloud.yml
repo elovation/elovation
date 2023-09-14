@@ -63,13 +63,13 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Setup DB, Run tests
+      - name: Setup DB
         env:
           PGHOST: postgres
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
-        run: rails db:create db:schema:load
+        run: bin/rails db:create db:schema:load
 
       - name: Unit tests and coverage report
         run: bundle exec rspec --format doc
