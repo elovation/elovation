@@ -89,8 +89,7 @@ jobs:
 
       - name: Fix code coverage paths
         working-directory: ./coverage
-        run: |
-          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage.json
+        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage.json
 
       - name: Analyze with SonarCloud
         # You can pin the exact commit or the version.
