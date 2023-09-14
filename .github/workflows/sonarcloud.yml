@@ -44,7 +44,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:10.8
+        image: postgres
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
@@ -64,6 +64,7 @@ jobs:
 
       - name: Setup DB
         env:
+          PGHOST: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: bin/rails db:create db:schema:load
