@@ -41,42 +41,43 @@ permissions:
 jobs:
   Analysis:
     runs-on: ubuntu-latest
+    container:
+      image: ruby:3.2.2
 
     services:
       postgres:
-        image: postgres
+        image: postgres:10.8
         env:
-          POSTGRES_DB: postgres_db
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
         - 5432:5432
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
   
     steps:
-      - name: Install PostgreSQL client
-        run: |
-          apt-get update
-          apt-get install --yes postgresql-client
-
-      # queries database with postgres client
-      - name: Query database
-        run: psql -h postgres -d postgres_db -U postgres -c 'SELECT 1;'
-        env:
-          PGPASSWORD: password
-
       - uses: actions/checkout@v2
 
-      - uses: ruby/setup-ruby@v1
+      - name: Gem cache
+        id: cache-bundle
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: bundle-${{ hashFiles('**/Gemfile.lock') }}
+
+      - name: Bundle install
         env:
           RAILS_ENV: test
-        with:
-          bundler-cache: true
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3 --path vendor/bundle
 
       - name: Setup DB
         env:
           PGHOST: postgres
+          PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: bin/rails db:create db:schema:load

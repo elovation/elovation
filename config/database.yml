@@ -60,6 +60,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
+  user: <%= ENV.fetch("PGUSER") { "postgres" } %>
   host: <%= ENV.fetch("PGHOST") { "db" } %>
   port: <%= ENV.fetch("PGPORT") { nil } %>
   database: elovation_test
