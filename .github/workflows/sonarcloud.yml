@@ -62,7 +62,7 @@ jobs:
 
       - name: Setup DB
         env:
-          PGHOST: 127.0.0.1
+          PGHOST: postgres
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
@@ -70,7 +70,7 @@ jobs:
 
       - name: Unit tests and coverage report
         env:
-          PGHOST: 127.0.0.1
+          PGHOST: postgres
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
