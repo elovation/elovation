@@ -80,6 +80,8 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+
+  gem 'simplecov'
 end
 
 gem "sentry-ruby", "~> 5.11"

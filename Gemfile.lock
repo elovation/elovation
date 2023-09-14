@@ -101,6 +101,7 @@ GEM
       reline (>= 0.3.1)
     debug_inspector (1.1.0)
     diff-lcs (1.5.0)
+    docile (1.4.0)
     dockerfile-rails (1.5.5)
       rails
     elo (0.1.0)
@@ -227,6 +228,12 @@ GEM
       sentry-ruby (~> 5.11.0)
     sentry-ruby (5.11.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.4)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -281,6 +288,7 @@ DEPENDENCIES
   selenium-webdriver
   sentry-rails (~> 5.11)
   sentry-ruby (~> 5.11)
+  simplecov
   sprockets-rails
   stimulus-rails
   trueskill!

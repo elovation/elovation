@@ -43,6 +43,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
+      - name: Unit tests and coverage report
+        run: bundle exec rspec --format doc
       - name: Analyze with SonarCloud
 
         # You can pin the exact commit or the version.
