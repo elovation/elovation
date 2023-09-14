@@ -41,8 +41,6 @@ permissions:
 jobs:
   Analysis:
     runs-on: ubuntu-latest
-    container:
-      image: timbru31/ruby-node:3.2
 
     services:
       postgres:
@@ -58,6 +56,11 @@ jobs:
   
     steps:
       - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+        node-version: '18.x'
+        registry-url: 'https://registry.npmjs.org'
 
       - uses: ruby/setup-ruby@v1
         env:
