@@ -48,7 +48,6 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: postgres
         ports:
         - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -65,8 +64,6 @@ jobs:
 
       - name: Setup DB
         env:
-          PGHOST: postgres
-          PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: bin/rails db:create db:schema:load
