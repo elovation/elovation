@@ -76,11 +76,11 @@ jobs:
 
       - name: Setup DB
         env:
-          PGHOST: postgres
+          PGHOST: localhost
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
-        run: bin/rails db:create db:schema:load
+        run: bin/rails db:prepare
 
       - name: Unit tests and coverage report
         run: bundle exec rspec --format doc
