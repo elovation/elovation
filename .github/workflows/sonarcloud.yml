@@ -88,7 +88,7 @@ jobs:
           bundle exec rspec
 
       - name: Static Analysis Rubocop
-        run: rubocop --format json --out rubocop.json
+        run: bundle exec rubocop --format json --out rubocop.json
 
       - name: Fix code coverage paths
         working-directory: ./coverage
