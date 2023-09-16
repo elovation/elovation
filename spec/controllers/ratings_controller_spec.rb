@@ -1,10 +1,10 @@
-require "spec_helper"
+require "rails_helper"
 
 describe RatingsController, :type => :controller do
   describe "index" do
     it "renders ratins for the given game" do
-      game = FactoryGirl.create(:game)
-      rating = FactoryGirl.create(:rating, game: game)
+      game = FactoryBot.create(:game)
+      rating = FactoryBot.create(:rating, game: game)
 
       get :index, params: {game_id: game}
 

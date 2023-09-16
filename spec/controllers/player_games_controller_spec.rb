@@ -1,10 +1,10 @@
-require "spec_helper"
+require "rails_helper"
 
 describe PlayerGamesController, :type => :controller do
   describe "show" do
     it "renders successfully with the player and the game" do
-      game = FactoryGirl.create(:game)
-      player = FactoryGirl.create(:player)
+      game = FactoryBot.create(:game)
+      player = FactoryBot.create(:player)
 
       get :show, params: {player_id: player, id: game}
       response.should be_success

@@ -2,6 +2,10 @@
   <h1><%= @player.name %> — <%= @game.name %> <strong><%= @player.ratings.find_by_game_id(@game).value %></strong></h1>
 </div>
 
+<section class="action-buttons">
+  <%= link_to 'Return to game', game_path(@game), class: "btn" %>
+</section>
+
 <div class="row">
   <div class="span6">
     <h2>Head-to-Head Records</h2>
@@ -20,7 +24,6 @@
 
       <tbody>
         <% @game.all_ratings.each do |rating| %>
-
           <% opponent = rating.player %>
           <% wins = @player.wins(@game, opponent) %>
           <% losses = @player.results.losses.for_game(@game).against(opponent).size %>
@@ -83,4 +86,3 @@
   <h2>Progress</h2>
     <%= line_chart @chart_data, min: nil, max: nil, xtitle: 'Matches', ytitle: @game.rating_type.capitalize %>
 </div>
-

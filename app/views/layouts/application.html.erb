@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title> <%= brand_title %> Games</title>
-  <meta name='apple-mobile-web-app-capable' content='yes' />
-  <meta name='apple-mobile-web-app-status-bar-style' content='black' />
-  <meta name='viewport', content='width = device-width, initial-scale = 1, maximum-scale = 1, user-scalable = yes' />
-
-  <%= stylesheet_link_tag "application", media: "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
-
-  <%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
-</head>
-<body>
-  <div id='container'>
-    <header>
-      <%= link_to root_path, class: "brand" do %>
-        <div class='brand-name'><%= brand_title %></div>
-        <div class='brand-label'>Home</div>
-      <% end %>
-    </header>
-
-    <div id='main'>
-      <%= yield %>
+  <head>
+    <title><%= brand_title %> Games</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <%= javascript_importmap_tags %>
+  </head>
+  <body>
+    <div id='container'>
+      <header>
+        <%= link_to root_path, class: "brand" do %>
+          <div class='brand-name'><%= brand_title %></div>
+          <div class='brand-label'>Home</div>
+        <% end %>
+      </header>
+      <div id='main'>
+        <%= yield %>
+      </div>
     </div>
-  </div>
-  <% if brand_title != "Elovation" %>
-    <div class="footer">Powered by Elovation</div>
-  <% end %>
-</body>
+    <% if brand_title != "Elovation" %>
+      <div class="footer">Powered by Elovation</div>
+    <% end %>
+  </body>
 </html>

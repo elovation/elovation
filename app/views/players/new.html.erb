@@ -1,1 +1,5 @@
-<%= render 'form' %>
+<h1>New Player</h1>
+
+<%= turbo_frame_tag @player do %>
+  <%= render "form", player: @player %>
+<% end %>

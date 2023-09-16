@@ -1,26 +1,23 @@
 Elovation
 ===========================
 
-[![Build Status](https://travis-ci.org/elovation/elovation.png?branch=master)](https://travis-ci.org/elovation/elovation)
-[![Code Climate](https://codeclimate.com/github/elovation/elovation/badges/gpa.svg)](https://codeclimate.com/github/elovation/elovation)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=elovation_elovation&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=elovation_elovation)
 
 At Braintree, we play ping pong in the office. We wanted a way to track results and assign ratings to players. Elovation was born. It's a simple rails app that tracks the results of any two player game and assigns ratings to the players using the [Elo rating system](http://en.wikipedia.org/wiki/Elo_rating_system).
 
 This also supports individual player rankings within multi-player teams, using the [Trueskill ranking system](http://research.microsoft.com/en-us/projects/trueskill/)
 
+Deploy yourself with Fly.io for free
+-------------------------------------
+The root of this directory is setup with a Dockerfile ready to deploy to [fly.io](https://fly.io).
 
-Heroku
----------------------------
+To deploy to fly, you must install a command line tool and sign up [using the following instructions](https://fly.io/docs/hands-on/install-flyctl/)
 
-The fastest way to get started with Elovation is to click the deploy to [Heroku](http://www.heroku.com) button below. Heroku was initially chosen for it's free tier, but this no longer exists. We are currently seeking contributors to help migrate this application to another service. Heroku deployment is currently untested as per Elovations last update many years ago.
+Once you have installed and signed up to fly.io (you can skip the suggested example launcher), you can proceed to generate a fly.toml file for this project to deploy to fly.io
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/elovation/elovation)
+To do this, run `fly launch --dockerfile Dockerfile`, you will be prompted to generate a new project, with a new name. When prompted to setup a postgres database, select yes. You do not need to setup redis, so skip that step.
 
-If you would like to add a level of authentication security to your app on Heroku, on the setup screen set the "BASIC_AUTH" to "true", and set a username and password in their respective fields. When you try to access your app in future, you will be prompted for your credentials.
-
-You can set the branding on Elovation by defining the "ELOVATION_TITLE" variable in Heroku with your desired name.
-
-The click to deploy button will automatically migrate your database.
+It should "just work", if it doesn't, please file an issue.
 
 Game Options
 ------------
@@ -51,3 +48,16 @@ Suitable for:
 Caution
 -------
 If you intend to use this software commercially, you must remove the Trueskill implementation as it is patented by Microsoft.
+
+Contributing & Development
+--------------------------
+
+*Docker*
+
+The root directory of this app contains a `Dockerfile.dev` file, and a `docker-compose.yml` as helpers to make the development experience easier.
+
+Assuming you have Docker installed, you should be able to run `docker compose up` from the root directory, and get your dev instance running and accessible from `http://localhost:4321`
+
+*ASDF*
+
+The root directory contains a .tool-versions file, this is used by a version management tool called [ASDF](https://asdf-vm.com). If you are running Mac OS, you may find you need to run ASDF to help manage your ruby version if you're trying to run without docker, or you wish to make a custom fly.io deployment.

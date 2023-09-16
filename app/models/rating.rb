@@ -1,6 +1,7 @@
-class Rating < ActiveRecord::Base
+class Rating < ApplicationRecord
   belongs_to :game
   belongs_to :player
+
   has_many :history_events, -> { order created_at: :desc }, class_name: "RatingHistoryEvent", dependent: :destroy
 
   def active?
@@ -27,7 +28,7 @@ class Rating < ActiveRecord::Base
       destroy
     else
       Rating.transaction do
-        update_attributes!(value: _previous_rating.value,
+        update!(value: _previous_rating.value,
                            trueskill_mean: _previous_rating.trueskill_mean,
                            trueskill_deviation: _previous_rating.trueskill_deviation)
         _current_rating.destroy

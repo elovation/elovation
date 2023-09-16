@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :team do
-    players { [FactoryGirl.build(:player)] }
+    players { [FactoryBot.build(:player)] }
   end
 end

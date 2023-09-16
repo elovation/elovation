@@ -1,1 +1,3 @@
-<%= render 'form' %>
+<%= turbo_frame_tag @game do %>
+  <%= render "form", game: @game %>
+<% end %>

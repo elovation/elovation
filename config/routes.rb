@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
   resources :games do
-    resources :results, only: [:create, :destroy, :new]
+    resources :results, only: %i[create destroy new]
     resources :ratings, only: [:index]
   end
 
@@ -8,6 +10,5 @@ Rails.application.routes.draw do
     resources :games, only: [:show], controller: 'player_games'
   end
 
-  get '/dashboard' => 'dashboard#show', as: :dashboard
-  root to: 'dashboard#show'
+  root 'dashboard#index'
 end

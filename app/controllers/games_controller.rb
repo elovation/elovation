@@ -1,5 +1,9 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:destroy, :edit, :show, :update]
+  before_action :set_game, only: [:edit, :update, :show, :destroy]
+
+  def index
+    @games = Game.order(id: :desc)
+  end
 
   def create
     @game = Game.new(games_params)
@@ -13,7 +17,7 @@ class GamesController < ApplicationController
 
   def destroy
     @game.destroy if @game.results.empty?
-    redirect_to dashboard_path
+    redirect_to root_path
   end
 
   def edit
@@ -57,6 +61,8 @@ class GamesController < ApplicationController
       {:name => player.name, :data => player_to_days[player.name].to_a}
     end
 
+    @ratings = @game.all_ratings
+
     respond_to do |format|
       format.html
       format.json do
@@ -66,10 +72,10 @@ class GamesController < ApplicationController
   end
 
   def update
-    if @game.update_attributes(games_params)
+    if @game.update(game_update_params)
       redirect_to game_path(@game)
     else
-      render :edit
+      redirect_to game_path(@game), status: :unprocessable_entity
     end
   end
 
@@ -77,6 +83,18 @@ class GamesController < ApplicationController
 
   def set_game
     @game = Game.find(params[:id])
+  end
+
+  def game_update_params
+    if params[:rating_type] == 'elo'
+      params.require(:game).permit(:name,
+        :allow_ties)
+    else
+      params.require(:game).permit(:name,
+        :max_number_of_teams,
+        :max_number_of_players_per_team,
+        :allow_ties)
+    end
   end
 
   def games_params

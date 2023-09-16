@@ -1,4 +1,4 @@
-class RatingHistoryEvent < ActiveRecord::Base
+class RatingHistoryEvent < ApplicationRecord
   belongs_to :rating
   scope :events, -> (player, game) do
     includes(:rating)

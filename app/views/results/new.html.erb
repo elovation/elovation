@@ -1,24 +1,39 @@
+
+
+<% if @team_game %> 
+  <h2 style="margin-top:0;">Team Results</h2>
+  <p>
+  This game supports team results. This means that you can either select a singular player per team, or multiple. 
+  There is a known issue with this form. If you attempt to submit and nothing happens, it is likely that you have selected the same player in multiple teams. 
+  To select multiple players per team, use "shift + click", or "cmd + click" on mac, or "ctrl + click" on windows machines.
+  <% if @result.teams.length > 2 %>You do not need to fill in every team, start on the far left and move towards the right, the minimum requirement is the first two, then the rest are optional.<% end %>
+  </p>
+<% end %>
+
 <%= form_for [@game, @result], html: {id: "form-results"} do |f| %>
-  <%= f.error_messages %>
-
-  <% @result.teams.each.with_index do |team, index| %>
-    <%= select "result[teams][#{index}]", "players", player_options, {include_blank: ''}, class: "players", multiple: @game.max_number_of_players_per_team != 1, "data-placeholder" => "Team #{index + 1}" %>
-
-    <% if index != @result.teams.size - 1 %>
-      <% if @game.allow_ties %>
-        <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {} %>
-      <% else %>
-        <%= hidden_field_tag "result[teams][#{index}][relation]", :defeats, {} %>
-        Defeats:
+  <div class='form-fields'>
+    <% @result.teams.each.with_index do |team, index| %>
+      <div>
+      <small>
+        <% if index == 0 %>
+          Winner<% if @team_game %>/s<% end %>
+        <% else %>
+          Loser<% if @team_game %>/s<% end %>
+        <% end %>
+      </small>
+      <%= select "result[teams][#{index}]", "players", player_options, {include_blank: ''}, class: "players", multiple: @team_game, "data-placeholder" => "Team #{index + 1}" %>
+      </div>
+      <% if index != @result.teams.size - 1 %>
+        <% if @game.allow_ties %>
+          <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {} %>
+        <% else %>
+          <%= hidden_field_tag "result[teams][#{index}][relation]", :defeats, {} %>
+          Defeats:
+        <% end %>
       <% end %>
     <% end %>
-  <% end %>
-
+  </div>
   <div class='form-actions'>
     <%= f.submit class: "btn btn-primary", value: 'Save Result' %>
   </div>
-<% end %>
-
-<%= javascript_tag do %>
-  $(".players").chosen();
 <% end %>

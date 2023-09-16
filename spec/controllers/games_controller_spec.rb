@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe GamesController, :type => :controller do
   describe "new" do
@@ -11,7 +11,7 @@ describe GamesController, :type => :controller do
 
   describe "edit" do
     it "exposes the game for editing" do
-      game = FactoryGirl.create(:game)
+      game = FactoryBot.create(:game)
 
       get :edit, params: {id: game}
 
@@ -22,14 +22,14 @@ describe GamesController, :type => :controller do
   describe "create" do
     context "with valid params" do
       it "creates a game" do
-        game_attributes = FactoryGirl.attributes_for(:game)
+        game_attributes = FactoryBot.attributes_for(:game)
         post :create, params: {game: game_attributes}
 
         Game.where(name: game_attributes[:name]).first.should_not be_nil
       end
 
       it "redirects to the game's show page" do
-        game_attributes = FactoryGirl.attributes_for(:game)
+        game_attributes = FactoryBot.attributes_for(:game)
         post :create, params: {game: game_attributes}
 
         game = Game.where(name: game_attributes[:name]).first
@@ -39,7 +39,7 @@ describe GamesController, :type => :controller do
 
       it "protects against mass assignment" do
         Timecop.freeze(Time.now) do
-          game_attributes = FactoryGirl.attributes_for(:game, created_at: 3.days.ago)
+          game_attributes = FactoryBot.attributes_for(:game, created_at: 3.days.ago)
           post :create, params: {game: game_attributes}
 
           game = Game.where(name: game_attributes[:name]).first
@@ -59,7 +59,7 @@ describe GamesController, :type => :controller do
 
   describe "destroy" do
     it "allows deleting games without results" do
-      game = FactoryGirl.create(:game, name: "First name")
+      game = FactoryBot.create(:game, name: "First name")
 
       delete :destroy, params: {id: game}
 
@@ -68,8 +68,8 @@ describe GamesController, :type => :controller do
     end
 
     it "doesn't allow deleting games with results" do
-      game = FactoryGirl.create(:game, name: "First name")
-      FactoryGirl.create(:result, game: game)
+      game = FactoryBot.create(:game, name: "First name")
+      FactoryBot.create(:result, game: game)
 
       delete :destroy, params: {id: game}
 
@@ -81,7 +81,7 @@ describe GamesController, :type => :controller do
   describe "update" do
     context "with valid params" do
       it "redirects to the game's show page" do
-        game = FactoryGirl.create(:game, name: "First name")
+        game = FactoryBot.create(:game, name: "First name")
 
         put :update, params: {id: game, game: {name: "Second name"}}
 
@@ -89,7 +89,7 @@ describe GamesController, :type => :controller do
       end
 
       it "updates the game with the provided attributes" do
-        game = FactoryGirl.create(:game, name: "First name")
+        game = FactoryBot.create(:game, name: "First name")
 
         put :update, params: {id: game, game: {name: "Second name"}}
 
@@ -98,7 +98,7 @@ describe GamesController, :type => :controller do
 
       it "protects against mass assignment" do
         Timecop.freeze(Time.now) do
-          game = FactoryGirl.create(:game, name: "First name")
+          game = FactoryBot.create(:game, name: "First name")
 
           put :update, params: {id: game, game: {created_at: 3.days.ago}}
 
@@ -109,7 +109,7 @@ describe GamesController, :type => :controller do
 
     context "with invalid params" do
       it "renders the edit page" do
-        game = FactoryGirl.create(:game, name: "First name")
+        game = FactoryBot.create(:game, name: "First name")
 
         put :update, params: {id: game, game: {name: nil}}
 
@@ -120,7 +120,7 @@ describe GamesController, :type => :controller do
 
   describe "show" do
     it "exposes the game" do
-      game = FactoryGirl.create(:game)
+      game = FactoryBot.create(:game)
 
       get :show, params: {id: game}
 
@@ -129,19 +129,19 @@ describe GamesController, :type => :controller do
 
     it "returns a json response" do
       Timecop.freeze(Time.now) do
-        game = FactoryGirl.create(:game)
+        game = FactoryBot.create(:game)
 
-        player1 = FactoryGirl.create(:player)
-        player2 = FactoryGirl.create(:player)
-        player3 = FactoryGirl.create(:player)
+        player1 = FactoryBot.create(:player)
+        player2 = FactoryBot.create(:player)
+        player3 = FactoryBot.create(:player)
 
-        rating1 = FactoryGirl.create(:rating, game: game, value: 1003, player: player1)
-        rating2 = FactoryGirl.create(:rating, game: game, value: 1002, player: player2)
-        rating3 = FactoryGirl.create(:rating, game: game, value: 1001, player: player3)
+        rating1 = FactoryBot.create(:rating, game: game, value: 1003, player: player1)
+        rating2 = FactoryBot.create(:rating, game: game, value: 1002, player: player2)
+        rating3 = FactoryBot.create(:rating, game: game, value: 1001, player: player3)
 
-        result1 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player1]), FactoryGirl.create(:team, rank: 2, players: [player2])])
-        result2 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player2]), FactoryGirl.create(:team, rank: 2, players: [player3])])
-        result3 = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player3]), FactoryGirl.create(:team, rank: 2, players: [player1])])
+        result1 = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player1]), FactoryBot.create(:team, rank: 2, players: [player2])])
+        result2 = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player2]), FactoryBot.create(:team, rank: 2, players: [player3])])
+        result3 = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player3]), FactoryBot.create(:team, rank: 2, players: [player1])])
 
         get :show, params: {id: game, format: :json}
 

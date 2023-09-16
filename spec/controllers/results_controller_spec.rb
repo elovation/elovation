@@ -1,9 +1,9 @@
-require "spec_helper"
+require "rails_helper"
 
 describe ResultsController, :type => :controller do
   describe "new" do
     it "exposes a new result" do
-      game = FactoryGirl.create(:game)
+      game = FactoryBot.create(:game)
 
       get :new, params: {game_id: game}
 
@@ -11,7 +11,7 @@ describe ResultsController, :type => :controller do
     end
 
     it "exposes the game" do
-      game = FactoryGirl.create(:game)
+      game = FactoryBot.create(:game)
 
       get :new, params: {game_id: game}
 
@@ -22,9 +22,9 @@ describe ResultsController, :type => :controller do
   describe "create" do
     context "with valid params" do
       it "creates a new result with the given players" do
-        game = FactoryGirl.create(:game, results: [])
-        player_1 = FactoryGirl.create(:player)
-        player_2 = FactoryGirl.create(:player)
+        game = FactoryBot.create(:game, results: [])
+        player_1 = FactoryBot.create(:player)
+        player_2 = FactoryBot.create(:player)
 
         post :create, params: {game_id: game, result: {
           teams: {
@@ -43,8 +43,8 @@ describe ResultsController, :type => :controller do
 
     context "with invalid params" do
       it "renders the new page" do
-        game = FactoryGirl.create(:game, results: [])
-        player = FactoryGirl.create(:player)
+        game = FactoryBot.create(:game, results: [])
+        player = FactoryBot.create(:player)
 
         post :create, params: {game_id: game, result: {
           teams: {
@@ -61,9 +61,9 @@ describe ResultsController, :type => :controller do
   describe "destroy" do
     context "the most recent result for each player" do
       it "destroys the result and resets the elo for each player" do
-        game = FactoryGirl.create(:elo_game, results: [])
-        player_1 = FactoryGirl.create(:player)
-        player_2 = FactoryGirl.create(:player)
+        game = FactoryBot.create(:elo_game, results: [])
+        player_1 = FactoryBot.create(:player)
+        player_2 = FactoryBot.create(:player)
 
         ResultService.create(game,
           teams: {

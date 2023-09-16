@@ -1,7 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe Team do
-
+RSpec.describe Team, type: :model do
   describe "validations" do
     context "base validations" do
       it "requires a rank" do

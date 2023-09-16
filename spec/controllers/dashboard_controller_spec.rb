@@ -1,10 +1,10 @@
-require "spec_helper"
+require "rails_helper"
 
 describe DashboardController, :type => :controller do
   describe "show" do
     it "displays all players and games" do
-      player = FactoryGirl.create(:player)
-      game = FactoryGirl.create(:game)
+      player = FactoryBot.create(:player)
+      game = FactoryBot.create(:game)
 
       get :show
 

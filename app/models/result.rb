@@ -1,4 +1,4 @@
-class Result < ActiveRecord::Base
+class Result < ApplicationRecord
   has_many :teams
   belongs_to :game, touch: true
 

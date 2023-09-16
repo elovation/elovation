@@ -1,11 +1,11 @@
-require "spec_helper"
+require "rails_helper"
 
 describe ResultService do
   describe "create" do
     it "builds a result given a game and params" do
-      game = FactoryGirl.create(:elo_game)
-      player1 = FactoryGirl.create(:player)
-      player2 = FactoryGirl.create(:player)
+      game = FactoryBot.create(:elo_game)
+      player1 = FactoryBot.create(:player)
+      player2 = FactoryBot.create(:player)
 
       response = ResultService.create(
         game,
@@ -23,8 +23,8 @@ describe ResultService do
     end
 
     it "returns success as false if there are validation errors" do
-      game = FactoryGirl.create(:elo_game)
-      player = FactoryGirl.create(:player)
+      game = FactoryBot.create(:elo_game)
+      player = FactoryBot.create(:player)
 
       response = ResultService.create(
         game,
@@ -38,8 +38,8 @@ describe ResultService do
     end
 
     it "handles nil winner or loser" do
-      game = FactoryGirl.create(:elo_game)
-      player = FactoryGirl.create(:player)
+      game = FactoryBot.create(:elo_game)
+      player = FactoryBot.create(:player)
 
       response = ResultService.create(
         game,
@@ -63,9 +63,9 @@ describe ResultService do
     end
 
     it "is successful on trailing empty teams" do
-      game = FactoryGirl.create(:elo_game)
-      player1 = FactoryGirl.create(:player)
-      player2 = FactoryGirl.create(:player)
+      game = FactoryBot.create(:elo_game)
+      player1 = FactoryBot.create(:player)
+      player2 = FactoryBot.create(:player)
 
       response = ResultService.create(
         game,
@@ -84,9 +84,9 @@ describe ResultService do
     end
 
     it "fails on skipped teams" do
-      game = FactoryGirl.create(:elo_game)
-      player1 = FactoryGirl.create(:player)
-      player2 = FactoryGirl.create(:player)
+      game = FactoryBot.create(:elo_game)
+      player1 = FactoryBot.create(:player)
+      player2 = FactoryBot.create(:player)
 
       response = ResultService.create(
         game,
@@ -101,9 +101,9 @@ describe ResultService do
     end
 
     it "doesn't need the players in an array" do
-      game = FactoryGirl.create(:elo_game)
-      player1 = FactoryGirl.create(:player)
-      player2 = FactoryGirl.create(:player)
+      game = FactoryBot.create(:elo_game)
+      player1 = FactoryBot.create(:player)
+      player2 = FactoryBot.create(:player)
 
       response = ResultService.create(
         game,
@@ -121,9 +121,9 @@ describe ResultService do
     end
 
     it "works with ties" do
-      game = FactoryGirl.create(:game)
-      player1 = FactoryGirl.create(:player)
-      player2 = FactoryGirl.create(:player)
+      game = FactoryBot.create(:game)
+      player1 = FactoryBot.create(:player)
+      player2 = FactoryBot.create(:player)
 
       response = ResultService.create(
         game,
@@ -140,9 +140,9 @@ describe ResultService do
 
     context "ratings" do
       it "builds ratings for both players and increments the winner" do
-        game = FactoryGirl.create(:elo_game)
-        player1 = FactoryGirl.create(:player)
-        player2 = FactoryGirl.create(:player)
+        game = FactoryBot.create(:elo_game)
+        player1 = FactoryBot.create(:player)
+        player2 = FactoryBot.create(:player)
 
         ResultService.create(
           game,
@@ -166,9 +166,9 @@ describe ResultService do
 
   describe "destroy" do
     it "returns a successful response if the result is destroyed" do
-      game = FactoryGirl.create(:elo_game)
-      player1 = FactoryGirl.create(:player)
-      player2 = FactoryGirl.create(:player)
+      game = FactoryBot.create(:elo_game)
+      player1 = FactoryBot.create(:player)
+      player2 = FactoryBot.create(:player)
 
       result = ResultService.create(
         game,
@@ -185,13 +185,13 @@ describe ResultService do
     end
 
     it "returns an unsuccessful response and does not destroy the result if it is not the most recent for both players" do
-      game = FactoryGirl.create(:elo_game)
-      player_1 = FactoryGirl.create(:player)
-      player_2 = FactoryGirl.create(:player)
-      player_3 = FactoryGirl.create(:player)
+      game = FactoryBot.create(:elo_game)
+      player_1 = FactoryBot.create(:player)
+      player_2 = FactoryBot.create(:player)
+      player_3 = FactoryBot.create(:player)
 
-      old_result = FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_2])])
-      FactoryGirl.create(:result, game: game, teams: [FactoryGirl.create(:team, rank: 1, players: [player_1]), FactoryGirl.create(:team, rank: 2, players: [player_3])])
+      old_result = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player_1]), FactoryBot.create(:team, rank: 2, players: [player_2])])
+      FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player_1]), FactoryBot.create(:team, rank: 2, players: [player_3])])
 
       response = ResultService.destroy(old_result)
 

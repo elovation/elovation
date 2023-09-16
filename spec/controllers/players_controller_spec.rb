@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe PlayersController, :type => :controller do
   describe "new" do
@@ -20,7 +20,7 @@ describe PlayersController, :type => :controller do
     end
 
     it "renders new given invalid params" do
-      FactoryGirl.create(:player, name: "Drew")
+      FactoryBot.create(:player, name: "Drew")
 
       post :create, params: {player: {name: "Drew"}}
 
@@ -39,7 +39,7 @@ describe PlayersController, :type => :controller do
 
   describe "destroy" do
     it "deletes a player with no results" do
-      player = FactoryGirl.create(:player)
+      player = FactoryBot.create(:player)
 
       delete :destroy, params: {id: player}
 
@@ -48,7 +48,7 @@ describe PlayersController, :type => :controller do
     end
 
     it "doesn't allow deleting a player with results" do
-      result = FactoryGirl.create(:result)
+      result = FactoryBot.create(:result)
       player = result.players.first
 
       delete :destroy, params: {id: player}
@@ -60,7 +60,7 @@ describe PlayersController, :type => :controller do
 
   describe "edit" do
     it "exposes the player for editing" do
-      player = FactoryGirl.create(:player)
+      player = FactoryBot.create(:player)
 
       get :edit, params: {id: player}
 
@@ -71,7 +71,7 @@ describe PlayersController, :type => :controller do
   describe "update" do
     context "with valid params" do
       it "redirects to the player show page" do
-        player = FactoryGirl.create(:player, name: "First name")
+        player = FactoryBot.create(:player, name: "First name")
 
         put :update, params: {id: player, player: {name: "Second name"}}
 
@@ -79,7 +79,7 @@ describe PlayersController, :type => :controller do
       end
 
       it "updates the player with the provided attributes" do
-        player = FactoryGirl.create(:player, name: "First name")
+        player = FactoryBot.create(:player, name: "First name")
 
         put :update, params: {id: player, player: {name: "Second name"}}
 
@@ -88,7 +88,7 @@ describe PlayersController, :type => :controller do
 
       it "protects against mass assignment" do
         Timecop.freeze(Time.now) do
-          player = FactoryGirl.create(:player, name: "First name")
+          player = FactoryBot.create(:player, name: "First name")
 
           put :update, params: {id: player, player: {created_at: 3.days.ago}}
 
@@ -99,7 +99,7 @@ describe PlayersController, :type => :controller do
 
     context "with invalid params" do
       it "renders the edit page" do
-        player = FactoryGirl.create(:player, name: "First name")
+        player = FactoryBot.create(:player, name: "First name")
 
         put :update, params: {id: player, player: {name: nil}}
 
@@ -110,7 +110,7 @@ describe PlayersController, :type => :controller do
 
   describe "show" do
     it "exposes the player" do
-      player = FactoryGirl.create(:player)
+      player = FactoryBot.create(:player)
 
       get :show, params: {id: player}
 

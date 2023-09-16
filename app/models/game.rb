@@ -1,5 +1,4 @@
-class Game < ActiveRecord::Base
-
+class Game < ApplicationRecord
   default_scope { order("updated_at DESC") }
 
   has_many :ratings, dependent: :destroy

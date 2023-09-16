@@ -1,19 +1,35 @@
 class PlayersController < ApplicationController
   before_action :set_player, only: [:edit, :destroy, :show, :update]
 
+  def index
+    @players = Player.order(id: :desc)
+  end
+
   def create
     @player = Player.new(player_params)
 
     if @player.save
-      redirect_to dashboard_path
+      redirect_to players_path
     else
-      render :new
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update 
+    if @player.update(player_params)
+      redirect_to player_path(@player)
+    else
+      redirect_to player_path(@player), status: :unprocessable_entity
     end
   end
 
   def destroy
-    @player.destroy if @player.results.empty?
-    redirect_to dashboard_path
+    @player.destroy
+  
+    respond_to do |f|
+      f.turbo_stream { render turbo_stream: turbo_stream.remove(@player) }
+      f.html { redirect_to players_path }
+    end
   end
 
   def edit
@@ -21,17 +37,6 @@ class PlayersController < ApplicationController
 
   def new
     @player = Player.new
-  end
-
-  def show
-  end
-
-  def update
-    if @player.update_attributes(player_params)
-      redirect_to player_path(@player)
-    else
-      render :edit
-    end
   end
 
   private
