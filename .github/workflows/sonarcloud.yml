@@ -87,6 +87,9 @@ jobs:
           bin/rails db:create db:schema:load
           bundle exec rspec
 
+      - name: Static Analysis Rubocop
+        run: rubocop --format json --out rubocop.json
+
       - name: Fix code coverage paths
         working-directory: ./coverage
         run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage.json
@@ -100,7 +103,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
         with:
           args:
-            -Dsonar.tests=spec 
+            -Dsonar.tests=spec
+            -Dsonar.ruby.rubocop.reportPaths=rubocop.json
             -Dsonar.ruby.coverage.reportPaths=coverage/coverage.json
             -Dsonar.projectKey=elovation_elovation
             -Dsonar.organization=elovation
