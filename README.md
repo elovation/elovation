@@ -19,6 +19,12 @@ To do this, run `fly launch --dockerfile Dockerfile`, you will be prompted to ge
 
 It should "just work", if it doesn't, please file an issue.
 
+OS Support
+----------
+This was developed in a MacOS environment, but it uses Docker to help with cross-platform compatability.
+
+Windows will encounter a line endings issue, it is suggested you use WSL if using a windows machine. See: [#115](https://github.com/elovation/elovation/issues/115)
+
 Game Options
 ------------
 There are two types of "Games" that Elovation allows for: [Trueskill](https://en.wikipedia.org/wiki/TrueSkill) & [Elo](https://en.wikipedia.org/wiki/Elo_rating_system)
