@@ -19,12 +19,6 @@ To do this, run `fly launch --dockerfile Dockerfile`, you will be prompted to ge
 
 It should "just work", if it doesn't, please file an issue.
 
-OS Support
-----------
-This was developed in a MacOS environment, but it uses Docker to help with cross-platform compatability.
-
-Windows will encounter a line endings issue, it is suggested you use WSL if using a windows machine. See: [#115](https://github.com/elovation/elovation/issues/115)
-
 Game Options
 ------------
 There are two types of "Games" that Elovation allows for: [Trueskill](https://en.wikipedia.org/wiki/TrueSkill) & [Elo](https://en.wikipedia.org/wiki/Elo_rating_system)
@@ -67,3 +61,9 @@ Assuming you have Docker installed, you should be able to run `docker compose up
 *ASDF*
 
 The root directory contains a .tool-versions file, this is used by a version management tool called [ASDF](https://asdf-vm.com). If you are running Mac OS, you may find you need to run ASDF to help manage your ruby version if you're trying to run without docker, or you wish to make a custom fly.io deployment.
+
+*OS Support*
+
+This was developed in a MacOS environment, but it uses Docker to help with cross-platform compatibility.
+
+When developing/deploying from Windows, please use the Windows Subsystem for Linux, or run the Dockerfiles through a line-endings conversion tool. See: [#115](https://github.com/elovation/elovation/issues/115)
