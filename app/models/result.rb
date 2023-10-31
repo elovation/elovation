@@ -1,5 +1,5 @@
 class Result < ApplicationRecord
-  has_many :teams
+  has_many :teams, dependent: :destroy
   belongs_to :game, touch: true
 
   validates :game, presence: true
