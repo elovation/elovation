@@ -6,6 +6,7 @@ class Team < ApplicationRecord
   belongs_to :result, optional: true
 
   validates :rank, presence: true
+  validates :score, presence: true
 
   scope :winners, -> {
     where(:rank => FIRST_PLACE_RANK)

@@ -82,21 +82,22 @@ module Rater
     end
 
     def update_ratings game, teams
-      ratings_to_ranks = teams.sort_by(&:rank).each_with_object({}){ |team, hash| hash[team.players.map{|player| player.ratings.find_or_create(game)}] = team.rank }
+      ratings_to_scores = teams.sort_by(&:rank).each_with_object({}){ |team, hash| hash[team.players.map{|player| player.ratings.find_or_create(game)}] = team.score }
 
       ratings_to_trueskill = {}
-      trueskills_to_rank = ratings_to_ranks.each_with_object({}) do |(ratings, rank), hash|
+      trueskills_to_scores = ratings_to_scores.each_with_object({}) do |(ratings, score), hash|
         trueskills = ratings.map do |rating|
           ratings_to_trueskill[rating] = to_trueskill(rating)
         end
 
-        hash[trueskills] = rank
+        hash[trueskills] = score
       end
 
-      graph = Saulabs::TrueSkill::FactorGraph.new trueskills_to_rank
+      # The gamma is optimized for badminton.
+      graph = Saulabs::TrueSkill::ScoreBasedBayesianRating.new(trueskills_to_scores, {:gamma => 4})
       graph.update_skills
 
-      ratings_to_trueskill.each do |rating, trueskill|
+      ratings_to_scores.keys.flatten.zip(trueskills_to_scores.keys.flatten).each do |rating, trueskill|
         _update_rating_from_trueskill rating, trueskill
       end
     end

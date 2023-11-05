@@ -5,7 +5,7 @@ class ResultService
     next_rank = Team::FIRST_PLACE_RANK
     teams = (params[:teams] || {}).values.each.with_object([]) do |team, acc|
       players = Array.wrap(team[:players]).delete_if(&:blank?)
-      acc << { rank: next_rank, players: players }
+      acc << { rank: next_rank, players: players, score: team[:score] }
 
       next_rank = next_rank + 1 if team[:relation] != "ties"
     end
@@ -13,7 +13,7 @@ class ResultService
     teams = teams.reverse.drop_while{ |team| team[:players].empty? }.reverse
 
     teams.each do |team|
-      result.teams.build rank: team[:rank], player_ids: team[:players]
+      result.teams.build rank: team[:rank], player_ids: team[:players], score: team[:score]
     end
 
     if result.valid?
