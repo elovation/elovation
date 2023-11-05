@@ -1,11 +1,8 @@
-References
-===========================
+# References
 
-Docker Commands
----------------
+## Docker Commands
 
-[Reference to rebuild Rails 7 application](https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/rails/
-)
+[Reference to rebuild Rails 7 application](https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/rails/)
 
 To generate a Rails skeleton:
 
@@ -50,8 +47,7 @@ Routes:
 docker compose run web rails routes
 ```
 
-Hotwire References
-------------------
+## Hotwire References
 
 https://hotwired.dev
 
@@ -65,7 +61,6 @@ https://github.com/thoughtbot/hotwire-example-template/tree/hotwire-example-inli
 
 https://gorails.com/episodes/inline-editing-turbo-frames
 
-Other References
-----------------
+## Other References
 
 https://web-crunch.com/posts/how-to-use-formbuilder-in-ruby-on-rails
