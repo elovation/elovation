@@ -1,5 +1,1 @@
-FactoryBot.define do
-  factory :team do
-    players { [FactoryBot.build(:player)] }
-  end
-end
+FactoryBot.define { factory(:team) { players { [FactoryBot.build(:player)] } } }

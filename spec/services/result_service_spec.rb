@@ -7,15 +7,20 @@ describe ResultService do
       player1 = FactoryBot.create(:player)
       player2 = FactoryBot.create(:player)
 
-      response = ResultService.create(
-        game,
-        teams: {
-          "0" => { players: [player1.id.to_s] },
-          "1" => { players: [player2.id.to_s] }
-        }
-      )
+      response =
+        ResultService.create(
+          game,
+          teams: {
+            "0" => {
+              players: [player1.id.to_s]
+            },
+            "1" => {
+              players: [player2.id.to_s]
+            }
+          }
+        )
 
-      response.should be_success
+      response.should(be_success)
       result = response.result
       result.winners.should == [player1]
       result.losers.should == [player2]
@@ -26,40 +31,55 @@ describe ResultService do
       game = FactoryBot.create(:elo_game)
       player = FactoryBot.create(:player)
 
-      response = ResultService.create(
-        game,
-        teams: {
-          "0" => { players: [player.id.to_s] },
-          "1" => { players: [player.id.to_s] }
-        }
-      )
+      response =
+        ResultService.create(
+          game,
+          teams: {
+            "0" => {
+              players: [player.id.to_s]
+            },
+            "1" => {
+              players: [player.id.to_s]
+            }
+          }
+        )
 
-      response.should_not be_success
+      response.should_not(be_success)
     end
 
     it "handles nil winner or loser" do
       game = FactoryBot.create(:elo_game)
       player = FactoryBot.create(:player)
 
-      response = ResultService.create(
-        game,
-        teams: {
-          "0" => { players: [player.id.to_s] },
-          "1" => { players: [] }
-        }
-      )
+      response =
+        ResultService.create(
+          game,
+          teams: {
+            "0" => {
+              players: [player.id.to_s]
+            },
+            "1" => {
+              players: []
+            }
+          }
+        )
 
-      response.should_not be_success
+      response.should_not(be_success)
 
-      response = ResultService.create(
-        game,
-        teams: {
-          "0" => { players: [nil] },
-          "1" => { players: [player.id.to_s] }
-        }
-      )
+      response =
+        ResultService.create(
+          game,
+          teams: {
+            "0" => {
+              players: [nil]
+            },
+            "1" => {
+              players: [player.id.to_s]
+            }
+          }
+        )
 
-      response.should_not be_success
+      response.should_not(be_success)
     end
 
     it "is successful on trailing empty teams" do
@@ -67,16 +87,23 @@ describe ResultService do
       player1 = FactoryBot.create(:player)
       player2 = FactoryBot.create(:player)
 
-      response = ResultService.create(
-        game,
-        teams: {
-          "0" => { players: [player1.id.to_s] },
-          "1" => { players: [player2.id.to_s] },
-          "2" => { players: [] }
-        }
-      )
+      response =
+        ResultService.create(
+          game,
+          teams: {
+            "0" => {
+              players: [player1.id.to_s]
+            },
+            "1" => {
+              players: [player2.id.to_s]
+            },
+            "2" => {
+              players: []
+            }
+          }
+        )
 
-      response.should be_success
+      response.should(be_success)
       result = response.result
       result.winners.should == [player1]
       result.losers.should == [player2]
@@ -88,16 +115,23 @@ describe ResultService do
       player1 = FactoryBot.create(:player)
       player2 = FactoryBot.create(:player)
 
-      response = ResultService.create(
-        game,
-        teams: {
-          "0" => { players: [player1.id.to_s] },
-          "1" => { players: [""] },
-          "2" => { players: [player2.id.to_s] }
-        }
-      )
+      response =
+        ResultService.create(
+          game,
+          teams: {
+            "0" => {
+              players: [player1.id.to_s]
+            },
+            "1" => {
+              players: [""]
+            },
+            "2" => {
+              players: [player2.id.to_s]
+            }
+          }
+        )
 
-      response.should_not be_success
+      response.should_not(be_success)
     end
 
     it "doesn't need the players in an array" do
@@ -105,15 +139,20 @@ describe ResultService do
       player1 = FactoryBot.create(:player)
       player2 = FactoryBot.create(:player)
 
-      response = ResultService.create(
-        game,
-        teams: {
-          "0" => { players: player1.id.to_s },
-          "1" => { players: player2.id.to_s }
-        }
-      )
+      response =
+        ResultService.create(
+          game,
+          teams: {
+            "0" => {
+              players: player1.id.to_s
+            },
+            "1" => {
+              players: player2.id.to_s
+            }
+          }
+        )
 
-      response.should be_success
+      response.should(be_success)
       result = response.result
       result.winners.should == [player1]
       result.losers.should == [player2]
@@ -125,20 +164,26 @@ describe ResultService do
       player1 = FactoryBot.create(:player)
       player2 = FactoryBot.create(:player)
 
-      response = ResultService.create(
-        game,
-        teams: {
-          "0" => { players: [player1.id.to_s], relation: "ties" },
-          "1" => { players: [player2.id.to_s] },
-        }
-      )
+      response =
+        ResultService.create(
+          game,
+          teams: {
+            "0" => {
+              players: [player1.id.to_s],
+              relation: "ties"
+            },
+            "1" => {
+              players: [player2.id.to_s]
+            }
+          }
+        )
 
-      response.should be_success
+      response.should(be_success)
       result = response.result
       result.winners.should == [player1, player2]
     end
 
-    context "ratings" do
+    context("ratings") do
       it "builds ratings for both players and increments the winner" do
         game = FactoryBot.create(:elo_game)
         player1 = FactoryBot.create(:player)
@@ -147,18 +192,22 @@ describe ResultService do
         ResultService.create(
           game,
           teams: {
-            "0" => { players: [player1.id.to_s] },
-            "1" => { players: [player2.id.to_s] }
+            "0" => {
+              players: [player1.id.to_s]
+            },
+            "1" => {
+              players: [player2.id.to_s]
+            }
           }
         )
 
         rating1 = player1.ratings.where(game_id: game.id).first
         rating2 = player2.ratings.where(game_id: game.id).first
 
-        rating1.should_not be_nil
+        rating1.should_not(be_nil)
         rating1.value.should > game.rater.default_attributes[:value]
 
-        rating2.should_not be_nil
+        rating2.should_not(be_nil)
         rating2.value.should < game.rater.default_attributes[:value]
       end
     end
@@ -170,18 +219,23 @@ describe ResultService do
       player1 = FactoryBot.create(:player)
       player2 = FactoryBot.create(:player)
 
-      result = ResultService.create(
-        game,
+      result =
+        ResultService.create(
+          game,
           teams: {
-            "0" => { players: [player1.id.to_s] },
-            "1" => { players: [player2.id.to_s] }
+            "0" => {
+              players: [player1.id.to_s]
+            },
+            "1" => {
+              players: [player2.id.to_s]
+            }
           }
-      ).result
+        ).result
 
       response = ResultService.destroy(result)
 
-      response.should be_success
-      Result.find_by_id(result.id).should be_nil
+      response.should(be_success)
+      Result.find_by_id(result.id).should(be_nil)
     end
 
     it "returns an unsuccessful response and does not destroy the result if it is not the most recent for both players" do
@@ -190,13 +244,28 @@ describe ResultService do
       player_2 = FactoryBot.create(:player)
       player_3 = FactoryBot.create(:player)
 
-      old_result = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player_1]), FactoryBot.create(:team, rank: 2, players: [player_2])])
-      FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player_1]), FactoryBot.create(:team, rank: 2, players: [player_3])])
+      old_result =
+        FactoryBot.create(
+          :result,
+          game: game,
+          teams: [
+            FactoryBot.create(:team, rank: 1, players: [player_1]),
+            FactoryBot.create(:team, rank: 2, players: [player_2])
+          ]
+        )
+      FactoryBot.create(
+        :result,
+        game: game,
+        teams: [
+          FactoryBot.create(:team, rank: 1, players: [player_1]),
+          FactoryBot.create(:team, rank: 2, players: [player_3])
+        ]
+      )
 
       response = ResultService.destroy(old_result)
 
-      response.should_not be_success
-      Result.find_by_id(old_result.id).should_not be_nil
+      response.should_not(be_success)
+      Result.find_by_id(old_result.id).should_not(be_nil)
     end
   end
 end

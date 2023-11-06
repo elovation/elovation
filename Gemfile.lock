@@ -117,6 +117,10 @@ GEM
       i18n (>= 1.8.11, < 2)
     globalid (1.2.0)
       activesupport (>= 6.1)
+    haml (6.2.3)
+      temple (>= 0.8.2)
+      thor
+      tilt
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.2.1)
@@ -164,6 +168,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.4)
+    prettier_print (1.2.1)
     psych (5.1.0)
       stringio
     public_suffix (5.0.3)
@@ -203,6 +208,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
+    rbs (3.2.2)
     rdoc (6.5.0)
       psych (>= 4.0.0)
     regexp_parser (2.8.1)
@@ -268,7 +274,19 @@ GEM
     stimulus-rails (1.2.2)
       railties (>= 6.0.0)
     stringio (3.0.8)
+    syntax_tree (6.2.0)
+      prettier_print (>= 1.2.0)
+    syntax_tree-haml (4.0.3)
+      haml (>= 5.2)
+      prettier_print (>= 1.2.1)
+      syntax_tree (>= 6.0.0)
+    syntax_tree-rbs (1.0.0)
+      prettier_print
+      rbs
+      syntax_tree (>= 2.0.1)
+    temple (0.10.3)
     thor (1.2.2)
+    tilt (2.3.0)
     timeout (0.4.0)
     turbo-rails (1.4.0)
       actionpack (>= 6.0.0)
@@ -307,6 +325,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   pg (~> 1.1)
+  prettier_print (~> 1.2)
   puma (~> 5.0)
   rails (~> 7.0.7, >= 7.0.7.2)
   rspec-rails (~> 6.0.0)
@@ -318,6 +337,9 @@ DEPENDENCIES
   simplecov_json_formatter
   sprockets-rails
   stimulus-rails
+  syntax_tree (~> 6.2)
+  syntax_tree-haml (~> 4.0)
+  syntax_tree-rbs (~> 1.0)
   trueskill!
   turbo-rails
   tzinfo-data

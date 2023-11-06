@@ -8,11 +8,7 @@ class Team < ApplicationRecord
   validates :rank, presence: true
   validates :score, presence: true
 
-  scope :winners, -> {
-    where(:rank => FIRST_PLACE_RANK)
-  }
+  scope(:winners, -> { where(rank: FIRST_PLACE_RANK) })
 
-  scope :losers, -> {
-    where.not(:rank => FIRST_PLACE_RANK)
-  }
+  scope(:losers, -> { where.not(rank: FIRST_PLACE_RANK) })
 end
