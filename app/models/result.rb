@@ -71,6 +71,10 @@ class Result < ApplicationRecord
       .flatten
   end
 
+  def scores
+    teams.map(&:score)
+  end
+
   def tie?
     teams.count == teams.winners.count
   end
