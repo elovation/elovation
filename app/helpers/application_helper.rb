@@ -1,8 +1,6 @@
 module ApplicationHelper
   def errors_for(model, key)
-    tag.div do
-      model.errors.messages_for(key).join(", ")
-    end
+    tag.div { model.errors.messages_for(key).join(", ") }
   end
 
   def format_time(time)
@@ -10,7 +8,7 @@ module ApplicationHelper
   end
 
   def gravatar_url(player, options = {})
-    options.assert_valid_keys :size
+    options.assert_valid_keys(:size)
     size = options[:size] || 32
     if player.email.blank?
       digest = Digest::MD5.hexdigest(player.name)

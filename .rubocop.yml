@@ -2,10 +2,10 @@ inherit_from: .rubocop_todo.yml
 
 AllCops:
   Exclude:
-    - 'bin/**/*'
-    - 'vendor/**/*'
-    - 'tmp/**/*'
-    - 'db/**/*'
-    - 'test/**/*'
-    - 'spec/**/*'
+    - "bin/**/*"
+    - "vendor/**/*"
+    - "tmp/**/*"
+    - "db/**/*"
+    - "test/**/*"
+    - "spec/**/*"
   TargetRubyVersion: 3.2

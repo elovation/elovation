@@ -2,21 +2,17 @@ class Rating < ApplicationRecord
   belongs_to :game
   belongs_to :player
 
-  has_many :history_events, -> { order created_at: :desc }, class_name: "RatingHistoryEvent", dependent: :destroy
+  has_many :history_events,
+           -> { order created_at: :desc },
+           class_name: "RatingHistoryEvent",
+           dependent: :destroy
 
   def active?
-    if most_recent_result
-      most_recent_result.created_at >= 4.weeks.ago
-    else
-      false
-    end
+    most_recent_result ? most_recent_result.created_at >= 4.weeks.ago : false
   end
 
   def as_json(option = {})
-    {
-      player: player.as_json,
-      value: value
-    }
+    { player: player.as_json, value: value }
   end
 
   def most_recent_result
@@ -28,9 +24,11 @@ class Rating < ApplicationRecord
       destroy
     else
       Rating.transaction do
-        update!(value: _previous_rating.value,
-                           trueskill_mean: _previous_rating.trueskill_mean,
-                           trueskill_deviation: _previous_rating.trueskill_deviation)
+        update!(
+          value: _previous_rating.value,
+          trueskill_mean: _previous_rating.trueskill_mean,
+          trueskill_deviation: _previous_rating.trueskill_deviation
+        )
         _current_rating.destroy
       end
     end

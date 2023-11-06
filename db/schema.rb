@@ -10,81 +10,82 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_02_085813) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_04_231848) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension("plpgsql")
 
-  create_table "games", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "rating_type"
-    t.integer "min_number_of_teams"
-    t.integer "max_number_of_teams"
-    t.integer "min_number_of_players_per_team"
-    t.integer "max_number_of_players_per_team"
-    t.boolean "allow_ties"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table("games", force: :cascade) do |t|
+    t.string("name", null: false)
+    t.string("rating_type")
+    t.integer("min_number_of_teams")
+    t.integer("max_number_of_teams")
+    t.integer("min_number_of_players_per_team")
+    t.integer("max_number_of_players_per_team")
+    t.boolean("allow_ties")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
   end
 
-  create_table "memberships", force: :cascade do |t|
-    t.bigint "player_id", null: false
-    t.bigint "team_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["player_id"], name: "index_memberships_on_player_id"
-    t.index ["team_id"], name: "index_memberships_on_team_id"
+  create_table("memberships", force: :cascade) do |t|
+    t.bigint("player_id", null: false)
+    t.bigint("team_id", null: false)
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.index(["player_id"], name: "index_memberships_on_player_id")
+    t.index(["team_id"], name: "index_memberships_on_team_id")
   end
 
-  create_table "players", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table("players", force: :cascade) do |t|
+    t.string("name", null: false)
+    t.string("email")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
   end
 
-  create_table "rating_history_events", force: :cascade do |t|
-    t.bigint "rating_id", null: false
-    t.integer "value", null: false
-    t.float "trueskill_mean"
-    t.float "trueskill_deviation"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["rating_id"], name: "index_rating_history_events_on_rating_id"
+  create_table("rating_history_events", force: :cascade) do |t|
+    t.bigint("rating_id", null: false)
+    t.integer("value", null: false)
+    t.float("trueskill_mean")
+    t.float("trueskill_deviation")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.index(["rating_id"], name: "index_rating_history_events_on_rating_id")
   end
 
-  create_table "ratings", force: :cascade do |t|
-    t.bigint "game_id", null: false
-    t.bigint "player_id", null: false
-    t.integer "value", null: false
-    t.boolean "pro", null: false
-    t.float "trueskill_mean"
-    t.float "trueskill_deviation"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["game_id"], name: "index_ratings_on_game_id"
-    t.index ["player_id"], name: "index_ratings_on_player_id"
+  create_table("ratings", force: :cascade) do |t|
+    t.bigint("game_id", null: false)
+    t.bigint("player_id", null: false)
+    t.integer("value", null: false)
+    t.boolean("pro", null: false)
+    t.float("trueskill_mean")
+    t.float("trueskill_deviation")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.index(["game_id"], name: "index_ratings_on_game_id")
+    t.index(["player_id"], name: "index_ratings_on_player_id")
   end
 
-  create_table "results", force: :cascade do |t|
-    t.bigint "game_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["game_id"], name: "index_results_on_game_id"
+  create_table("results", force: :cascade) do |t|
+    t.bigint("game_id", null: false)
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.index(["game_id"], name: "index_results_on_game_id")
   end
 
-  create_table "teams", force: :cascade do |t|
-    t.integer "rank"
-    t.bigint "result_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["result_id"], name: "index_teams_on_result_id"
+  create_table("teams", force: :cascade) do |t|
+    t.integer("rank")
+    t.bigint("result_id")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.integer("score")
+    t.index(["result_id"], name: "index_teams_on_result_id")
   end
 
-  add_foreign_key "memberships", "players"
-  add_foreign_key "memberships", "teams"
-  add_foreign_key "rating_history_events", "ratings"
-  add_foreign_key "ratings", "games"
-  add_foreign_key "ratings", "players"
-  add_foreign_key "results", "games"
-  add_foreign_key "teams", "results"
+  add_foreign_key("memberships", "players")
+  add_foreign_key("memberships", "teams")
+  add_foreign_key("rating_history_events", "ratings")
+  add_foreign_key("ratings", "games")
+  add_foreign_key("ratings", "players")
+  add_foreign_key("results", "games")
+  add_foreign_key("teams", "results")
 end

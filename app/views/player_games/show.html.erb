@@ -68,13 +68,13 @@
             <% if result.losers.empty? %>
               Tied
             <% else %>
-              Won against <strong><%= result.losers.map(&:name).join(", ") %></strong>
+              Won against <strong><%= result.losers.map(&:name).join(", ") %></strong> (<%=result.scores.max%>-<%=result.scores.min%>)  
             <% end %>
           <% else %>
-            Lost to <strong><%= result.winners.map(&:name).join(", ") %></strong>
+            Lost to <strong><%= result.winners.map(&:name).join(", ") %></strong> (<%=result.scores.min%>-<%=result.scores.max%>)
           <% end %>
           <% if result.most_recent? -%>
-            <%= link_to "Delete", game_result_path(@game, result), class: "btn btn-danger", method: :delete, confirm: "Are you sure?" %>
+            <%= link_to "Delete", game_result_path(@game, result), class: "btn btn-danger", data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} %>
           <% end -%>
         </li>
       <% end %>

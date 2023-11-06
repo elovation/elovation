@@ -30,9 +30,9 @@ name: SonarCloud analysis
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -54,10 +54,10 @@ jobs:
           POSTGRES_DB: postgres
           POSTGRES_HOST_AUTH_METHOD: trust
         ports:
-        - 5432:5432
+          - 5432:5432
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-  
+
     steps:
       - uses: actions/checkout@v3
 
@@ -76,8 +76,8 @@ jobs:
           bundle install --jobs 4 --retry 3 --path vendor/bundle
 
       - name: Setup DB, Run tests
-        # TODO: Remove continue on error once test suite is restored. 
-        continue-on-error: true 
+        # TODO: Remove continue on error once test suite is restored.
+        continue-on-error: true
         env:
           PGHOST: postgres
           PGUSER: postgres
@@ -99,11 +99,10 @@ jobs:
         # uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
         uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
         with:
-          args:
-            -Dsonar.tests=spec
+          args: -Dsonar.tests=spec
             -Dsonar.ruby.rubocop.reportPaths=rubocop.json
             -Dsonar.ruby.coverage.reportPaths=coverage/coverage.json
             -Dsonar.projectKey=elovation_elovation

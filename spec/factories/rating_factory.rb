@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :rating do
+  factory(:rating) do
     game
     player
     pro { false }

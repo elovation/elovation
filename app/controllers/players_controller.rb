@@ -1,5 +1,5 @@
 class PlayersController < ApplicationController
-  before_action :set_player, only: [:edit, :destroy, :show, :update]
+  before_action :set_player, only: %i[edit destroy show update]
 
   def index
     @players = Player.order(id: :desc)
@@ -9,26 +9,26 @@ class PlayersController < ApplicationController
     @player = Player.new(player_params)
 
     if @player.save
-      redirect_to players_path
+      redirect_to(players_path)
     else
-      render :new, status: :unprocessable_entity
+      render(:new, status: :unprocessable_entity)
     end
   end
 
-  def update 
+  def update
     if @player.update(player_params)
-      redirect_to player_path(@player)
+      redirect_to(player_path(@player))
     else
-      redirect_to player_path(@player), status: :unprocessable_entity
+      redirect_to(player_path(@player), status: :unprocessable_entity)
     end
   end
 
   def destroy
     @player.destroy
-  
+
     respond_to do |f|
-      f.turbo_stream { render turbo_stream: turbo_stream.remove(@player) }
-      f.html { redirect_to players_path }
+      f.turbo_stream { render(turbo_stream: turbo_stream.remove(@player)) }
+      f.html { redirect_to(players_path) }
     end
   end
 

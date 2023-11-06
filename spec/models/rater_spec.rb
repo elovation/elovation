@@ -12,8 +12,8 @@ RSpec.describe Rater, type: :model do
 
         game.rater.update_ratings(game, [team1, team2])
 
-        player1.ratings.where(game_id: game.id).should_not be_empty
-        player2.ratings.where(game_id: game.id).should_not be_empty
+        player1.ratings.where(game_id: game.id).should_not(be_empty)
+        player2.ratings.where(game_id: game.id).should_not(be_empty)
       end
 
       it "works with ties" do
@@ -37,18 +37,20 @@ RSpec.describe Rater, type: :model do
         player2 = FactoryBot.create(:player)
         team1 = FactoryBot.create(:team, rank: 1, players: [player1])
         team2 = FactoryBot.create(:team, rank: 2, players: [player2])
-        rating1 = FactoryBot.create(
-          :rating,
-          game: game,
-          player: player1,
-          value: game.rater.default_attributes[:value]
-        )
-        rating2 = FactoryBot.create(
-          :rating,
-          game: game,
-          player: player2,
-          value: game.rater.default_attributes[:value]
-        )
+        rating1 =
+          FactoryBot.create(
+            :rating,
+            game: game,
+            player: player1,
+            value: game.rater.default_attributes[:value]
+          )
+        rating2 =
+          FactoryBot.create(
+            :rating,
+            game: game,
+            player: player2,
+            value: game.rater.default_attributes[:value]
+          )
 
         game.rater.update_ratings(game, [team1, team2])
 
@@ -62,19 +64,23 @@ RSpec.describe Rater, type: :model do
         player2 = FactoryBot.create(:player)
         team1 = FactoryBot.create(:team, rank: 1, players: [player1])
         team2 = FactoryBot.create(:team, rank: 2, players: [player2])
-        rating1 = FactoryBot.create(
-          :rating,
-          game: game,
-          player: player1,
-          value: game.rater.default_attributes[:value],
-          pro: false
-        )
+        rating1 =
+          FactoryBot.create(
+            :rating,
+            game: game,
+            player: player1,
+            value: game.rater.default_attributes[:value],
+            pro: false
+          )
 
-        Rater::EloRater.any_instance.stubs(:to_elo).returns(Elo::Player.new(pro: true))
+        Rater::EloRater
+          .any_instance
+          .stubs(:to_elo)
+          .returns(Elo::Player.new(pro: true))
 
         game.rater.update_ratings(game, [team1, team2])
 
-        rating1.reload.pro?.should be true
+        rating1.reload.pro?.should(be(true))
       end
 
       it "creates rating history events" do
@@ -83,18 +89,20 @@ RSpec.describe Rater, type: :model do
         player2 = FactoryBot.create(:player)
         team1 = FactoryBot.create(:team, rank: 1, players: [player1])
         team2 = FactoryBot.create(:team, rank: 2, players: [player2])
-        rating1 = FactoryBot.create(
-          :rating,
-          game: game,
-          player: player1,
-          value: game.rater.default_attributes[:value]
-        )
-        rating2 = FactoryBot.create(
-          :rating,
-          game: game,
-          player: player2,
-          value: game.rater.default_attributes[:value]
-        )
+        rating1 =
+          FactoryBot.create(
+            :rating,
+            game: game,
+            player: player1,
+            value: game.rater.default_attributes[:value]
+          )
+        rating2 =
+          FactoryBot.create(
+            :rating,
+            game: game,
+            player: player2,
+            value: game.rater.default_attributes[:value]
+          )
 
         game.rater.update_ratings(game, [team1, team2])
 
@@ -134,7 +142,16 @@ RSpec.describe Rater, type: :model do
       it "includes number of games played" do
         player = FactoryBot.create(:player)
         game = FactoryBot.create(:game)
-        2.times { FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)]) }
+        2.times do
+          FactoryBot.create(
+            :result,
+            game: game,
+            teams: [
+              FactoryBot.create(:team, rank: 1, players: [player]),
+              FactoryBot.create(:team, rank: 2)
+            ]
+          )
+        end
 
         rating = FactoryBot.create(:rating, player: player, game: game)
 
@@ -143,14 +160,20 @@ RSpec.describe Rater, type: :model do
 
       it "includes the pro flag" do
         rating = FactoryBot.build(:rating, pro: true)
-        rater.to_elo(rating).should be_pro
+        rater.to_elo(rating).should(be_pro)
       end
     end
   end
 
   describe Rater::TrueSkillRater do
     describe "update_ratings" do
-      let(:game) { FactoryBot.create(:game, max_number_of_teams: nil, max_number_of_players_per_team: nil) }
+      let(:game) do
+        FactoryBot.create(
+          :game,
+          max_number_of_teams: nil,
+          max_number_of_players_per_team: nil
+        )
+      end
       let(:player1) { FactoryBot.create(:player) }
       let(:player2) { FactoryBot.create(:player) }
       let(:player3) { FactoryBot.create(:player) }
@@ -160,38 +183,46 @@ RSpec.describe Rater, type: :model do
       let(:player7) { FactoryBot.create(:player) }
       let(:team1) { FactoryBot.create(:team, rank: 1, players: [player1]) }
       let(:team2) { FactoryBot.create(:team, rank: 2, players: [player2]) }
-      let(:team3) { FactoryBot.create(:team, rank: 3, players: [player3, player4]) }
-      let(:team4) { FactoryBot.create(:team, rank: 3, players: [player5, player6, player7]) }
+      let(:team3) do
+        FactoryBot.create(:team, rank: 3, players: [player3, player4])
+      end
+      let(:team4) do
+        FactoryBot.create(:team, rank: 3, players: [player5, player6, player7])
+      end
 
       it "creates new ratings" do
         game.rater.update_ratings(game, [team1, team2, team3, team4])
 
-        player1.ratings.where(game_id: game.id).should_not be_empty
-        player2.ratings.where(game_id: game.id).should_not be_empty
-        player3.ratings.where(game_id: game.id).should_not be_empty
-        player4.ratings.where(game_id: game.id).should_not be_empty
-        player5.ratings.where(game_id: game.id).should_not be_empty
-        player6.ratings.where(game_id: game.id).should_not be_empty
-        player7.ratings.where(game_id: game.id).should_not be_empty
+        player1.ratings.where(game_id: game.id).should_not(be_empty)
+        player2.ratings.where(game_id: game.id).should_not(be_empty)
+        player3.ratings.where(game_id: game.id).should_not(be_empty)
+        player4.ratings.where(game_id: game.id).should_not(be_empty)
+        player5.ratings.where(game_id: game.id).should_not(be_empty)
+        player6.ratings.where(game_id: game.id).should_not(be_empty)
+        player7.ratings.where(game_id: game.id).should_not(be_empty)
       end
 
       it "updates existing ratings" do
-        rating1 = FactoryBot.create(
-          :rating,
-          game: game,
-          player: player1,
-          value: game.rater.default_attributes[:value],
-          trueskill_mean: game.rater.default_attributes[:trueskill_mean],
-          trueskill_deviation: game.rater.default_attributes[:trueskill_deviation]
-        )
-        rating2 = FactoryBot.create(
-          :rating,
-          game: game,
-          player: player2,
-          value: game.rater.default_attributes[:value],
-          trueskill_mean: game.rater.default_attributes[:trueskill_mean],
-          trueskill_deviation: game.rater.default_attributes[:trueskill_deviation]
-        )
+        rating1 =
+          FactoryBot.create(
+            :rating,
+            game: game,
+            player: player1,
+            value: game.rater.default_attributes[:value],
+            trueskill_mean: game.rater.default_attributes[:trueskill_mean],
+            trueskill_deviation:
+              game.rater.default_attributes[:trueskill_deviation]
+          )
+        rating2 =
+          FactoryBot.create(
+            :rating,
+            game: game,
+            player: player2,
+            value: game.rater.default_attributes[:value],
+            trueskill_mean: game.rater.default_attributes[:trueskill_mean],
+            trueskill_deviation:
+              game.rater.default_attributes[:trueskill_deviation]
+          )
 
         game.rater.update_ratings(game, [team1, team2, team3, team4])
 
@@ -202,22 +233,26 @@ RSpec.describe Rater, type: :model do
       end
 
       it "creates rating history events" do
-        rating1 = FactoryBot.create(
-          :rating,
-          game: game,
-          player: player1,
-          value: game.rater.default_attributes[:value],
-          trueskill_mean: game.rater.default_attributes[:trueskill_mean],
-          trueskill_deviation: game.rater.default_attributes[:trueskill_deviation]
-        )
-        rating2 = FactoryBot.create(
-          :rating,
-          game: game,
-          player: player2,
-          value: game.rater.default_attributes[:value],
-          trueskill_mean: game.rater.default_attributes[:trueskill_mean],
-          trueskill_deviation: game.rater.default_attributes[:trueskill_deviation]
-        )
+        rating1 =
+          FactoryBot.create(
+            :rating,
+            game: game,
+            player: player1,
+            value: game.rater.default_attributes[:value],
+            trueskill_mean: game.rater.default_attributes[:trueskill_mean],
+            trueskill_deviation:
+              game.rater.default_attributes[:trueskill_deviation]
+          )
+        rating2 =
+          FactoryBot.create(
+            :rating,
+            game: game,
+            player: player2,
+            value: game.rater.default_attributes[:value],
+            trueskill_mean: game.rater.default_attributes[:trueskill_mean],
+            trueskill_deviation:
+              game.rater.default_attributes[:trueskill_deviation]
+          )
 
         game.rater.update_ratings(game, [team1, team2, team3, team4])
 
@@ -235,7 +270,10 @@ RSpec.describe Rater, type: :model do
         rating1 = player1.ratings.find_or_create(game)
         rating2 = player2.ratings.find_or_create(game)
 
-        rating1.value.should == (((rating1.trueskill_mean - (3 * rating1.trueskill_deviation)) * 100)).floor
+        rating1.value.should ==
+          (
+            ((rating1.trueskill_mean - (3 * rating1.trueskill_deviation)) * 100)
+          ).floor
         rating1.value.should > rating2.value
       end
 
@@ -263,7 +301,7 @@ RSpec.describe Rater, type: :model do
         team2b = team2.clone
         team3b = team3.clone
         team4b = team4.clone
-        gameb  = game.clone
+        gameb = game.clone
 
         game.rater.update_ratings(game, [team1, team2, team3, team4])
         old_ratings = game.ratings.map(&:value)
@@ -275,7 +313,7 @@ RSpec.describe Rater, type: :model do
         # it is now broken. As the call "game.ratings.destroy_all" is only required in this instance and isn't a feature
         # of the app, I decided to rely on clones, and prove that the ratings update appropriately.... in future it may
         # be wise to write tests surrounding the .destroy_all functionality and make sure it updates the players ratings/deviations
-        # appropriately. 
+        # appropriately.
         # game.ratings.destroy_all
         # game.reload
 
@@ -287,14 +325,24 @@ RSpec.describe Rater, type: :model do
     describe "to_trueskill" do
       it "returns an trueskill rating with the correct mean" do
         game = FactoryBot.create(:game)
-        rating = FactoryBot.build :rating, trueskill_mean: Rater::TrueSkillRater::DefaultMean
-        game.rater.to_trueskill(rating).mean.should == Rater::TrueSkillRater::DefaultMean
+        rating =
+          FactoryBot.build(
+            :rating,
+            trueskill_mean: Rater::TrueSkillRater::DefaultMean
+          )
+        game.rater.to_trueskill(rating).mean.should ==
+          Rater::TrueSkillRater::DefaultMean
       end
 
       it "returns an trueskill rating with the correct mean" do
         game = FactoryBot.create(:game)
-        rating = FactoryBot.build :rating, trueskill_deviation: Rater::TrueSkillRater::DefaultDeviation
-        game.rater.to_trueskill(rating).deviation.should == Rater::TrueSkillRater::DefaultDeviation
+        rating =
+          FactoryBot.build(
+            :rating,
+            trueskill_deviation: Rater::TrueSkillRater::DefaultDeviation
+          )
+        game.rater.to_trueskill(rating).deviation.should ==
+          Rater::TrueSkillRater::DefaultDeviation
       end
     end
   end

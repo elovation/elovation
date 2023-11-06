@@ -22,6 +22,8 @@
         <% end %>
       </small>
       <%= select "result[teams][#{index}]", "players", player_options, {include_blank: ''}, class: "players", multiple: @team_game, "data-placeholder" => "Team #{index + 1}" %>
+      <%= f.label "Score" %>
+      <%= select "result[teams][#{index}]", "score", [*0..30] %>
       </div>
       <% if index != @result.teams.size - 1 %>
         <% if @game.allow_ties %>
