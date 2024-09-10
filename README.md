@@ -56,7 +56,7 @@ Contributing & Development
 
 The root directory of this app contains a `Dockerfile.dev` file, and a `docker-compose.yml` as helpers to make the development experience easier.
 
-Assuming you have Docker installed, you should be able to run `docker compose up` from the root directory, and get your dev instance running and accessible from `http://localhost:4321`
+Assuming you have Docker installed, you should be able to run `docker compose up` from the root directory, then shell into your web container `docker exec -it elovation-web-1 /bin/bash`, provision your database `rails db:create` and `rails db:migrate RAILS_ENV=development` and get your dev instance running and accessible from `http://localhost:4321`
 
 *ASDF*
 
