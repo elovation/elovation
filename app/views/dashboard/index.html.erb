@@ -55,7 +55,7 @@
               <li>
                 <%= link_to player_path(player) do %>
                   <%= image_tag(gravatar_url(player, size: 24)) %>
-                  <%= player.name %>
+                  <%= player.name %> - <%= player.ratings.last.value %>
                 <% end %>
               </li>
             <% end %>

@@ -3,7 +3,7 @@
     <%= link_to player_path(player), data: { turbo: false } do %>
       <%= image_tag(gravatar_url(player, size: 80)) %>
       <h3> <%= player.name %> </h3>
-      <p> <%= player.email %> </p>
+      <p> <%= player.email %> <%= player.ratings.last.value %> </p>
     <% end %>
   </li>
 <% end %>
