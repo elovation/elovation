@@ -43,7 +43,7 @@ Read `CONTEXT.md` first. It defines the domain terms used in code and specs: rat
 - `app/services/result_service.rb`: turns the result form into a Result, then records it on the game's leaderboard. Only a result that is the latest for all its players can be deleted.
 - `vendor/trueskill/`: the vendored, unmaintained `saulabs/trueskill` library, loaded only by `RatingSystems::TrueSkill`. See `VENDORED.md` there before changing it.
 - `config/ci.rb`: the steps `bin/ci` runs, locally and in GitHub Actions.
-- `spec/`: RSpec suite (models, controllers, helpers, services) using FactoryBot. The `test/` directory is unused Rails scaffolding.
+- `spec/`: RSpec suite (models, controllers, helpers, services, requests) using FactoryBot.
 
 ## Conventions
 
