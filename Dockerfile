@@ -1,8 +1,8 @@
 # syntax = docker/dockerfile:1
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.2.5
-FROM ruby:$RUBY_VERSION-slim as base
+ARG RUBY_VERSION=4.0.10
+FROM ruby:$RUBY_VERSION-slim AS base
 
 LABEL fly_launch_runtime="rails"
 
@@ -20,7 +20,7 @@ RUN gem update --system --no-document && \
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
@@ -28,6 +28,8 @@ RUN apt-get update -qq && \
 
 # Install application gems
 COPY --link Gemfile Gemfile.lock ./
+# Path gem referenced by the Gemfile (see vendor/trueskill/VENDORED.md)
+COPY --link vendor/trueskill ./vendor/trueskill
 RUN bundle install && \
     bundle exec bootsnap precompile --gemfile && \
     rm -rf ~/.bundle/ $BUNDLE_PATH/ruby/*/cache $BUNDLE_PATH/ruby/*/bundler/gems/*/.git

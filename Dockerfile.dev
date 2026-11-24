@@ -1,10 +1,11 @@
-FROM timbru31/ruby-node:3.2
+FROM ruby:4.0.10
 
 RUN apt-get update -qq && apt-get install -y postgresql-client
 
 WORKDIR /elovation
 COPY Gemfile /elovation/Gemfile
 COPY Gemfile.lock /elovation/Gemfile.lock
+COPY vendor/trueskill /elovation/vendor/trueskill
 RUN bundle install
 
 ENTRYPOINT ["./bin/docker-entrypoint"]

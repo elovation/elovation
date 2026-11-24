@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.2.5'
+ruby '4.0.10'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.0.7', '>= 7.0.7.2'
+gem 'rails', '~> 8.1.4'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
@@ -13,7 +13,7 @@ gem 'sprockets-rails'
 gem 'pg', '~> 1.1'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem 'puma', '~> 5.0'
+gem 'puma', '>= 6.0'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'importmap-rails'
@@ -34,7 +34,7 @@ gem 'jbuilder'
 # gem "kredis"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem 'tzinfo-data', platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
@@ -42,17 +42,18 @@ gem 'bootsnap', require: false
 # https://github.com/iain/elo
 gem 'elo'
 # https://github.com/saulabs/trueskill
-gem 'trueskill', github: 'saulabs/trueskill', require: 'saulabs/trueskill'
+# Vendored: upstream is unmaintained and incompatible with RubyGems 4 (see vendor/trueskill/VENDORED.md)
+gem 'trueskill', path: 'vendor/trueskill', require: 'saulabs/trueskill'
 
 # https://chartkick.com/
 gem 'chartkick'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'debug', platforms: %i[mri mingw x64_mingw]
+  gem 'debug', platforms: %i[mri windows]
 
   # https://rspec.info/documentation/6.0/rspec-rails/
-  gem 'rspec-rails', '~> 6.0.0'
+  gem 'rspec-rails', '~> 8.0'
 
   # https://github.com/thoughtbot/factory_bot
   gem 'factory_bot_rails'
@@ -85,7 +86,6 @@ group :test do
 
   gem 'capybara'
   gem 'selenium-webdriver'
-  gem 'webdrivers'
 
   # https://github.com/simplecov-ruby/simplecov
   gem 'simplecov'
@@ -93,6 +93,6 @@ group :test do
   gem 'simplecov_json_formatter'
 end
 
-gem 'sentry-ruby', '~> 5.11'
+gem 'sentry-ruby', '>= 5.11'
 
-gem 'sentry-rails', '~> 5.11'
+gem 'sentry-rails', '>= 5.11'

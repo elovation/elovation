@@ -11,4 +11,7 @@ Rails.application.routes.draw do
   end
 
   root 'dashboard#index'
+
+  # Health check for load balancers and uptime monitors (200 if the app boots).
+  get 'up' => 'rails/health#show', as: :rails_health_check
 end
