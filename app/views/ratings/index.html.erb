@@ -1,18 +1,10 @@
+<% content_for :title, "#{@game.name} leaderboard" %>
+<header class="page-header">
+  <div class="title">
+    <p class="eyebrow"><%= link_to @game.name, game_path(@game) %></p>
+    <h1>Leaderboard</h1>
+  </div>
+</header>
 <%= turbo_frame_tag "ratings" do %>
-  <table id='ratings'>
-    <thead>
-      <tr>
-        <th>Player</th>
-        <th>Rating</th>
-        <th>W</th>
-        <th>L</th>
-        <% if @game.allow_ties %>
-          <th>T</th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
-      <%= render partial: 'games/rating', collection: @game.all_ratings %>
-    </tbody>
-  </table>
+  <%= render "games/leaderboard", ratings: @game.all_ratings %>
 <% end %>

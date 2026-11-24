@@ -1,25 +1,19 @@
-<div class="player-card form-well">
-  <%= form_with model: player do |f| %>
-    <div class="control-group">
-      <%= f.label :name, class: "control-label" %>
-      <div class="controls">
-        <%= f.text_field :name, class: "input-xlarge" %>
-      </div>
+<div class="form-panel">
+  <%= form_with model: player, class: "form" do |f| %>
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name, required: true %>
       <%= errors_for player, :name %>
     </div>
-    <div class="control-group">
-      <%= f.label :email, class: "control-label" %>
-      <div class="controls">
-        <%= f.text_field :email, class: "input-xlarge" %>
-      </div>
+    <div class="field">
+      <%= f.label :email %>
+      <%= f.email_field :email, aria: { describedby: "email-help" } %>
+      <p class="help" id="email-help">Optional, and never shown. Used to show the player's <a href="https://gravatar.com/">Gravatar</a>, through <a href="https://robohash.org/">Robohash</a>.</p>
       <%= errors_for player, :email %>
     </div>
     <div class="form-actions">
-      <%= f.button class: "btn btn-primary" %>
+      <%= f.button (player.persisted? ? "Save player" : "Add player"), class: "btn btn-primary" %>
       <%= link_to "Cancel", (player.persisted? ? player_path(player) : players_path), class: "btn btn-warning" %>
     </div>
-    <small class="description attribution">
-      Avatar provided by <a href="http://gravatar.com/">Gravatar</a>, a global avatar service.
-    </small>
   <% end %>
 </div>

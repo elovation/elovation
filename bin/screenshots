@@ -22,8 +22,10 @@ PORT = 3998
 OUTPUT = File.join(ROOT, 'docs/screenshots')
 
 VIEWPORTS = {
-  'desktop' => { width: 1280, height: 800, scale_factor: 1, mobile: false },
-  'mobile' => { width: 390, height: 844, scale_factor: 1, mobile: true }
+  'desktop' => { width: 1280, height: 800, scale_factor: 1, mobile: false, scheme: 'light' },
+  'mobile' => { width: 390, height: 844, scale_factor: 1, mobile: true, scheme: 'light' },
+  'desktop-dark' => { width: 1280, height: 800, scale_factor: 1, mobile: false, scheme: 'dark',
+                      pages: %w[01-home 02-game-1v1 03-game-teams 04-game-free-for-all 12-player] }
 }.freeze
 
 # The seed creates these records in this order, so the ids are stable.
@@ -92,14 +94,17 @@ begin
   wait_for_server
   browser = Ferrum::Browser.new(window_size: [1280, 800], timeout: 30)
 
-  VIEWPORTS.each do |name, viewport|
+  VIEWPORTS.each do |name, options|
     directory = File.join(OUTPUT, name)
     FileUtils.rm_rf(directory)
     FileUtils.mkdir_p(directory)
+    viewport = options.except(:scheme, :pages)
 
-    PAGES.each do |page_name, path|
+    PAGES.slice(*options.fetch(:pages, PAGES.keys)).each do |page_name, path|
       page = browser.create_page
       page.set_viewport(**viewport)
+      # Light or dark mode, whatever the machine running this prefers.
+      page.command('Emulation.setEmulatedMedia', features: [{ name: 'prefers-color-scheme', value: options[:scheme] }])
       page.evaluate_on_new_document(NO_CHART_ANIMATION)
       page.go_to("http://localhost:#{PORT}#{path}")
       settle(page)

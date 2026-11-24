@@ -1,30 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= brand_title %> Games</title>
+    <title><%= [content_for(:title), brand_title].compact.join(" · ") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <%= preload_link_tag "atkinson-hyperlegible-next.woff2", crossorigin: "anonymous" %>
+    <%= preload_link_tag "archivo.woff2", crossorigin: "anonymous" %>
+    <%= stylesheet_link_tag "fonts", "tokens", "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <div id='container'>
-      <header>
-        <%= link_to root_path, class: "brand" do %>
-          <div class='brand-name'><%= brand_title %></div>
-          <div class='brand-label'>Home</div>
-        <% end %>
-      </header>
-      <div id='main'>
-        <%= yield %>
-      </div>
-    </div>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Main">
+        <%= link_to brand_title, root_path, class: "brand" %>
+        <ul role="list">
+          <li><%= nav_link "Games", root_path, section: :games %></li>
+          <li><%= nav_link "Players", players_path, section: :players %></li>
+        </ul>
+      </nav>
+    </header>
+    <main id="main" class="page">
+      <%= yield %>
+    </main>
     <% if brand_title != "Elovation" %>
-      <div class="footer">Powered by Elovation</div>
+      <footer class="site-footer">Powered by <a href="https://github.com/elovation/elovation">Elovation</a></footer>
     <% end %>
   </body>
 </html>

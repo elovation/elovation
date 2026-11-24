@@ -22,6 +22,27 @@ module ApplicationHelper
     end
   end
 
+  NAV_SECTIONS = {
+    games: %w[dashboard games results ratings],
+    players: %w[players player_games]
+  }.freeze
+
+  # A main navigation link, marked as the current page while viewing any page
+  # in its section.
+  def nav_link(name, path, section:)
+    current = NAV_SECTIONS.fetch(section).include?(controller_name)
+    link_to name, path, aria: { current: current ? 'page' : nil }
+  end
+
+  # An avatar shown beside the player's name, so it's decorative (empty alt).
+  AVATAR_SIZES = [20, 24, 48, 64].freeze
+
+  def avatar(player, size: 24)
+    raise ArgumentError, "avatar size must be one of #{AVATAR_SIZES}" unless AVATAR_SIZES.include?(size)
+
+    image_tag avatar_url(player, size: size * 2), alt: '', width: size, height: size, class: "avatar avatar-#{size}"
+  end
+
   def brand_title
     ENV.fetch('ELOVATION_TITLE', 'Elovation')
   end

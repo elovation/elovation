@@ -58,7 +58,7 @@ Read `CONTEXT.md` first. It defines the domain terms used in code and specs: rat
 
 ## Screenshots
 
-`docs/screenshots/` holds desktop and mobile screenshots of the main pages. The README gallery uses them, and they serve as a lightweight visual regression check: a pull request that changes how pages look regenerates them, and reviewers compare the images in the pull request diff.
+`docs/screenshots/` holds desktop and mobile screenshots of the main pages in light mode, plus a few desktop pages in dark mode. The README gallery uses them, and they serve as a lightweight visual regression check: a pull request that changes how pages look regenerates them, and reviewers compare the images in the pull request diff.
 
 ```bash
 docker compose up -d db

@@ -9,7 +9,7 @@ RSpec.describe "A game's page", type: :request do
     # Regression: it showed an empty ratings table and a blank chart.
     it "says there are no ratings yet instead of an empty table and chart" do
       expect(response.body).to include("No ratings yet")
-      expect(response.body).not_to include("id='ratings'")
+      expect(response.body).not_to include('class="leaderboard"')
       expect(response.body).not_to include("Progress")
     end
 
@@ -30,7 +30,7 @@ RSpec.describe "A game's page", type: :request do
       get game_path(game)
 
       expect(response.body).to include("No one has played in the last four weeks")
-      expect(response.body).to include(">View All</a>")
+      expect(response.body).to include(">Show everyone, including players inactive for four weeks</a>")
     end
   end
 end

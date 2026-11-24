@@ -1,57 +1,50 @@
-<h1>Games / <%= @game.name %></h1>
-<div class="row-fluid">
-  <div class="span8">
-    <%= turbo_frame_tag dom_id(@game), target: "_top" do %>
-      <section class="action-buttons">
-        <%= link_to 'Edit', edit_game_path(@game), data: { turbo_frame: dom_id(@game) }, class: "btn" %>
-        <% if @game.results.empty? %>
-          <%= button_to "Delete", game_path(@game), method: :delete, form: { data: { turbo_confirm: 'Are you sure?' } }, class: "btn btn-danger" %>
-        <% end %>
-      </section>
-    <% end %>
-    <h2>Recent Results</h2>
-    <%= link_to "Add Result", new_game_result_path(@game), class: "btn btn-primary" %>
-    <% if @game.recent_results.any? %>
-      <%= render partial: 'shared/results', object: @game.recent_results, locals: {show_game: false} %>
-    <% else %>
-      <span>No results, play some games!</span>
+<% content_for :title, @game.name %>
+<header class="page-header">
+  <div class="title">
+    <p class="eyebrow"><%= @game.rating_system.name %></p>
+    <h1><%= @game.name %></h1>
+  </div>
+  <div class="actions">
+    <%= link_to "Add result", new_game_result_path(@game), class: "btn btn-primary" %>
+    <%= link_to "Edit", edit_game_path(@game), data: { turbo_frame: dom_id(@game) }, class: "btn" %>
+    <% if @game.results.empty? %>
+      <%= button_to "Delete", game_path(@game), method: :delete, form: { data: { turbo_confirm: "Are you sure?" } }, class: "btn btn-danger" %>
     <% end %>
   </div>
-  <div class="span4">
-    <h2>Player Ratings</h2>
+</header>
+<%= turbo_frame_tag dom_id(@game), target: "_top" %>
+
+<div class="columns">
+  <section class="column-side" aria-labelledby="leaderboard-heading">
+    <h2 id="leaderboard-heading">Leaderboard</h2>
     <% active_ratings = @ratings.select(&:active?) %>
     <%= turbo_frame_tag "ratings", target: "_top" do %>
       <% if @ratings.empty? %>
-        <p>No ratings yet. Add a result to start the leaderboard.</p>
+        <p class="empty">No ratings yet. Add a result to start the leaderboard.</p>
       <% elsif active_ratings.empty? %>
-        <p>No one has played in the last four weeks.</p>
+        <p class="empty">No one has played in the last four weeks.</p>
       <% else %>
-      <table id='ratings'>
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Rating</th>
-            <th>W</th>
-            <th>L</th>
-            <% if @game.allow_ties %>
-              <th>T</th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <%= render partial: 'rating', collection: active_ratings %>
-        </tbody>
-      </table>
+        <%= render "games/leaderboard", ratings: active_ratings %>
       <% end %>
       <% if @ratings.size > active_ratings.size %>
-        <%= link_to "View All", game_ratings_path(@game), data: { turbo_frame: "ratings" }, class: "btn" %>
+        <p><%= link_to "Show everyone, including players inactive for four weeks", game_ratings_path(@game), data: { turbo_frame: "ratings" } %></p>
       <% end %>
     <% end %>
-  </div>
+  </section>
+
+  <section class="column-main" aria-labelledby="results-heading">
+    <h2 id="results-heading">Recent results</h2>
+    <% if @game.recent_results.any? %>
+      <%= render partial: "shared/results", object: @game.recent_results, locals: { show_game: false } %>
+    <% else %>
+      <p class="empty">No results yet. Play some games!</p>
+    <% end %>
+  </section>
 </div>
+
 <% if @chart_data.any? %>
-  <div>
-    <h2>Progress</h2>
-    <%= line_chart @chart_data, min: nil, max: nil, height: "800px", xtitle: 'Matches', ytitle: @game.rating_system.name %>
-  </div>
+  <section class="chart" aria-labelledby="progress-heading">
+    <h2 id="progress-heading">Progress</h2>
+    <%= line_chart @chart_data, min: nil, max: nil, height: "26rem", xtitle: "Date", ytitle: @game.rating_system.name %>
+  </section>
 <% end %>

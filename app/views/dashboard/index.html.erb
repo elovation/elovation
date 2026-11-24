@@ -1,57 +1,58 @@
+<% content_for :title, "Games" %>
 <% if @players.length > 1 %>
-  <div class="row-fluid">
-    <div class="span8">
-      <h1><%= brand_title %> Games</h1>
+  <header class="page-header">
+    <div class="title">
+      <h1>Games</h1>
+    </div>
+    <div class="actions">
+      <%= link_to "New game", new_game_path, class: "btn btn-primary", data: { turbo_frame: "new_game" } %>
+    </div>
+  </header>
+  <%= turbo_frame_tag "new_game", target: "_top" %>
 
-      <%= turbo_frame_tag "new_game", target: "_top" do %>
-        <%= link_to "New Game", new_game_path, class: "btn btn-primary", data: { turbo_frame: "new_game" } %>
-      <% end %>
-
-      <ul id='games-list'>
+  <div class="columns">
+    <section class="column-main" aria-label="Games">
+      <ul class="game-tiles" role="list">
         <% @games.each do |game| %>
-          <li class="<%= "active" if @game == game %> game-list-item">
-            <%= link_to game_path(game) do %>
-              <h3 class='game-title'><%= game.name %></h3>
-              <ul class='game-params'>
-                <li class='rating-type'><%= game.rating_system.name %> – <%= game.allow_ties ? 'Ties allowed' : 'No ties' %></li>
-                <li class='num-players'><%= game.players.length %> players</li>
-                <li class='games-played'><%= game.results.length %> games played</li>
-              </ul>
-              <% result = game.recent_results.limit(1).first %>
-              <% if result %>
-                <div class='recent-result'>
-                  <h4>Last game</h4>
-                  <div class='description'>
-                    <%= render "shared/outcome", result: result, links: false, past: true %>
-                    <br/>
-                    <time><%= format_time(result.created_at) %></time>
-                  </div>
-                </div>
-              <% end %>
+          <li class="game-tile">
+            <h2><%= link_to game.name, game_path(game), class: "tile-link" %></h2>
+            <p class="meta">
+              <%= game.rating_system.name %> · <%= pluralize(game.results.length, "result") %> · <%= pluralize(game.players.length, "player") %><% unless game.allow_ties %> · no ties<% end %>
+            </p>
+            <% result = game.recent_results.limit(1).first %>
+            <% if result %>
+              <p class="last-result">
+                <%= render "shared/outcome", result: result, links: false, past: true %>
+                <time datetime="<%= result.created_at.iso8601 %>"><%= format_time(result.created_at) %></time>
+              </p>
+            <% else %>
+              <p class="last-result meta">No results yet</p>
             <% end %>
           </li>
         <% end %>
       </ul>
-    </div>
-    <div class="span4">
-      <div>
-        <h2>Players</h2>
-          <%= link_to "See all players", players_path, class: "btn" %>
-          <ul id='players-list'>
-            <% @players.each do |player| %>
-              <li>
-                <%= link_to player_path(player) do %>
-                  <%= image_tag(avatar_url(player, size: 24)) %>
-                  <%= player.name %>
-                <% end %>
-              </li>
-            <% end %>
-          </ul>
+    </section>
+
+    <section class="column-side" aria-labelledby="players-heading">
+      <div class="section-heading">
+        <h2 id="players-heading">Players</h2>
+        <%= link_to "All players", players_path %>
       </div>
-    </div>
+      <ul class="player-list" role="list">
+        <% @players.each do |player| %>
+          <li><%= link_to player_path(player), class: "player" do %><%= avatar(player, size: 24) %><span><%= player.name %></span><% end %></li>
+        <% end %>
+      </ul>
+    </section>
   </div>
 <% else %>
-  <h1><%= brand_title %> Games</h1>
-  <h3>You have no players yet! Add at least 2 players to get started.</h3>
-  <%= link_to "Add players", players_path, class: "btn" %>
+  <header class="page-header">
+    <div class="title">
+      <h1>Games</h1>
+  </div>
+  </header>
+  <div class="empty">
+    <p>You have no players yet. Add at least two players to get started.</p>
+    <%= link_to "Add players", players_path, class: "btn btn-primary" %>
+  </div>
 <% end %>

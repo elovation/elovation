@@ -31,7 +31,7 @@ RSpec.describe "How results read", type: :request do
 
     get new_game_result_path(game)
 
-    labels = Nokogiri::HTML(response.body).css("#form-results small").map { |label| label.text.squish }
+    labels = Nokogiri::HTML(response.body).css("#form-results label").map { |label| label.text.squish }
     expect(labels).to eq(%w[1st 2nd 3rd])
   end
 
