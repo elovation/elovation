@@ -2,7 +2,7 @@
 
 Guidance for AI coding agents (and humans) working on Elovation: a small Rails app that tracks game results and rates players with Elo (1v1) or TrueSkill (teams).
 
-Stack: Ruby 4.0, Rails 8.1, PostgreSQL 17, Sprockets with importmap, Turbo/Stimulus, and RSpec.
+Stack: Ruby 4.0, Rails 8.1, PostgreSQL 17, Propshaft with importmap, Turbo/Stimulus, and RSpec.
 
 ## Fast local loop (preferred)
 
