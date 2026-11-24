@@ -6,7 +6,11 @@ class Game < ApplicationRecord
 
   validates :name, presence: true
   validates :rating_type, inclusion: { in: ->(_game) { RatingSystems.keys }, message: "must be a valid rating type" }
-  validate { rating_system&.validate_game(self) }
+  validate do
+    if rating_system && !rating_system.supported_format.supports?(self)
+      errors.add(:rating_type, "#{rating_system.name} can only be used with #{rating_system.supported_format.summary}")
+    end
+  end
 
   validates :min_number_of_teams, numericality: { only_integer: true, greater_than_or_equal_to: 2 }
   validates :max_number_of_teams, numericality: { only_integer: true, allow_nil: true }

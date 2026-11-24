@@ -11,7 +11,13 @@ module RatingSystems
 
     def key = 'elo'
 
+    def name = 'Elo'
+
     def description = 'Elo (1v1 only)'
+
+    def supported_format
+      Format.new(teams: 2..2, players_per_team: 1..1, summary: '1v1 games')
+    end
 
     def initial_state
       { 'rating' => DEFAULT_RATING, 'games_played' => 0, 'pro' => false }
@@ -34,15 +40,6 @@ module RatingSystems
       end
 
       { first_key => from_elo(first_elo), second_key => from_elo(second_elo) }
-    end
-
-    def validate_game(game)
-      if game.min_number_of_teams != 2 ||
-         game.max_number_of_teams != 2 ||
-         game.min_number_of_players_per_team != 1 ||
-         game.max_number_of_players_per_team != 1
-        game.errors.add(:rating_type, 'Elo can only be used with 1v1 games')
-      end
     end
 
     private

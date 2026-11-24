@@ -13,7 +13,13 @@ module RatingSystems
 
     def key = 'trueskill'
 
+    def name = 'TrueSkill'
+
     def description = 'Trueskill'
+
+    def supported_format
+      Format.new(teams: 2.., players_per_team: 1.., summary: 'two or more teams of any size')
+    end
 
     def initial_state
       { 'mean' => DEFAULT_MEAN, 'deviation' => DEFAULT_DEVIATION }
@@ -35,7 +41,5 @@ module RatingSystems
 
       skills.transform_values { |skill| { 'mean' => skill.mean, 'deviation' => skill.deviation } }
     end
-
-    def validate_game(_game); end
   end
 end

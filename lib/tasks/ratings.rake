@@ -8,8 +8,14 @@ namespace :ratings do
       abort "Unknown rating system #{args[:rating_system].inspect}. Choose one of: #{RatingSystems.keys.join(', ')}"
     names = Player.where(id: game.results.joins(teams: :players).select('players.id')).pluck(:id, :name).to_h
 
+    entries = begin
+      game.leaderboard.preview(system)
+    rescue ArgumentError => e
+      abort "Can't preview #{game.name}: #{e.message}"
+    end
+
     puts "#{game.name}: #{game.results.count} results rated with #{system.description}"
-    game.leaderboard.preview(system).each_with_index do |entry, index|
+    entries.each_with_index do |entry, index|
       puts format('%<position>3d. %<name>-30s %<score>6d  %<state>s',
                   position: index + 1, name: names[entry.player_id], score: entry.score, state: entry.state.to_json)
     end

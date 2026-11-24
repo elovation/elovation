@@ -117,6 +117,13 @@ RSpec.describe Leaderboard do
       expect(snapshot(game)).to eq(before)
     end
 
+    it "refuses a rating system that can't rate the game's format" do
+      team_game = FactoryBot.create(:trueskill_game, max_number_of_players_per_team: 2)
+
+      expect { team_game.leaderboard.preview(RatingSystems::Elo) }
+        .to raise_error(ArgumentError, "Elo can only be used with 1v1 games")
+    end
+
     it "matches the recorded ratings under the game's own rating system" do
       play_series(game, RatingScenarios::ELO_SERIES, %w[a b c])
 

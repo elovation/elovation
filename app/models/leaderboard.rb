@@ -56,8 +56,11 @@ class Leaderboard
   end
 
   # Ratings the game's results would produce under `system`, best first,
-  # without saving anything.
+  # without saving anything. Raises ArgumentError if `system` can't rate this
+  # game's format.
   def preview(system = game.rating_system)
+    raise ArgumentError, "#{system.name} can only be used with #{system.supported_format.summary}" unless system.supported_format.supports?(game)
+
     replay = RatingSystems::Replay.new(system)
     game.results.reorder(:id).includes(teams: :players).each { |result| replay.play(placings(result)) }
 

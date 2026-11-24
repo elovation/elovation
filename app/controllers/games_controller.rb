@@ -85,16 +85,13 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
   end
 
+  # Limits the rating system fixes (e.g. Elo's 1v1) can't be edited.
   def game_update_params
-    if params[:rating_type] == 'elo'
-      params.require(:game).permit(:name,
-        :allow_ties)
-    else
-      params.require(:game).permit(:name,
-        :max_number_of_teams,
-        :max_number_of_players_per_team,
-        :allow_ties)
-    end
+    format = @game.rating_system.supported_format
+    permitted = [:name, :allow_ties]
+    permitted << :max_number_of_teams unless format.fixed_teams
+    permitted << :max_number_of_players_per_team unless format.fixed_players_per_team
+    params.require(:game).permit(*permitted)
   end
 
   def games_params

@@ -24,8 +24,18 @@ RSpec.shared_examples "a rating system" do
     expect(RatingSystems.fetch(system.key)).to be(system)
   end
 
-  it "has a description" do
+  it "has a name and a description" do
+    expect(system.name).to be_a(String).and be_present
     expect(system.description).to be_a(String).and be_present
+  end
+
+  it "supports at least two teams of one player" do
+    format = system.supported_format
+
+    expect(format).to be_a(RatingSystems::Format)
+    expect(format.teams).to cover(2)
+    expect(format.players_per_team).to cover(1)
+    expect(format.summary).to be_present
   end
 
   it "has an initial state that survives a JSON round trip" do
