@@ -17,7 +17,7 @@ class ResultsController < ApplicationController
 
     response = ResultService.destroy(result)
 
-    redirect_to request.referer
+    redirect_to request.referer || game_path(@game), status: :see_other
   end
 
   def new

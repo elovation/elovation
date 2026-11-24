@@ -20,6 +20,6 @@
   <% end %>
   <time><%= format_time(result.created_at) %></time>
   <% if result.most_recent? -%>
-    <%= link_to "Delete", game_result_path(result.game, result), class: "btn btn-danger", method: :delete, confirm: "Are you sure?" %>
+    <%= link_to "Delete", game_result_path(result.game, result), class: "btn btn-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
   <% end -%>
 </li>
