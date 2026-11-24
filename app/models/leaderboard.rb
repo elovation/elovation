@@ -8,6 +8,7 @@
 #   leaderboard.retract(result)   # remove the latest result and undo its ratings
 #   leaderboard.rebuild           # recompute every rating from the results
 #   leaderboard.preview(system)   # what ratings would be under any rating system (no writes)
+#   leaderboard.history_by_day    # each player's score at the end of every day played
 #
 # Recording a result is one step of a rebuild, so a rebuild always reproduces
 # the ratings that were recorded live.
@@ -67,6 +68,23 @@ class Leaderboard
     replay.states
           .map { |player_id, state| Entry.new(player_id: player_id, score: system.score(state), state: state) }
           .sort_by { |entry| -entry.score }
+  end
+
+  # Each rated player's score at the end of every day the game was played,
+  # best player first, as [player, [[day, score], ...]]. A player's score is
+  # nil on days before their first result.
+  def history_by_day
+    ratings = game.ratings.includes(:player, :history_events).order(value: :desc, id: :asc)
+    scores = ratings.to_h do |rating|
+      events = rating.history_events.sort_by { |event| [event.created_at, event.id] }
+      [rating.player, events.to_h { |event| [event.created_at.to_date.to_s, event.value] }]
+    end
+    days = scores.values.flat_map(&:keys).uniq.sort
+
+    scores.map do |player, by_day|
+      score = nil
+      [player, days.map { |day| [day, score = by_day.fetch(day, score)] }]
+    end
   end
 
   private
