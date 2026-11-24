@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class GamesController < ApplicationController
-  before_action :set_game, only: [:edit, :update, :show, :destroy]
+  before_action :set_game, only: %i[edit update show destroy]
 
   def index
     @games = Game.order(id: :desc)
@@ -20,12 +22,11 @@ class GamesController < ApplicationController
     redirect_to root_path
   end
 
-  def edit
-  end
+  def edit; end
 
   def new
     @game = Game.new min_number_of_players_per_team: 1,
-                     rating_type: "trueskill",
+                     rating_type: 'trueskill',
                      min_number_of_teams: 2,
                      allow_ties: true,
                      max_number_of_players_per_team: 2,
@@ -64,7 +65,7 @@ class GamesController < ApplicationController
   # Limits the rating system fixes (e.g. Elo's 1v1) can't be edited.
   def game_update_params
     format = @game.rating_system.supported_format
-    permitted = [:name, :allow_ties]
+    permitted = %i[name allow_ties]
     permitted << :max_number_of_teams unless format.fixed_teams
     permitted << :max_number_of_players_per_team unless format.fixed_players_per_team
     params.require(:game).permit(*permitted)
@@ -72,11 +73,11 @@ class GamesController < ApplicationController
 
   def games_params
     params.require(:game).permit(:name,
-                                :rating_type,
-                                :min_number_of_teams,
-                                :max_number_of_teams,
-                                :min_number_of_players_per_team,
-                                :max_number_of_players_per_team,
-                                :allow_ties)
+                                 :rating_type,
+                                 :min_number_of_teams,
+                                 :max_number_of_teams,
+                                 :min_number_of_players_per_team,
+                                 :max_number_of_players_per_team,
+                                 :allow_ties)
   end
 end

@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 namespace :ratings do
-  desc 'Show the ratings a game would have under any rating system, without saving: rails "ratings:preview[GAME_ID,trueskill]"'
+  desc 'Show the ratings a game would have under any rating system, without saving: ' \
+       'rails "ratings:preview[GAME_ID,trueskill]"'
   task :preview, %i[game_id rating_system] => :environment do |_task, args|
     game = Game.find(args.fetch(:game_id))
     system = RatingSystems.fetch(args[:rating_system] || game.rating_type) or

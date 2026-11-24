@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def errors_for(model, key)
     tag.div do
-      model.errors.messages_for(key).join(", ")
+      model.errors.messages_for(key).join(', ')
     end
   end
 
@@ -22,6 +24,6 @@ module ApplicationHelper
   end
 
   def brand_title
-    ENV.fetch("ELOVATION_TITLE", "Elovation")
+    ENV.fetch('ELOVATION_TITLE', 'Elovation')
   end
 end

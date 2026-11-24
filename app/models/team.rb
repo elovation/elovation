@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Team < ApplicationRecord
   FIRST_PLACE_RANK = 1
 
@@ -7,11 +9,11 @@ class Team < ApplicationRecord
 
   validates :rank, presence: true
 
-  scope :winners, -> {
-    where(:rank => FIRST_PLACE_RANK)
+  scope :winners, lambda {
+    where(rank: FIRST_PLACE_RANK)
   }
 
-  scope :losers, -> {
-    where.not(:rank => FIRST_PLACE_RANK)
+  scope :losers, lambda {
+    where.not(rank: FIRST_PLACE_RANK)
   }
 end

@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class Game < ApplicationRecord
-  default_scope { order("updated_at DESC") }
+  default_scope { order('updated_at DESC') }
 
   has_many :ratings, dependent: :destroy
   has_many :results, dependent: :destroy
 
   validates :name, presence: true
-  validates :rating_type, inclusion: { in: ->(_game) { RatingSystems.keys }, message: "must be a valid rating type" }
+  validates :rating_type, inclusion: { in: ->(_game) { RatingSystems.keys }, message: 'must be a valid rating type' }
   validate do
     if rating_system && !rating_system.supported_format.supports?(self)
       errors.add(:rating_type, "#{rating_system.name} can only be used with #{rating_system.supported_format.summary}")
@@ -16,31 +18,30 @@ class Game < ApplicationRecord
   validates :max_number_of_teams, numericality: { only_integer: true, allow_nil: true }
   validate do |game|
     if game.min_number_of_teams && game.max_number_of_teams && game.min_number_of_teams > game.max_number_of_teams
-      game.errors.add(:max_number_of_teams, "cannot be less than the minimum")
+      game.errors.add(:max_number_of_teams, 'cannot be less than the minimum')
     end
   end
 
   validates :min_number_of_players_per_team, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :max_number_of_players_per_team, numericality: { only_integer: true, allow_nil: true }
   validate do |game|
-    if game.min_number_of_players_per_team && game.max_number_of_players_per_team && game.min_number_of_players_per_team > game.max_number_of_players_per_team
-      game.errors.add(:max_number_of_teams, "cannot be less than the minimum")
+    if game.min_number_of_players_per_team && game.max_number_of_players_per_team &&
+       game.min_number_of_players_per_team > game.max_number_of_players_per_team
+      game.errors.add(:max_number_of_teams, 'cannot be less than the minimum')
     end
   end
 
   validate do |game|
-    if game.rating_type_was && game.rating_type_changed?
-      game.errors.add(:rating_type, "cannot be changed")
-    end
+    game.errors.add(:rating_type, 'cannot be changed') if game.rating_type_was && game.rating_type_changed?
   end
 
-  validates :allow_ties, inclusion: { in: [true, false], message: "must be selected" }
+  validates :allow_ties, inclusion: { in: [true, false], message: 'must be selected' }
 
   def all_ratings
     ratings.order(value: :desc)
   end
 
-  def as_json(options = {})
+  def as_json(_options = {})
     {
       name: name,
       ratings: top_ratings.map(&:as_json),
@@ -53,11 +54,11 @@ class Game < ApplicationRecord
   end
 
   def recent_results
-    results.order("created_at DESC").limit(20)
+    results.order('created_at DESC').limit(20)
   end
 
   def top_ratings
-    ratings.order("value DESC").limit(5)
+    ratings.order('value DESC').limit(5)
   end
 
   def rating_system

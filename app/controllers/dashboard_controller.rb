@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DashboardController < ApplicationController
   def index
     @players = Player.all.sort_by(&:name)

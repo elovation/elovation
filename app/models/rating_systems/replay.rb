@@ -20,7 +20,8 @@ module RatingSystems
     # Rates one result and returns the new state of each of its participants.
     def play(placings)
       standings = placings.map do |placing|
-        Standing.new(rank: placing.rank, ratings: placing.participants.to_h { |participant| [participant, state_of(participant)] })
+        ratings = placing.participants.to_h { |participant| [participant, state_of(participant)] }
+        Standing.new(rank: placing.rank, ratings: ratings)
       end
 
       system.rate(standings).tap { |new_states| @states.merge!(new_states) }

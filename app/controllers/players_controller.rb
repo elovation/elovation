@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class PlayersController < ApplicationController
-  before_action :set_player, only: [:edit, :destroy, :show, :update]
+  before_action :set_player, only: %i[edit destroy show update]
 
   def index
     @players = Player.order(id: :desc)
@@ -31,8 +33,7 @@ class PlayersController < ApplicationController
     redirect_to players_path, status: :see_other
   end
 
-  def edit
-  end
+  def edit; end
 
   def new
     @player = Player.new

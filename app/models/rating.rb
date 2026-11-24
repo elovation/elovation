@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 class Rating < ApplicationRecord
   belongs_to :game
   belongs_to :player
 
   # Newest first. History is stamped with the time of the result it came from.
-  has_many :history_events, -> { order created_at: :desc, id: :desc }, class_name: "RatingHistoryEvent", dependent: :destroy
+  has_many :history_events, -> { order(created_at: :desc, id: :desc) },
+           class_name: 'RatingHistoryEvent', dependent: :destroy
 
   def active?
     if most_recent_result
@@ -13,7 +16,7 @@ class Rating < ApplicationRecord
     end
   end
 
-  def as_json(option = {})
+  def as_json(_option = {})
     {
       player: player.as_json,
       value: value
