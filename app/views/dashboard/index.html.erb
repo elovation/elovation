@@ -22,20 +22,7 @@
                 <div class='recent-result'>
                   <h4>Last game</h4>
                   <div class='description'>
-                    <% result.teams.each_with_index do |team, i| %>
-                      <% team.players.each do |winner| %>
-                        <span class='player'>
-                          <strong><%= winner.name %></strong>
-                        </span>
-                      <% end %>
-                      <% if i == 0 %>
-                        <% if result.tie? %>
-                          ties
-                        <% else %>
-                          defeated
-                        <% end %>
-                      <% end %>
-                    <% end %>
+                    <%= render "shared/outcome", result: result, links: false, past: true %>
                     <br/>
                     <time><%= format_time(result.created_at) %></time>
                   </div>

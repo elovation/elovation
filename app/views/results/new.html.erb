@@ -5,8 +5,10 @@
   <p>
   This game supports team results. This means that you can either select a singular player per team, or multiple. 
   To select multiple players per team, use "shift + click", or "cmd + click" on mac, or "ctrl + click" on windows machines.
-  <% if @team_count > 2 %>You do not need to fill in every team, start on the far left and move towards the right, the minimum requirement is the first two, then the rest are optional.<% end %>
-  </p>
+    </p>
+<% end %>
+<% if @team_count > 2 %>
+  <p>Enter finishers from first place on. Only the first two are required. If two finish level, choose "ties" between them and they share the place.</p>
 <% end %>
 
 <%= form_for [@game, @result], html: {id: "form-results"} do |f| %>
@@ -22,7 +24,9 @@
       <% submitted = @submitted_teams[index.to_s] || {} %>
       <div>
       <small>
-        <% if index == 0 %>
+        <% if @team_count > 2 %>
+          <%= (index + 1).ordinalize %>
+        <% elsif index == 0 %>
           Winner<% if @team_game %>/s<% end %>
         <% else %>
           Loser<% if @team_game %>/s<% end %>

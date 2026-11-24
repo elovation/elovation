@@ -1,0 +1,1 @@
+<span class="team"><% team.players.each_with_index do |player, index| %><%= " & " if index.positive? %><% if links %><%= link_to player, class: "player" do %><%= image_tag(avatar_url(player, size: 16)) %> <strong><%= player.name %></strong><% end %><% else %><strong class="player"><%= player.name %></strong><% end %><% end %></span>
