@@ -212,16 +212,19 @@ RSpec.describe Game, type: :model do
       end
 
       it "can be nil" do
-        game = FactoryBot.build(:game, min_number_of_players_per_team: 2, max_number_of_players_per_team: 3)
+        game = FactoryBot.build(:game, min_number_of_players_per_team: 2, max_number_of_players_per_team: nil)
 
         game.should be_valid
       end
 
+      # Regression: the error was added to max_number_of_teams, so the form
+      # showed it against the wrong field.
       it "cannot be less than the min number of players per team" do
         game = FactoryBot.build(:game, min_number_of_players_per_team: 2, max_number_of_players_per_team: 1)
 
         game.should_not be_valid
-        game.errors[:max_number_of_teams].should == ["cannot be less than the minimum"]
+        game.errors[:max_number_of_players_per_team].should == ["cannot be less than the minimum"]
+        game.errors[:max_number_of_teams].should be_empty
       end
     end
 

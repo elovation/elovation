@@ -16,20 +16,11 @@ class Game < ApplicationRecord
 
   validates :min_number_of_teams, numericality: { only_integer: true, greater_than_or_equal_to: 2 }
   validates :max_number_of_teams, numericality: { only_integer: true, allow_nil: true }
-  validate do |game|
-    if game.min_number_of_teams && game.max_number_of_teams && game.min_number_of_teams > game.max_number_of_teams
-      game.errors.add(:max_number_of_teams, 'cannot be less than the minimum')
-    end
-  end
+  validate { validate_not_below(:max_number_of_teams, :min_number_of_teams) }
 
   validates :min_number_of_players_per_team, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :max_number_of_players_per_team, numericality: { only_integer: true, allow_nil: true }
-  validate do |game|
-    if game.min_number_of_players_per_team && game.max_number_of_players_per_team &&
-       game.min_number_of_players_per_team > game.max_number_of_players_per_team
-      game.errors.add(:max_number_of_teams, 'cannot be less than the minimum')
-    end
-  end
+  validate { validate_not_below(:max_number_of_players_per_team, :min_number_of_players_per_team) }
 
   validate do |game|
     game.errors.add(:rating_type, 'cannot be changed') if game.rating_type_was && game.rating_type_changed?
@@ -68,5 +59,13 @@ class Game < ApplicationRecord
   # This game's ratings: record, retract, rebuild and preview them.
   def leaderboard
     Leaderboard.new(self)
+  end
+
+  private
+
+  def validate_not_below(max_attribute, min_attribute)
+    max = public_send(max_attribute)
+    min = public_send(min_attribute)
+    errors.add(max_attribute, 'cannot be less than the minimum') if max && min && max < min
   end
 end
