@@ -51,6 +51,9 @@ module DemoData
     ['Zoe Park', true, 0.0, 175, nil]
   ].freeze
 
+  # Games with their own theme; the rest use the site's.
+  THEMES = { 'Ping Pong' => 'table-tennis', 'Foosball' => 'foosball', 'Chess' => 'chess' }.freeze
+
   # name, rating system, teams, players per team, ties, results per weekday
   GAMES = [
     ['Ping Pong', 'elo', 2..2, 1..1, false, 4.0],
@@ -98,7 +101,7 @@ module DemoData
     GAMES.map do |name, rating_type, teams, players_per_team, ties, per_day|
       created = name == 'Cornhole' ? now - 3.days : start
       record = travel_to(created) do
-        Game.create!(name: name, rating_type: rating_type, allow_ties: ties,
+        Game.create!(name: name, rating_type: rating_type, allow_ties: ties, theme: THEMES[name],
                      min_number_of_teams: teams.begin, max_number_of_teams: teams.end,
                      min_number_of_players_per_team: players_per_team.begin,
                      max_number_of_players_per_team: players_per_team.end)

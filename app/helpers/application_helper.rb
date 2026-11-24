@@ -43,6 +43,12 @@ module ApplicationHelper
     image_tag avatar_url(player, size: size * 2), alt: '', width: size, height: size, class: "avatar avatar-#{size}"
   end
 
+  # The theme for this page: the game's when there is one, otherwise the
+  # site's.
+  def current_theme
+    @game ? @game.look : Theme.site
+  end
+
   def brand_title
     ENV.fetch('ELOVATION_TITLE', 'Elovation')
   end

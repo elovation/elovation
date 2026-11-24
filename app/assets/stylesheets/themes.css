@@ -1,0 +1,135 @@
+/*
+ * Game themes. A game's pages carry its theme on <body data-theme>, and these
+ * rules override the theme tokens from tokens.css on the root, so the canvas
+ * and scrollbars match too. (Turbo replaces <body> on each visit but not the
+ * attributes of <html>, which is why the theme lives on <body>.)
+ *
+ * A theme may only override colour, display-type, motif and corner tokens.
+ * Every pair below was checked: text 4.5:1 on all four surfaces, accents,
+ * focus, strong lines and chart series 3:1. Board squares, pitch and table
+ * motifs are decorative and never sit behind text.
+ */
+
+/* Chess: the club bulletin. Cream squares, walnut ink, felt green. */
+:root:has(> body[data-theme="chess"]) {
+  --surface-page: light-dark(oklch(96% 0.018 85), oklch(19% 0.015 55));
+  --surface-raised: light-dark(oklch(98.5% 0.01 85), oklch(23% 0.018 55));
+  --surface-sunken: light-dark(oklch(92% 0.03 80), oklch(16% 0.012 55));
+  --surface-highlight: light-dark(oklch(92% 0.06 90), oklch(28% 0.04 85));
+  --text: light-dark(oklch(22% 0.025 55), oklch(94% 0.02 85));
+  --text-muted: light-dark(oklch(44% 0.03 55), oklch(78% 0.03 80));
+  --line: light-dark(oklch(86% 0.03 75), oklch(32% 0.02 55));
+  --line-strong: light-dark(oklch(58% 0.04 60), oklch(60% 0.03 70));
+  --accent: light-dark(oklch(40% 0.08 160), oklch(78% 0.10 160));
+  --on-accent: light-dark(oklch(98% 0.01 85), oklch(18% 0.015 55));
+  --link: light-dark(oklch(38% 0.08 160), oklch(80% 0.10 160));
+  --focus: var(--accent);
+  --win: light-dark(oklch(40% 0.09 160), oklch(80% 0.11 160));
+  --loss: light-dark(oklch(45% 0.14 27), oklch(76% 0.12 30));
+  --chart-1: light-dark(oklch(40% 0.08 160), oklch(78% 0.10 160));
+  --chart-2: light-dark(oklch(48% 0.14 27), oklch(74% 0.13 30));
+  --chart-3: light-dark(oklch(35% 0.03 55), oklch(90% 0.03 85));
+  --chart-4: light-dark(oklch(55% 0.10 65), oklch(78% 0.11 75));
+  --chart-5: light-dark(oklch(45% 0.09 250), oklch(74% 0.09 250));
+  --chart-6: light-dark(oklch(50% 0.10 330), oklch(75% 0.10 330));
+  --chart-muted: light-dark(oklch(80% 0.03 75), oklch(36% 0.02 55));
+
+  --font-display: "Source Serif 4", Georgia, serif;
+  --display-stretch: 100%;
+  --display-weight: 600;
+  --display-case: none;
+  --display-tracking: 0;
+
+  --radius: 0;
+  --avatar-radius: 0;
+  --motif-a: light-dark(oklch(88% 0.045 80), oklch(72% 0.05 80));
+  --motif-b: light-dark(oklch(60% 0.075 60), oklch(45% 0.06 55));
+  /* A rank of the board under the header. */
+  --motif-band: repeating-conic-gradient(var(--motif-b) 0 25%, var(--motif-a) 0 50%) 0 0 / 1.5rem 1.5rem;
+  --motif-band-size: 0.75rem;
+}
+
+/* Foosball: the table. Green pitch, white markings, red and blue rods. */
+:root:has(> body[data-theme="foosball"]) {
+  --surface-page: light-dark(oklch(97% 0.012 150), oklch(27% 0.06 152));
+  --surface-raised: light-dark(oklch(99.5% 0.004 150), oklch(31% 0.065 152));
+  --surface-sunken: light-dark(oklch(93% 0.025 150), oklch(23% 0.05 152));
+  --surface-highlight: light-dark(oklch(94% 0.06 105), oklch(36% 0.08 130));
+  --text: light-dark(oklch(22% 0.035 155), oklch(97% 0.01 150));
+  --text-muted: light-dark(oklch(43% 0.04 155), oklch(86% 0.03 150));
+  --line: light-dark(oklch(87% 0.02 150), oklch(40% 0.06 152));
+  --line-strong: light-dark(oklch(56% 0.05 150), oklch(72% 0.05 150));
+  --accent: light-dark(oklch(44% 0.11 150), oklch(90% 0.14 105));
+  --on-accent: light-dark(oklch(99% 0 none), oklch(22% 0.05 152));
+  --link: light-dark(oklch(40% 0.10 150), oklch(92% 0.12 105));
+  --focus: var(--accent);
+  --win: light-dark(oklch(40% 0.10 150), oklch(88% 0.14 150));
+  --loss: light-dark(oklch(48% 0.18 27), oklch(82% 0.10 25));
+  --chart-1: light-dark(oklch(50% 0.19 27), oklch(80% 0.105 27));
+  --chart-2: light-dark(oklch(46% 0.15 258), oklch(82% 0.09 245));
+  --chart-3: light-dark(oklch(45% 0.11 150), oklch(92% 0.14 105));
+  --chart-4: light-dark(oklch(56% 0.11 80), oklch(88% 0.10 75));
+  --chart-5: light-dark(oklch(45% 0.14 320), oklch(82% 0.10 320));
+  --chart-6: light-dark(oklch(38% 0.02 155), oklch(97% 0.01 150));
+  --chart-muted: light-dark(oklch(82% 0.02 150), oklch(45% 0.05 152));
+
+  --font-display: "Big Shoulders", var(--font-numeric);
+  --display-stretch: 100%;
+  --display-weight: 800;
+  --display-case: uppercase;
+  --display-tracking: 0.02em;
+
+  --radius: 2px;
+  --avatar-radius: 50%;
+  --motif-a: oklch(100% 0 none);
+  --motif-b: oklch(44% 0.11 150);
+  /* The pitch under the header: halfway line and centre circle. */
+  --motif-band:
+    radial-gradient(circle, transparent 0.7rem, var(--motif-a) 0.7rem 0.82rem, transparent 0.85rem),
+    linear-gradient(90deg, transparent calc(50% - 1px), var(--motif-a) 0 calc(50% + 1px), transparent 0),
+    var(--motif-b);
+  --motif-band-size: 2rem;
+}
+
+/* Table tennis: the table. Table blue with white lines, the orange ball. */
+:root:has(> body[data-theme="table-tennis"]) {
+  --surface-page: light-dark(oklch(97.5% 0.006 250), oklch(26% 0.07 258));
+  --surface-raised: light-dark(oklch(100% 0 none), oklch(30% 0.075 258));
+  --surface-sunken: light-dark(oklch(94% 0.015 250), oklch(22% 0.06 258));
+  --surface-highlight: light-dark(oklch(95% 0.035 70), oklch(34% 0.08 255));
+  --text: light-dark(oklch(22% 0.04 258), oklch(97% 0.008 250));
+  --text-muted: light-dark(oklch(44% 0.04 258), oklch(86% 0.03 250));
+  --line: light-dark(oklch(88% 0.015 250), oklch(38% 0.07 258));
+  --line-strong: light-dark(oklch(56% 0.05 255), oklch(72% 0.05 255));
+  --accent: light-dark(oklch(42% 0.13 258), oklch(78% 0.15 60));
+  --on-accent: light-dark(oklch(99% 0 none), oklch(22% 0.06 258));
+  --link: light-dark(oklch(42% 0.13 258), oklch(82% 0.13 65));
+  --focus: var(--accent);
+  --win: light-dark(oklch(42% 0.10 155), oklch(86% 0.13 155));
+  --loss: light-dark(oklch(47% 0.18 25), oklch(80% 0.11 22));
+  --chart-1: light-dark(oklch(42% 0.13 258), oklch(80% 0.135 60));
+  --chart-2: light-dark(oklch(49% 0.19 25), oklch(78% 0.12 22));
+  --chart-3: light-dark(oklch(22% 0.02 258), oklch(97% 0.008 250));
+  --chart-4: light-dark(oklch(58% 0.135 55), oklch(84% 0.12 175));
+  --chart-5: light-dark(oklch(47% 0.08 175), oklch(80% 0.10 320));
+  --chart-6: light-dark(oklch(45% 0.15 310), oklch(86% 0.10 110));
+  --chart-muted: light-dark(oklch(82% 0.015 250), oklch(44% 0.06 258));
+
+  --font-display: var(--font-numeric);
+  --display-stretch: 118%;
+  --display-weight: 800;
+  --display-case: uppercase;
+  --display-tracking: 0.01em;
+
+  --radius: 2px;
+  --avatar-radius: 50%;
+  --motif-a: oklch(100% 0 none);
+  --motif-b: oklch(42% 0.13 258);
+  /* The table under the header: white edges and the centre line. */
+  --motif-band:
+    linear-gradient(var(--motif-a), var(--motif-a)) top / 100% 2px no-repeat,
+    linear-gradient(var(--motif-a), var(--motif-a)) bottom / 100% 2px no-repeat,
+    linear-gradient(90deg, transparent calc(50% - 1px), var(--motif-a) 0 calc(50% + 1px), transparent 0),
+    var(--motif-b);
+  --motif-band-size: 1.25rem;
+}

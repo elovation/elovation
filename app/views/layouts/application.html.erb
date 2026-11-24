@@ -8,10 +8,10 @@
     <%= csp_meta_tag %>
     <%= preload_link_tag "atkinson-hyperlegible-next.woff2", crossorigin: "anonymous" %>
     <%= preload_link_tag "archivo.woff2", crossorigin: "anonymous" %>
-    <%= stylesheet_link_tag "fonts", "tokens", "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "fonts", "tokens", "themes", "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body>
+  <body data-theme="<%= current_theme %>">
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <nav class="site-nav" aria-label="Main">

@@ -44,6 +44,16 @@ To do this, run `fly launch --dockerfile Dockerfile`, you will be prompted to ge
 
 It should "just work", if it doesn't, please file an issue.
 
+Customising
+-----------
+
+Set these environment variables where the app runs (for example with `fly secrets set`):
+
+- `ELOVATION_TITLE`: the name shown in the header and page titles. Defaults to "Elovation".
+- `ELOVATION_THEME`: the look of every page: `generic` (the default), `chess`, `foosball` or `table-tennis`.
+
+Each game can also have its own theme, chosen on its form, which its pages use for everyone. Themes only change colours, heading type and decoration, so every theme is equally legible, in light and dark mode. Light or dark follows each visitor's system setting.
+
 Game Options
 ------------
 There are two types of "Games" that Elovation allows for: [Trueskill](https://en.wikipedia.org/wiki/TrueSkill) & [Elo](https://en.wikipedia.org/wiki/Elo_rating_system)

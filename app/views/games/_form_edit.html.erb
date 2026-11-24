@@ -26,6 +26,12 @@
         <%= errors_for game, :max_number_of_teams %>
       </div>
     <% end %>
+    <div class="field">
+      <%= f.label :theme %>
+      <%= f.select :theme, Theme.options, { include_blank: "Site theme (#{Theme::NAMES.fetch(Theme.site)})" }, aria: { describedby: "theme-help" } %>
+      <p class="help" id="theme-help">How this game's pages look, for everyone.</p>
+      <%= errors_for game, :theme %>
+    </div>
     <div class="field field-checkbox">
       <%= f.check_box :allow_ties %>
       <%= f.label :allow_ties, "Allow ties" %>
