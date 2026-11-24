@@ -61,14 +61,22 @@ RSpec.describe RatingSystems::Elo do
       expect([winner["games_played"], loser["games_played"]]).to eq([5, 10])
     end
 
-    # Inherited from the elo gem: the first-placed player's starter check
-    # counts the game being rated, so they stop being a starter at 29 games.
-    it "drops the first-placed player's starter K-factor one game early" do
-      winner, = play(state(games_played: 29), state)
-      _, loser = play(state, state(games_played: 29))
+    # Regression: the elo gem counted the game being rated for the winner, so a
+    # winner on 29 games lost the starter K-factor one game early.
+    it "applies the starter K-factor to every player with fewer than 30 games, winner or loser" do
+      winner, loser = play(state(games_played: 29), state(games_played: 29))
 
-      expect(winner["rating"]).to eq(1007)
-      expect(loser["rating"]).to eq(987)
+      expect([winner["rating"], loser["rating"]]).to eq([1012, 987])
+    end
+
+    it "does not depend on which player is listed first in a draw" do
+      veteran = state(rating: 1100, games_played: 29)
+      newcomer = state(rating: 1000, games_played: 0)
+
+      veteran_first = play(veteran, newcomer, tie: true)
+      newcomer_first = play(newcomer, veteran, tie: true)
+
+      expect(veteran_first).to eq(newcomer_first.reverse)
     end
 
     # Values recorded from the elo gem (0.1.0) before it was removed.

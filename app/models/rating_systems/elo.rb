@@ -5,14 +5,10 @@ module RatingSystems
   #
   # State: { "rating" => Integer, "games_played" => Integer, "pro" => Boolean }
   #
-  # Reproduces the elo gem (0.1.0) this replaced, exactly, so existing ratings
-  # and rebuilds are unchanged:
-  # - New ratings are truncated toward zero.
+  # - New ratings are truncated toward zero (as the elo gem this replaced did).
   # - K is 10 for a pro (a player who has ever reached 2400) or anyone rated
-  #   2400+, otherwise 25 for a starter (fewer than 30 games), otherwise 15.
-  # - Quirk: for the first-placed player (in a draw, the first-listed one), the
-  #   games-played count used to decide whether they are a starter already
-  #   includes the game being rated, so they stop being a starter one game early.
+  #   2400+, otherwise 25 for a starter (fewer than 30 games played before this
+  #   one), otherwise 15.
   module Elo
     extend self
 
@@ -40,23 +36,22 @@ module RatingSystems
     def score(state) = state.fetch('rating')
 
     def rate(standings)
-      # Stable: in a draw the first-listed standing stays first (see the quirk above).
-      first, second = standings.each_with_index.sort_by { |standing, index| [standing.rank, index] }.map(&:first)
+      first, second = standings.sort_by(&:rank)
       first_key, first_state = first.ratings.first
       second_key, second_state = second.ratings.first
       first_score = first.rank == second.rank ? 0.5 : 1.0
 
       {
-        first_key => play(first_state, second_state, first_score, first_placed: true),
-        second_key => play(second_state, first_state, 1.0 - first_score, first_placed: false)
+        first_key => play(first_state, second_state, first_score),
+        second_key => play(second_state, first_state, 1.0 - first_score)
       }
     end
 
     private
 
-    def play(state, opponent, actual_score, first_placed:)
+    def play(state, opponent, actual_score)
       expected_score = 1.0 / (1.0 + (10.0**((opponent.fetch('rating').to_f - state.fetch('rating').to_f) / 400.0)))
-      rating = (state.fetch('rating').to_f + (k_factor(state, first_placed:) * (actual_score - expected_score))).to_i
+      rating = (state.fetch('rating').to_f + (k_factor(state) * (actual_score - expected_score))).to_i
 
       {
         'rating' => rating,
@@ -65,11 +60,10 @@ module RatingSystems
       }
     end
 
-    def k_factor(state, first_placed:)
+    def k_factor(state)
       return PRO_K_FACTOR if state.fetch('pro') || state.fetch('rating') >= PRO_RATING
 
-      games_played = state.fetch('games_played') + (first_placed ? 1 : 0)
-      games_played < STARTER_GAMES ? STARTER_K_FACTOR : K_FACTOR
+      state.fetch('games_played') < STARTER_GAMES ? STARTER_K_FACTOR : K_FACTOR
     end
   end
 end
