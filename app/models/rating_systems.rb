@@ -18,8 +18,14 @@
 # better; equal ranks are a tie) and the prior state of each participant.
 # Participants are opaque keys (the app uses player ids). Rating systems never
 # touch the database; loading and saving ratings is the caller's job.
+#
+# To run a rating system over a series of results, use RatingSystems::Replay.
 module RatingSystems
+  # One team in one result: its rank and each participant's prior state.
   Standing = Data.define(:rank, :ratings)
+
+  # One team in one result: its rank and its participants (for Replay).
+  Placing = Data.define(:rank, :participants)
 
   def self.all
     [Elo, TrueSkill]

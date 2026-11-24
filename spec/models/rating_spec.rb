@@ -67,56 +67,5 @@ RSpec.describe Rating, type: :model do
 
       RatingHistoryEvent.find_by_id(history_event.id).should be_nil
     end
-
-    # TODO: .destroy_all should update player rankings and attributes appropriately refer to line 272 rater_spec.rb
-  end
-
-  describe "rewind!" do
-    it "resets the rating to the previous state and its score" do
-      previous = { "mean" => 51.0, "deviation" => 21.0 }
-      current = { "mean" => 52.0, "deviation" => 22.0 }
-      rating = FactoryBot.create(:rating, state: current)
-      FactoryBot.create(:rating_history_event, rating: rating, state: previous)
-      FactoryBot.create(:rating_history_event, rating: rating, state: current)
-
-      rating.rewind!
-
-      rating.reload
-      expect(rating.state).to eq(previous)
-      expect(rating.value).to eq(RatingSystems::TrueSkill.score(previous))
-    end
-
-    it "restores every part of the state, including Elo's pro flag" do
-      game = FactoryBot.create(:elo_game)
-      previous = { "rating" => 2390, "games_played" => 40, "pro" => false }
-      current = { "rating" => 2401, "games_played" => 41, "pro" => true }
-      rating = FactoryBot.create(:rating, game: game, state: current)
-      FactoryBot.create(:rating_history_event, rating: rating, state: previous)
-      FactoryBot.create(:rating_history_event, rating: rating, state: current)
-
-      rating.rewind!
-
-      expect(rating.reload.state).to eq(previous)
-    end
-
-    it "deletes the most recent history event" do
-      rating = FactoryBot.create(:rating, value: 1002)
-      FactoryBot.create(:rating_history_event, rating: rating, value: 1001)
-      history_event = FactoryBot.create(:rating_history_event, rating: rating, value: 1002)
-
-      rating.rewind!
-
-      RatingHistoryEvent.find_by_id(history_event.id).should be_nil
-    end
-
-    it "destroys the rating if there is only one history event" do
-      rating = FactoryBot.create(:rating, value: 1002)
-      history_event = FactoryBot.create(:rating_history_event, rating: rating, value: 1002)
-
-      rating.rewind!
-
-      Rating.find_by_id(rating.id).should be_nil
-      RatingHistoryEvent.find_by_id(history_event.id).should be_nil
-    end
   end
 end

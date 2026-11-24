@@ -60,28 +60,8 @@ class Game < ApplicationRecord
     RatingSystems.fetch(rating_type)
   end
 
-  # Rates one result. `teams` are the result's ranked Teams.
-  def rate!(teams)
-    ratings = {}
-    standings = teams.map do |team|
-      team_ratings = team.players.to_h do |player|
-        rating = ratings[player.id] = player.ratings.find_or_create(self)
-        [player.id, rating.state]
-      end
-      RatingSystems::Standing.new(rank: team.rank, ratings: team_ratings)
-    end
-
-    rating_system.rate(standings).each do |player_id, state|
-      ratings.fetch(player_id).record!(state)
-    end
-  end
-
-  def recalculate_ratings!
-    RatingHistoryEvent.joins(:rating).where(ratings: {game_id: self.id}).destroy_all
-    Rating.where(game_id: self.id).destroy_all
-
-    results.order("id ASC").all.each do |result|
-      rate!(result.teams.order("rank ASC"))
-    end
+  # This game's ratings: record, retract, rebuild and preview them.
+  def leaderboard
+    Leaderboard.new(self)
   end
 end

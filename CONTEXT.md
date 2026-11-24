@@ -24,4 +24,8 @@ The language used in code, specs and discussion. When a term here and a name in 
 
 **Score**: the single integer a rating system derives from a rating state for display and sorting. Elo's score is the rating; TrueSkill's is the conservative estimate (mean - 3 × deviation) × 100. _Code_: `Rating#value`. _Avoid_: calling the score "the rating" when the rating state is meant.
 
-**Rating history**: the sequence of a rating's states, one entry per result the player took part in. _Code_: `RatingHistoryEvent`.
+**Rating history**: the sequence of a rating's states, one entry per result the player took part in, dated when that result was played. _Code_: `RatingHistoryEvent`.
+
+**Leaderboard**: a game's ratings and their history, derived from its results by its rating system. Recording a result is one step of rebuilding the whole leaderboard, so a rebuild always reproduces what was recorded live. Only the latest result for every one of its players can be retracted. _Code_: `Leaderboard` (`game.leaderboard`: `record`, `retract`, `rebuild`, `preview`). It is the only code that writes ratings.
+
+**Replay**: running a rating system over a series of results in order, in memory. Any rating system can replay any results it can rate, which is how a leaderboard is previewed under a different rating system. _Code_: `RatingSystems::Replay`; `bin/rails "ratings:preview[GAME_ID,RATING_SYSTEM]"`.

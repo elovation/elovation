@@ -23,9 +23,8 @@ class ResultService
 
     if result.valid?
       Result.transaction do
-        game.rate!(result.teams)
-
         result.save!
+        game.leaderboard.record(result)
 
         Response.new(success: true, result: result)
       end
@@ -35,16 +34,6 @@ class ResultService
   end
 
   def self.destroy(result)
-    return Response.new(success: false) unless result.most_recent?
-
-    Result.transaction do
-      result.players.each do |player|
-        player.rewind_rating!(result.game)
-      end
-
-      result.destroy
-
-      Response.new(success: true)
-    end
+    Response.new(success: result.game.leaderboard.retract(result))
   end
 end

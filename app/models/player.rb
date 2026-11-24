@@ -39,11 +39,6 @@ class Player < ApplicationRecord
     results.order("results.created_at DESC").limit(5)
   end
 
-  def rewind_rating!(game)
-    rating = ratings.where(game_id: game.id).first
-    rating.rewind!
-  end
-
   def total_ties(game)
     results.where(game_id: game).to_a.count { |r| r.tie? }
   end

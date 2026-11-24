@@ -2,7 +2,8 @@ class Rating < ApplicationRecord
   belongs_to :game
   belongs_to :player
 
-  has_many :history_events, -> { order created_at: :desc }, class_name: "RatingHistoryEvent", dependent: :destroy
+  # Newest first. History is stamped with the time of the result it came from.
+  has_many :history_events, -> { order created_at: :desc, id: :desc }, class_name: "RatingHistoryEvent", dependent: :destroy
 
   def active?
     if most_recent_result
@@ -28,35 +29,5 @@ class Rating < ApplicationRecord
   def state=(new_state)
     super
     self.value = game.rating_system.score(new_state)
-  end
-
-  # Saves a new state and appends it to the rating's history.
-  def record!(new_state)
-    Rating.transaction do
-      self.state = new_state
-      save!
-      history_events.create!(value: value, state: state)
-    end
-  end
-
-  # Restores the previous state in the rating's history, or removes the
-  # rating if it has no earlier history.
-  def rewind!
-    if history_events.count == 1
-      destroy
-    else
-      Rating.transaction do
-        update!(state: _previous_rating.state)
-        _current_rating.destroy
-      end
-    end
-  end
-
-  def _current_rating
-    history_events.first
-  end
-
-  def _previous_rating
-    history_events.second
   end
 end
