@@ -334,7 +334,7 @@ RSpec.describe Game, type: :model do
 
       game.recalculate_ratings!
 
-      attrs = ->(rating){[rating.player_id, rating.value, rating.trueskill_mean, rating.trueskill_deviation]}
+      attrs = ->(rating){[rating.player_id, rating.value, rating.state]}
       previous_ratings.map(&:id).should_not == game.all_ratings.map(&:id)
       previous_ratings.map(&attrs).should == game.all_ratings.map(&attrs)
     end

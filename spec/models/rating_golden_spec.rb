@@ -45,8 +45,8 @@ RSpec.describe "Recorded ratings", type: :model do
       RECORDED.each do |name, recorded|
         rating = rating_for(game, players[name])
         expect(rating.value).to eq(recorded[:value]), "value for #{name}"
-        expect(rating.trueskill_mean).to be_within(1e-9).of(recorded[:mean]), "mean for #{name}"
-        expect(rating.trueskill_deviation).to be_within(1e-9).of(recorded[:deviation]), "deviation for #{name}"
+        expect(rating.state["mean"]).to be_within(1e-9).of(recorded[:mean]), "mean for #{name}"
+        expect(rating.state["deviation"]).to be_within(1e-9).of(recorded[:deviation]), "deviation for #{name}"
       end
     end
 

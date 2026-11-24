@@ -1,7 +1,7 @@
 class Player < ApplicationRecord
   has_many :ratings, dependent: :destroy do
     def find_or_create(game)
-      where(game_id: game.id).first || create!(game: game, pro: false, state: game.rating_system.initial_state)
+      where(game_id: game.id).first || create!(game: game, state: game.rating_system.initial_state)
     end
   end
 

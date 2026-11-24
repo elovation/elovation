@@ -139,13 +139,15 @@ RSpec.describe Player, type: :model do
     it "resets the player's rating to the previous rating" do
       player = FactoryBot.create(:player)
       game = FactoryBot.create(:game)
-      rating = FactoryBot.create(:rating, game: game, player: player, value: 1002)
-      FactoryBot.create(:rating_history_event, rating: rating, value: 1001)
-      FactoryBot.create(:rating_history_event, rating: rating, value: 1002)
+      previous = { "mean" => 30.0, "deviation" => 5.0 }
+      current = { "mean" => 31.0, "deviation" => 5.0 }
+      rating = FactoryBot.create(:rating, game: game, player: player, state: current)
+      FactoryBot.create(:rating_history_event, rating: rating, state: previous)
+      FactoryBot.create(:rating_history_event, rating: rating, state: current)
 
       player.rewind_rating!(game)
 
-      player.ratings.where(game_id: game.id).first.value.should == 1001
+      player.ratings.where(game_id: game.id).first.value.should == 1500
     end
   end
 

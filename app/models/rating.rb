@@ -23,27 +23,11 @@ class Rating < ApplicationRecord
     player.results.for_game(game).most_recent_first.first
   end
 
-  # The rating system's state for this rating. Each rating system's state is
-  # spread over its own columns here; only game.rating_system interprets it.
-  def state
-    case game.rating_type
-    when "elo"
-      { "rating" => value, "games_played" => history_events.count, "pro" => pro }
-    when "trueskill"
-      { "mean" => trueskill_mean, "deviation" => trueskill_deviation }
-    end
-  end
-
+  # `state` is the rating state: opaque to everything except game.rating_system.
+  # Assigning it also sets `value`, the score derived from it.
   def state=(new_state)
+    super
     self.value = game.rating_system.score(new_state)
-
-    case game.rating_type
-    when "elo"
-      self.pro = new_state.fetch("pro")
-    when "trueskill"
-      self.trueskill_mean = new_state.fetch("mean")
-      self.trueskill_deviation = new_state.fetch("deviation")
-    end
   end
 
   # Saves a new state and appends it to the rating's history.
@@ -51,18 +35,18 @@ class Rating < ApplicationRecord
     Rating.transaction do
       self.state = new_state
       save!
-      history_events.create!(value: value, trueskill_mean: trueskill_mean, trueskill_deviation: trueskill_deviation)
+      history_events.create!(value: value, state: state)
     end
   end
 
+  # Restores the previous state in the rating's history, or removes the
+  # rating if it has no earlier history.
   def rewind!
     if history_events.count == 1
       destroy
     else
       Rating.transaction do
-        update!(value: _previous_rating.value,
-                           trueskill_mean: _previous_rating.trueskill_mean,
-                           trueskill_deviation: _previous_rating.trueskill_deviation)
+        update!(state: _previous_rating.state)
         _current_rating.destroy
       end
     end
