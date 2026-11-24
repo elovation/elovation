@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus"
 // token (e.g. "--chart-1"); Chart.js can't read oklch() or light-dark(), so
 // each token is resolved to rgb by painting it on a 1x1 canvas. Re-applied
 // when the system switches between light and dark.
-export default class extends Controller {
+export default class ChartThemeController extends Controller {
   connect() {
     this.scheme = window.matchMedia("(prefers-color-scheme: dark)")
     this.apply = this.apply.bind(this)
@@ -18,13 +18,13 @@ export default class extends Controller {
 
   whenChartReady(callback, attempts = 120) {
     const chart = this.chart
-    if (chart && chart.getChartObject()) return callback()
+    if (chart?.getChartObject()) return callback()
     if (attempts > 0) requestAnimationFrame(() => this.whenChartReady(callback, attempts - 1))
   }
 
   get chart() {
     const element = this.element.querySelector("[id^='chart-']")
-    return element && window.Chartkick && window.Chartkick.charts[element.id]
+    return element && window.Chartkick?.charts[element.id]
   }
 
   apply() {

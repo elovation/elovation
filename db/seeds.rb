@@ -16,6 +16,8 @@ require 'active_support/testing/time_helpers'
 module DemoData
   extend ActiveSupport::Testing::TimeHelpers
 
+  class SeedError < StandardError; end
+
   DAYS = 182
   RANDOM = Random.new(2026)
 
@@ -132,7 +134,7 @@ module DemoData
     end
 
     response = ResultService.create(game[:record], teams: params)
-    raise "Couldn't record a #{game[:record].name} result: #{response.result.errors.full_messages}" unless response.success?
+    raise SeedError, "Couldn't record a #{game[:record].name} result: #{response.result.errors.full_messages}" unless response.success?
 
     true
   end

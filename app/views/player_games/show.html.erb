@@ -52,7 +52,7 @@
     <h2 id="games-heading">Recent games</h2>
     <% results = @player.results.for_game(@game).limit(15).order("created_at desc") %>
     <% if results.any? %>
-      <ol class="results" role="list">
+      <ol class="results">
         <% results.each do |result| %>
           <% won = result.winners.include?(@player) %>
           <li class="result<%= " is-latest" if result.most_recent? %>">

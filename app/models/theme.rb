@@ -17,5 +17,5 @@ module Theme
 
   def self.options = NAMES.map { |key, name| [name, key] }
 
-  def self.site = ENV['ELOVATION_THEME'].presence_in(keys) || 'generic'
+  def self.site = ENV.fetch('ELOVATION_THEME', 'generic').presence_in(keys) || 'generic'
 end

@@ -69,7 +69,7 @@
   --win: light-dark(oklch(45% 0.12 150), oklch(80% 0.14 150));
   --loss: light-dark(oklch(48% 0.17 28), oklch(75% 0.15 28));
 
-  /* Theme: chart series (the first six players; the rest are muted). */
+  /* Theme: colours of the first six players' chart lines, and of the rest */
   --chart-1: light-dark(oklch(50% 0.18 32), oklch(82% 0.15 75));
   --chart-2: light-dark(oklch(45% 0.13 255), oklch(74% 0.12 250));
   --chart-3: light-dark(oklch(52% 0.12 150), oklch(76% 0.14 150));
