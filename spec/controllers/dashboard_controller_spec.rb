@@ -6,7 +6,7 @@ describe DashboardController, :type => :controller do
       player = FactoryBot.create(:player)
       game = FactoryBot.create(:game)
 
-      get :show
+      get :index
 
       assigns(:players).should == [player]
       assigns(:games).should == [game]

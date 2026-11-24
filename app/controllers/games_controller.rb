@@ -75,7 +75,7 @@ class GamesController < ApplicationController
     if @game.update(game_update_params)
       redirect_to game_path(@game)
     else
-      redirect_to game_path(@game), status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 

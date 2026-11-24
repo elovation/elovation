@@ -10,13 +10,13 @@ describe PlayersController, :type => :controller do
   end
 
   describe "create" do
-    it "creates a player and redirects to dashboard" do
+    it "creates a player and redirects to the players list" do
       post :create, params: {player: {name: "Drew", email: "drew@example.com"}}
 
       player = Player.where(name: "Drew", email: "drew@example.com").first
 
       player.should_not be_nil
-      response.should redirect_to(dashboard_path)
+      response.should redirect_to(players_path)
     end
 
     it "renders new given invalid params" do
@@ -28,7 +28,7 @@ describe PlayersController, :type => :controller do
     end
 
     it "protects against mass assignment" do
-      Timecop.freeze(Time.now) do
+      travel_to(Time.now) do
         post :create, params: {player: {created_at: 3.days.ago, name: "Drew"}}
 
         player = Player.where(name: "Drew").first
@@ -43,7 +43,7 @@ describe PlayersController, :type => :controller do
 
       delete :destroy, params: {id: player}
 
-      response.should redirect_to(dashboard_path)
+      response.should redirect_to(players_path)
       Player.find_by_id(player.id).should be_nil
     end
 
@@ -53,7 +53,7 @@ describe PlayersController, :type => :controller do
 
       delete :destroy, params: {id: player}
 
-      response.should redirect_to(dashboard_path)
+      response.should redirect_to(players_path)
       Player.find_by_id(player.id).should == player
     end
   end
@@ -87,7 +87,7 @@ describe PlayersController, :type => :controller do
       end
 
       it "protects against mass assignment" do
-        Timecop.freeze(Time.now) do
+        travel_to(Time.now) do
           player = FactoryBot.create(:player, name: "First name")
 
           put :update, params: {id: player, player: {created_at: 3.days.ago}}

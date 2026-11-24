@@ -7,7 +7,7 @@ describe PlayerGamesController, :type => :controller do
       player = FactoryBot.create(:player)
 
       get :show, params: {player_id: player, id: game}
-      response.should be_success
+      response.should be_successful
 
       assigns(:game).should == game
       assigns(:player).should == player
