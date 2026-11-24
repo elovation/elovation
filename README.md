@@ -17,20 +17,20 @@ Screenshots
     <td><img src="docs/screenshots/mobile/01-home.png" alt="Home page on a phone" width="200"></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/desktop/02-game-1v1.png" alt="A one-on-one game: recent results, ratings and rating history" width="600"></td>
-    <td><img src="docs/screenshots/mobile/02-game-1v1.png" alt="A one-on-one game on a phone" width="200"></td>
+    <td><img src="docs/screenshots/desktop/02-game-1v1.png" alt="Ping pong in the table tennis theme: leaderboard, recent results and rating history" width="600"></td>
+    <td><img src="docs/screenshots/mobile/02-game-1v1.png" alt="Ping pong on a phone" width="200"></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/desktop/03-game-teams.png" alt="A team game rated with TrueSkill" width="600"></td>
-    <td><img src="docs/screenshots/mobile/03-game-teams.png" alt="A team game on a phone" width="200"></td>
+    <td><img src="docs/screenshots/desktop/04-game-chess.png" alt="Chess in the chess theme" width="600"></td>
+    <td><img src="docs/screenshots/mobile/04-game-chess.png" alt="Chess on a phone" width="200"></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/desktop/12-player.png" alt="A player's results and ratings" width="600"></td>
-    <td><img src="docs/screenshots/mobile/12-player.png" alt="A player on a phone" width="200"></td>
+    <td><img src="docs/screenshots/desktop-dark/03-game-teams.png" alt="Foosball, a team game, in the foosball theme in dark mode" width="600"></td>
+    <td><img src="docs/screenshots/mobile/03-game-teams.png" alt="Foosball on a phone" width="200"></td>
   </tr>
 </table>
 
-Every page is in [docs/screenshots](docs/screenshots). They show the demo data from `db/seeds.rb`: six months of office play across eight games.
+Every page is in [docs/screenshots](docs/screenshots). They show the demo data from `db/seeds.rb`: six months of office play across eight games, with the chess, foosball and table tennis themes.
 
 Deploy yourself with Fly.io for free
 -------------------------------------
