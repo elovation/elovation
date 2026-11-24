@@ -39,8 +39,6 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 
-# https://github.com/iain/elo
-gem 'elo'
 # https://github.com/saulabs/trueskill
 # Vendored: upstream is unmaintained and incompatible with RubyGems 4 (see vendor/trueskill/VENDORED.md)
 gem 'trueskill', path: 'vendor/trueskill', require: 'saulabs/trueskill'

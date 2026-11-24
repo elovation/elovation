@@ -3,9 +3,11 @@ require "rails_helper"
 RSpec.describe RatingSystems::Elo do
   it_behaves_like "a rating system"
 
-  def state(rating: 1000, games_played: 0, pro: false)
+  def self.state(rating: 1000, games_played: 0, pro: false)
     { "rating" => rating, "games_played" => games_played, "pro" => pro }
   end
+
+  def state(...) = self.class.state(...)
 
   def play(first, second, tie: false)
     described_class.rate([
@@ -57,6 +59,30 @@ RSpec.describe RatingSystems::Elo do
       winner, loser = play(state(games_played: 4), state(games_played: 9))
 
       expect([winner["games_played"], loser["games_played"]]).to eq([5, 10])
+    end
+
+    # Inherited from the elo gem: the first-placed player's starter check
+    # counts the game being rated, so they stop being a starter at 29 games.
+    it "drops the first-placed player's starter K-factor one game early" do
+      winner, = play(state(games_played: 29), state)
+      _, loser = play(state, state(games_played: 29))
+
+      expect(winner["rating"]).to eq(1007)
+      expect(loser["rating"]).to eq(987)
+    end
+
+    # Values recorded from the elo gem (0.1.0) before it was removed.
+    {
+      "a draw between unequal players" => [state(rating: 1500, games_played: 31), state(rating: 1000, games_played: 3), true, 1493, 1011],
+      "a pro beating a newcomer" => [state(rating: 3000, games_played: 200, pro: true), state(rating: 100, games_played: 1), false, 3000, 99],
+      "a newcomer upsetting a pro" => [state(rating: 100, games_played: 1), state(rating: 3000, games_played: 200, pro: true), false, 124, 2990],
+      "a pro losing below 2400" => [state(rating: 2390, games_played: 40), state(rating: 2401, games_played: 50, pro: true), false, 2397, 2395]
+    }.each do |situation, (first, second, tie, first_rating, second_rating)|
+      it "matches the elo gem for #{situation}" do
+        new_first, new_second = play(first, second, tie: tie)
+
+        expect([new_first["rating"], new_second["rating"]]).to eq([first_rating, second_rating])
+      end
     end
   end
 

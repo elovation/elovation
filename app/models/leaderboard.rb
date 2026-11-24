@@ -71,8 +71,10 @@ class Leaderboard
 
   private
 
+  # Teams in the order they were entered, so a rating system that depends on
+  # order (Elo, in a draw) sees the same order when recording and rebuilding.
   def placings(result)
-    result.teams.map do |team|
+    result.teams.sort_by(&:id).map do |team|
       RatingSystems::Placing.new(rank: team.rank, participants: team.players.map(&:id))
     end
   end
