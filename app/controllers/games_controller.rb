@@ -34,11 +34,9 @@ class GamesController < ApplicationController
   end
 
   def show
-    @chart_data = @game.leaderboard.history_by_day.map do |player, scores|
-      { name: player.name, data: scores }
-    end
-
     @ratings = @game.all_ratings
+    @active_ratings = @ratings.select(&:active?)
+    @history = @game.leaderboard.history_by_day
 
     respond_to do |format|
       format.html

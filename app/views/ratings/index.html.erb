@@ -6,5 +6,5 @@
   </div>
 </header>
 <%= turbo_frame_tag "ratings" do %>
-  <%= render "games/leaderboard", ratings: @game.all_ratings %>
+  <%= render "games/leaderboard", ratings: @game.all_ratings, swatches: false %>
 <% end %>

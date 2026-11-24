@@ -8,6 +8,6 @@
     </tr>
   </thead>
   <tbody>
-    <%= render partial: "games/rating", collection: ratings %>
+    <%= render partial: "games/rating", collection: ratings, locals: { swatches: swatches } %>
   </tbody>
 </table>

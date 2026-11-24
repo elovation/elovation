@@ -716,4 +716,21 @@ input:user-invalid { border-color: var(--loss); }
 
 /* Charts ----------------------------------------------------------------- */
 
-.chart > div { min-block-size: 20rem; }
+.chart-canvas { min-block-size: 20rem; }
+
+/* Beside a leaderboard name: the player's line colour in the chart. */
+.swatch {
+  display: inline-block;
+  inline-size: 0.75rem;
+  block-size: 0.25rem;
+  margin-inline-start: var(--space-xs);
+  vertical-align: middle;
+  background: var(--swatch);
+}
+
+.swatch-1 { --swatch: var(--chart-1); }
+.swatch-2 { --swatch: var(--chart-2); }
+.swatch-3 { --swatch: var(--chart-3); }
+.swatch-4 { --swatch: var(--chart-4); }
+.swatch-5 { --swatch: var(--chart-5); }
+.swatch-6 { --swatch: var(--chart-6); }

@@ -1,6 +1,6 @@
 <tr>
   <td class="rank"><%= rating_counter + 1 %></td>
-  <th scope="row"><%= link_to player_game_path(rating.player, @game), class: "player" do %><%= avatar(rating.player, size: 24) %><span><%= rating.player.name %></span><% end %></th>
+  <th scope="row"><%= link_to player_game_path(rating.player, @game), class: "player" do %><%= avatar(rating.player, size: 24) %><span><%= rating.player.name %></span><% end %><% if swatches && rating_counter < GamesHelper::CHART_HIGHLIGHTS %><span class="swatch swatch-<%= rating_counter + 1 %>" title="Chart colour"></span><% end %></th>
   <td class="number rating"><%= rating.value %></td>
   <td class="number record">
     <span class="win"><%= rating.player.total_wins(rating.game) %></span>–<span class="loss"><%= rating.player.results.for_game(rating.game).losses.size %></span><% if @game.allow_ties %>–<span class="tie"><%= rating.player.total_ties(rating.game) %></span><% end %>

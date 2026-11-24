@@ -17,16 +17,15 @@
 <div class="columns">
   <section class="column-side" aria-labelledby="leaderboard-heading">
     <h2 id="leaderboard-heading">Leaderboard</h2>
-    <% active_ratings = @ratings.select(&:active?) %>
     <%= turbo_frame_tag "ratings", target: "_top" do %>
       <% if @ratings.empty? %>
         <p class="empty">No ratings yet. Add a result to start the leaderboard.</p>
-      <% elsif active_ratings.empty? %>
+      <% elsif @active_ratings.empty? %>
         <p class="empty">No one has played in the last four weeks.</p>
       <% else %>
-        <%= render "games/leaderboard", ratings: active_ratings %>
+        <%= render "games/leaderboard", ratings: @active_ratings, swatches: @history.any? %>
       <% end %>
-      <% if @ratings.size > active_ratings.size %>
+      <% if @ratings.size > @active_ratings.size %>
         <p><%= link_to "Show everyone, including players inactive for four weeks", game_ratings_path(@game), data: { turbo_frame: "ratings" } %></p>
       <% end %>
     <% end %>
@@ -42,9 +41,10 @@
   </section>
 </div>
 
-<% if @chart_data.any? %>
+<% if @history.any? %>
   <section class="chart" aria-labelledby="progress-heading">
     <h2 id="progress-heading">Progress</h2>
-    <%= line_chart @chart_data, min: nil, max: nil, height: "26rem", xtitle: "Date", ytitle: @game.rating_system.name %>
+    <p class="help">The top <%= [@active_ratings.size, GamesHelper::CHART_HIGHLIGHTS].min %> players are in colour, matching the leaderboard. Everyone else is grey.</p>
+    <%= rating_chart rating_chart_series(@history, @active_ratings.map(&:player_id)), height: "26rem" %>
   </section>
 <% end %>

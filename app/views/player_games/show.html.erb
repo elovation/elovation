@@ -83,6 +83,6 @@
 <% if @chart_data.any? %>
   <section class="chart" aria-labelledby="progress-heading">
     <h2 id="progress-heading">Progress</h2>
-    <%= line_chart @chart_data, min: nil, max: nil, height: "20rem", xtitle: "Date", ytitle: @game.rating_system.name %>
+    <%= rating_chart [{ name: @player.name, data: @chart_data, token: "--chart-1", dataset: { borderWidth: 2.5 } }], height: "20rem" %>
   </section>
 <% end %>
