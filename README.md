@@ -7,6 +7,31 @@ At Braintree, we play ping pong in the office. We wanted a way to track results 
 
 This also supports individual player rankings within multi-player teams, using the [Trueskill ranking system](http://research.microsoft.com/en-us/projects/trueskill/)
 
+Screenshots
+-----------
+
+<table>
+  <tr><th>Desktop</th><th>Mobile</th></tr>
+  <tr>
+    <td><img src="docs/screenshots/desktop/01-home.png" alt="Home page: games and players" width="600"></td>
+    <td><img src="docs/screenshots/mobile/01-home.png" alt="Home page on a phone" width="200"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/desktop/02-game-1v1.png" alt="A one-on-one game: recent results, ratings and rating history" width="600"></td>
+    <td><img src="docs/screenshots/mobile/02-game-1v1.png" alt="A one-on-one game on a phone" width="200"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/desktop/03-game-teams.png" alt="A team game rated with TrueSkill" width="600"></td>
+    <td><img src="docs/screenshots/mobile/03-game-teams.png" alt="A team game on a phone" width="200"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/desktop/12-player.png" alt="A player's results and ratings" width="600"></td>
+    <td><img src="docs/screenshots/mobile/12-player.png" alt="A player on a phone" width="200"></td>
+  </tr>
+</table>
+
+Every page is in [docs/screenshots](docs/screenshots). They show the demo data from `db/seeds.rb`: six months of office play across eight games.
+
 Deploy yourself with Fly.io for free
 -------------------------------------
 The root of this directory is setup with a Dockerfile ready to deploy to [fly.io](https://fly.io).

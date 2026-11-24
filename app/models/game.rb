@@ -29,7 +29,7 @@ class Game < ApplicationRecord
   validates :allow_ties, inclusion: { in: [true, false], message: 'must be selected' }
 
   def all_ratings
-    ratings.order(value: :desc)
+    ratings.order(value: :desc, id: :asc)
   end
 
   def as_json(_options = {})
@@ -49,7 +49,7 @@ class Game < ApplicationRecord
   end
 
   def top_ratings
-    ratings.order('value DESC').limit(5)
+    ratings.order(value: :desc, id: :asc).limit(5)
   end
 
   def rating_system

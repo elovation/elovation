@@ -80,6 +80,8 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
+    addressable (2.10.0)
+      public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.3)
     base64 (0.3.0)
     better_errors (2.10.1)
@@ -114,6 +116,11 @@ GEM
       railties (>= 6.1.0)
     faker (3.8.0)
       i18n (>= 1.8.11, < 2)
+    ferrum (0.21.0)
+      addressable (~> 2.5)
+      base64 (~> 0.2)
+      concurrent-ruby (~> 1.1)
+      websocket-driver (~> 0.7)
     globalid (1.4.0)
       activesupport (>= 6.1)
     i18n (1.15.2)
@@ -187,6 +194,7 @@ GEM
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
+    public_suffix (7.0.5)
     puma (8.1.2)
       nio4r (~> 2.0)
     racc (1.8.1)
@@ -328,6 +336,7 @@ DEPENDENCIES
   dockerfile-rails (>= 1.5)
   factory_bot_rails
   faker
+  ferrum
   importmap-rails
   jbuilder
   pg (~> 1.1)

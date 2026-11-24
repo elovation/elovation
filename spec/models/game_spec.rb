@@ -96,6 +96,18 @@ RSpec.describe Game, type: :model do
 
       expect(game.all_ratings).to eq([rating6, rating5, rating4, rating3, rating2, rating1])
     end
+
+    # Regression: tied ratings came back in whatever order Postgres stored
+    # them, which changes when a row is updated.
+    it "orders tied ratings consistently, earliest rating first" do
+      game = FactoryBot.create(:game)
+      first = FactoryBot.create(:rating, game: game, value: 5)
+      second = FactoryBot.create(:rating, game: game, value: 5)
+      first.update_column(:value, 5)
+
+      expect(game.all_ratings).to eq([first, second])
+      expect(game.top_ratings).to eq([first, second])
+    end
   end
 
   describe "validations" do
