@@ -116,6 +116,26 @@ describe GamesController, :type => :controller do
         response.should render_template(:edit)
       end
     end
+
+    context "with limits the rating system fixes" do
+      it "ignores changes to them" do
+        game = FactoryBot.create(:elo_game)
+
+        put :update, params: {id: game, game: {name: "Chess", max_number_of_teams: 4, max_number_of_players_per_team: 3}}
+
+        game.reload
+        expect(game.name).to eq("Chess")
+        expect([game.max_number_of_teams, game.max_number_of_players_per_team]).to eq([2, 1])
+      end
+
+      it "allows changing limits the rating system leaves open" do
+        game = FactoryBot.create(:trueskill_game)
+
+        put :update, params: {id: game, game: {max_number_of_teams: 4, max_number_of_players_per_team: 3}}
+
+        expect([game.reload.max_number_of_teams, game.max_number_of_players_per_team]).to eq([4, 3])
+      end
+    end
   end
 
   describe "show" do

@@ -13,7 +13,7 @@
             <%= link_to game_path(game) do %>
               <h3 class='game-title'><%= game.name %></h3>
               <ul class='game-params'>
-                <li class='rating-type'><%= game.rating_type %> – <%= game.allow_ties ? 'Ties allowed' : 'No ties' %></li>
+                <li class='rating-type'><%= game.rating_system.name %> – <%= game.allow_ties ? 'Ties allowed' : 'No ties' %></li>
                 <li class='num-players'><%= game.players.length %> players</li>
                 <li class='games-played'><%= game.results.length %> games played</li>
               </ul>
@@ -55,7 +55,7 @@
               <li>
                 <%= link_to player_path(player) do %>
                   <%= image_tag(gravatar_url(player, size: 24)) %>
-                  <%= player.name %> - <%= player.ratings.last.value %>
+                  <%= player.name %><% if (rating = player.ratings.last) %> - <%= rating.value %><% end %>
                 <% end %>
               </li>
             <% end %>

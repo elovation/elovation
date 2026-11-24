@@ -45,5 +45,5 @@
 </div>
 <div>
   <h2>Progress</h2>
-  <%= line_chart @chart_data, min: nil, max: nil, height: "800px", xtitle: 'Matches', ytitle: @game.rating_type.capitalize %>
+  <%= line_chart @chart_data, min: nil, max: nil, height: "800px", xtitle: 'Matches', ytitle: @game.rating_system.name %>
 </div>

@@ -11,7 +11,7 @@
     <div class="control-group">
       <%= f.label :rating_type, class: "control-label" %>
       <div>
-        <%= f.select :rating_type, Game::RATER_MAPPINGS.map{|k, v| [v.description, k]}, {}, class: "input-xlarge", data: { action: 'change->game#handleRatingChange', 'game-target': 'rating' } %>
+        <%= f.select :rating_type, RatingSystems.all.map { |system| [system.description, system.key, { data: { fixed_teams: system.supported_format.fixed_teams, fixed_players_per_team: system.supported_format.fixed_players_per_team } }] }, {}, class: "input-xlarge", data: { action: 'change->game#handleRatingChange', 'game-target': 'rating' } %>
       </div>
     </div>
     <div class="control-group" data-game-target="maxPlayersGroup">
@@ -24,7 +24,7 @@
     <div class="control-group" data-game-target="maxTeamsGroup">
       <%= f.label :max_number_of_teams, 'Maximum number of teams', class: "control-label" %>
       <div class="controls">
-        <%= f.number_field :max_number_of_teams, class: "input-mini" %>
+        <%= f.number_field :max_number_of_teams, class: "input-mini", data: { 'game-target': 'maxTeams' } %>
         <span class="help-inline">Set to blank for no restriction</span>
       </div>
     </div>

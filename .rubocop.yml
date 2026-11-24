@@ -11,3 +11,6 @@ AllCops:
     - 'test/**/*'
     - 'spec/**/*'
   TargetRubyVersion: 4.0
+# Rating systems are modules that `extend self` so they can keep private helpers.
+Style/ModuleFunction:
+  EnforcedStyle: extend_self

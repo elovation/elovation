@@ -1,7 +1,7 @@
 class Player < ApplicationRecord
   has_many :ratings, dependent: :destroy do
     def find_or_create(game)
-      where(game_id: game.id).first || create({game: game, pro: false}.merge(game.rater.default_attributes))
+      where(game_id: game.id).first || create!(game: game, state: game.rating_system.initial_state)
     end
   end
 
@@ -37,11 +37,6 @@ class Player < ApplicationRecord
 
   def recent_results
     results.order("results.created_at DESC").limit(5)
-  end
-
-  def rewind_rating!(game)
-    rating = ratings.where(game_id: game.id).first
-    rating.rewind!
   end
 
   def total_ties(game)

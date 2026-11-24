@@ -8,9 +8,10 @@
     </div>
     <div class="control-group">
       <span class="control-label">Rating type</span>
-      <p><%= game.rater.description %></p>
+      <p><%= game.rating_system.description %></p>
     </div>
-    <% if game.rating_type != 'elo' %>
+    <% format = game.rating_system.supported_format %>
+    <% unless format.fixed_players_per_team %>
       <div class="control-group" data-game-target="maxPlayersGroup">
         <%= f.label :max_number_of_players_per_team, 'Maximum number of players per team', class: "control-label" %>
         <div class="controls">
@@ -18,6 +19,8 @@
           <span class="help-inline">Set to blank for no restriction</span>
         </div>
       </div>
+    <% end %>
+    <% unless format.fixed_teams %>
       <div class="control-group" data-game-target="maxTeamsGroup">
         <%= f.label :max_number_of_teams, 'Maximum number of teams', class: "control-label" %>
         <div class="controls">

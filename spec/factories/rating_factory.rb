@@ -2,9 +2,7 @@ FactoryBot.define do
   factory :rating do
     game
     player
-    pro { false }
-    value { game.rater.default_attributes[:value] }
-    trueskill_mean { game.rater.default_attributes[:trueskill_mean] }
-    trueskill_deviation { game.rater.default_attributes[:trueskill_deviation] }
+    # Assigning state also sets value (the score); pass value: to override it.
+    state { game.rating_system.initial_state }
   end
 end

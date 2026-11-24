@@ -4,16 +4,11 @@ class Game < ApplicationRecord
   has_many :ratings, dependent: :destroy
   has_many :results, dependent: :destroy
 
-  RATER_MAPPINGS = {
-    "elo" => Rater::EloRater.new,
-    "trueskill" => Rater::TrueSkillRater.new
-  }
-
   validates :name, presence: true
-  validates :rating_type, inclusion: { in: RATER_MAPPINGS.keys, message: "must be a valid rating type" }
-  validate do |game|
-    if game.rater
-      game.rater.validate_game game
+  validates :rating_type, inclusion: { in: ->(_game) { RatingSystems.keys }, message: "must be a valid rating type" }
+  validate do
+    if rating_system && !rating_system.supported_format.supports?(self)
+      errors.add(:rating_type, "#{rating_system.name} can only be used with #{rating_system.supported_format.summary}")
     end
   end
 
@@ -65,16 +60,12 @@ class Game < ApplicationRecord
     ratings.order("value DESC").limit(5)
   end
 
-  def rater
-    RATER_MAPPINGS[rating_type]
+  def rating_system
+    RatingSystems.fetch(rating_type)
   end
 
-  def recalculate_ratings!
-    RatingHistoryEvent.joins(:rating).where(ratings: {game_id: self.id}).destroy_all
-    Rating.where(game_id: self.id).destroy_all
-
-    results.order("id ASC").all.each do |result|
-      rater.update_ratings self, result.teams.order("rank ASC")
-    end
+  # This game's ratings: record, retract, rebuild and preview them.
+  def leaderboard
+    Leaderboard.new(self)
   end
 end
