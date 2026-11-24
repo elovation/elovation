@@ -23,7 +23,7 @@ class ResultService
 
     if result.valid?
       Result.transaction do
-        game.rater.update_ratings game, result.teams
+        game.rate!(result.teams)
 
         result.save!
 

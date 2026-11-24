@@ -321,13 +321,13 @@ RSpec.describe Game, type: :model do
         team1 = FactoryBot.create(:team, rank: 1, players: [player1])
         team2 = FactoryBot.create(:team, rank: 2, players: [player2])
         result = FactoryBot.create(:result, game: game, teams: [team1, team2])
-        game.rater.update_ratings game, result.teams
+        game.rate!(result.teams)
       end
       4.times do
         team1 = FactoryBot.create(:team, rank: 1, players: [player3])
         team2 = FactoryBot.create(:team, rank: 2, players: [player2])
         result = FactoryBot.create(:result, game: game, teams: [team1, team2])
-        game.rater.update_ratings game, result.teams
+        game.rate!(result.teams)
       end
 
       previous_ratings = game.all_ratings.to_a
@@ -337,6 +337,28 @@ RSpec.describe Game, type: :model do
       attrs = ->(rating){[rating.player_id, rating.value, rating.trueskill_mean, rating.trueskill_deviation]}
       previous_ratings.map(&:id).should_not == game.all_ratings.map(&:id)
       previous_ratings.map(&attrs).should == game.all_ratings.map(&attrs)
+    end
+
+    # Regression: replaying used to count each player's games from all saved
+    # results, so Elo K-factors differed from the live calculation.
+    it "reproduces live Elo ratings for players past the 30 game threshold" do
+      game = FactoryBot.create(:elo_game, max_number_of_teams: 2)
+      play_series(game, RatingScenarios::ELO_SERIES, %w[a b c])
+      live = game.all_ratings.map { |rating| [rating.player_id, rating.value] }
+
+      game.recalculate_ratings!
+
+      expect(game.all_ratings.map { |rating| [rating.player_id, rating.value] }).to eq(live)
+    end
+
+    it "reproduces live TrueSkill ratings" do
+      game = FactoryBot.create(:trueskill_game, max_number_of_teams: nil, max_number_of_players_per_team: nil)
+      play_series(game, RatingScenarios::TRUESKILL_SERIES, %w[a b c d e])
+      live = game.all_ratings.map { |rating| [rating.player_id, rating.value] }
+
+      game.recalculate_ratings!
+
+      expect(game.all_ratings.map { |rating| [rating.player_id, rating.value] }).to eq(live)
     end
   end
 end

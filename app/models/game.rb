@@ -4,18 +4,9 @@ class Game < ApplicationRecord
   has_many :ratings, dependent: :destroy
   has_many :results, dependent: :destroy
 
-  RATER_MAPPINGS = {
-    "elo" => Rater::EloRater.new,
-    "trueskill" => Rater::TrueSkillRater.new
-  }
-
   validates :name, presence: true
-  validates :rating_type, inclusion: { in: RATER_MAPPINGS.keys, message: "must be a valid rating type" }
-  validate do |game|
-    if game.rater
-      game.rater.validate_game game
-    end
-  end
+  validates :rating_type, inclusion: { in: ->(_game) { RatingSystems.keys }, message: "must be a valid rating type" }
+  validate { rating_system&.validate_game(self) }
 
   validates :min_number_of_teams, numericality: { only_integer: true, greater_than_or_equal_to: 2 }
   validates :max_number_of_teams, numericality: { only_integer: true, allow_nil: true }
@@ -65,8 +56,24 @@ class Game < ApplicationRecord
     ratings.order("value DESC").limit(5)
   end
 
-  def rater
-    RATER_MAPPINGS[rating_type]
+  def rating_system
+    RatingSystems.fetch(rating_type)
+  end
+
+  # Rates one result. `teams` are the result's ranked Teams.
+  def rate!(teams)
+    ratings = {}
+    standings = teams.map do |team|
+      team_ratings = team.players.to_h do |player|
+        rating = ratings[player.id] = player.ratings.find_or_create(self)
+        [player.id, rating.state]
+      end
+      RatingSystems::Standing.new(rank: team.rank, ratings: team_ratings)
+    end
+
+    rating_system.rate(standings).each do |player_id, state|
+      ratings.fetch(player_id).record!(state)
+    end
   end
 
   def recalculate_ratings!
@@ -74,7 +81,7 @@ class Game < ApplicationRecord
     Rating.where(game_id: self.id).destroy_all
 
     results.order("id ASC").all.each do |result|
-      rater.update_ratings self, result.teams.order("rank ASC")
+      rate!(result.teams.order("rank ASC"))
     end
   end
 end

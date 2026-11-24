@@ -11,7 +11,7 @@
     <div class="control-group">
       <%= f.label :rating_type, class: "control-label" %>
       <div>
-        <%= f.select :rating_type, Game::RATER_MAPPINGS.map{|k, v| [v.description, k]}, {}, class: "input-xlarge", data: { action: 'change->game#handleRatingChange', 'game-target': 'rating' } %>
+        <%= f.select :rating_type, RatingSystems.all.map { |system| [system.description, system.key] }, {}, class: "input-xlarge", data: { action: 'change->game#handleRatingChange', 'game-target': 'rating' } %>
       </div>
     </div>
     <div class="control-group" data-game-target="maxPlayersGroup">

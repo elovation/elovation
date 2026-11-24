@@ -3,8 +3,8 @@ FactoryBot.define do
     game
     player
     pro { false }
-    value { game.rater.default_attributes[:value] }
-    trueskill_mean { game.rater.default_attributes[:trueskill_mean] }
-    trueskill_deviation { game.rater.default_attributes[:trueskill_deviation] }
+    value { game.rating_system.score(game.rating_system.initial_state) }
+    trueskill_mean { game.rating_system.initial_state["mean"] }
+    trueskill_deviation { game.rating_system.initial_state["deviation"] }
   end
 end

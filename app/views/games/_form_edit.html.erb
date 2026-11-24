@@ -8,7 +8,7 @@
     </div>
     <div class="control-group">
       <span class="control-label">Rating type</span>
-      <p><%= game.rater.description %></p>
+      <p><%= game.rating_system.description %></p>
     </div>
     <% if game.rating_type != 'elo' %>
       <div class="control-group" data-game-target="maxPlayersGroup">

@@ -156,10 +156,10 @@ describe ResultService do
         rating2 = player2.ratings.where(game_id: game.id).first
 
         rating1.should_not be_nil
-        rating1.value.should > game.rater.default_attributes[:value]
+        rating1.value.should > game.rating_system.score(game.rating_system.initial_state)
 
         rating2.should_not be_nil
-        rating2.value.should < game.rater.default_attributes[:value]
+        rating2.value.should < game.rating_system.score(game.rating_system.initial_state)
       end
     end
   end
