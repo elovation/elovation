@@ -54,7 +54,7 @@
             <% @players.each do |player| %>
               <li>
                 <%= link_to player_path(player) do %>
-                  <%= image_tag(gravatar_url(player, size: 24)) %>
+                  <%= image_tag(avatar_url(player, size: 24)) %>
                   <%= player.name %><% if (rating = player.ratings.last) %> - <%= rating.value %><% end %>
                 <% end %>
               </li>

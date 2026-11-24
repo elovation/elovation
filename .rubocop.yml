@@ -1,16 +1,23 @@
-inherit_from: .rubocop_todo.yml
 
 AllCops:
   SuggestExtensions: false
-  NewCops: disable
+  NewCops: enable
   Exclude:
     - 'bin/**/*'
     - 'vendor/**/*'
     - 'tmp/**/*'
     - 'db/**/*'
-    - 'test/**/*'
     - 'spec/**/*'
   TargetRubyVersion: 4.0
 # Rating systems are modules that `extend self` so they can keep private helpers.
 Style/ModuleFunction:
   EnforcedStyle: extend_self
+# Domain terms are documented in CONTEXT.md, not in a comment on every class.
+Style/Documentation:
+  Enabled: false
+# RuboCop's defaults flag ordinary Rails methods; these limits still catch
+# methods that are doing too much.
+Metrics/AbcSize:
+  Max: 25
+Metrics/MethodLength:
+  Max: 15

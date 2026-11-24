@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class PlayersController < ApplicationController
-  before_action :set_player, only: [:edit, :destroy, :show, :update]
+  before_action :set_player, only: %i[edit destroy show update]
 
   def index
     @players = Player.order(id: :desc)
@@ -28,14 +30,10 @@ class PlayersController < ApplicationController
     # results without recalculating ratings, so only allow it with no results.
     @player.destroy if @player.results.empty?
 
-    respond_to do |f|
-      f.turbo_stream { render turbo_stream: turbo_stream.remove(@player) }
-      f.html { redirect_to players_path }
-    end
+    redirect_to players_path, status: :see_other
   end
 
-  def edit
-  end
+  def edit; end
 
   def new
     @player = Player.new

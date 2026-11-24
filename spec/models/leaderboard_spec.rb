@@ -132,4 +132,20 @@ RSpec.describe Leaderboard do
       expect(preview.sort).to eq(snapshot(game).sort)
     end
   end
+
+  describe "history_by_day" do
+    it "gives each player's score at the end of every day played, carrying it forward, best player first" do
+      monday = Time.zone.parse("2026-11-16 09:00")
+      record(game, [alice], [bob], at: monday)
+      record(game, [bob], [alice], at: monday + 2.hours)
+      record(game, [carol], [bob], at: monday + 1.day)
+
+      history = game.leaderboard.history_by_day.to_h { |player, scores| [player, scores] }
+
+      expect(history.keys).to eq(game.ratings.order(value: :desc).map(&:player))
+      expect(history[alice]).to eq([["2026-11-16", alice.ratings.first.value], ["2026-11-17", alice.ratings.first.value]])
+      expect(history[carol]).to eq([["2026-11-16", nil], ["2026-11-17", carol.ratings.first.value]])
+      expect(history[bob].map(&:last)).to eq([bob.ratings.first.history_events.second.value, bob.ratings.first.value])
+    end
+  end
 end

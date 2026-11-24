@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -6,8 +8,8 @@ ruby '4.0.10'
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 8.1.4'
 
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem 'sprockets-rails'
+# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
+gem 'propshaft'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
@@ -79,17 +81,11 @@ group :development do
 end
 
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   # Restores assigns/assert_template in controller specs
   gem 'rails-controller-testing'
 
-  gem 'capybara'
-  gem 'selenium-webdriver'
-
-  # https://github.com/simplecov-ruby/simplecov
-  gem 'simplecov'
-  # https://github.com/codeclimate-community/simplecov_json_formatter
-  gem 'simplecov_json_formatter'
+  # Coverage report in coverage/index.html
+  gem 'simplecov', require: false
 end
 
 gem 'sentry-ruby', '>= 5.11'

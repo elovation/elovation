@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def errors_for(model, key)
     tag.div do
-      model.errors.messages_for(key).join(", ")
+      model.errors.messages_for(key).join(', ')
     end
   end
 
@@ -9,9 +11,9 @@ module ApplicationHelper
     "#{time_ago_in_words(time)} ago"
   end
 
-  def gravatar_url(player, options = {})
-    options.assert_valid_keys :size
-    size = options[:size] || 32
+  # A Robohash avatar. Robohash shows the player's Gravatar when their email
+  # has one, and otherwise a robot generated from their email (or name).
+  def avatar_url(player, size: 32)
     if player.email.blank?
       digest = Digest::MD5.hexdigest(player.name)
       "https://robohash.org/#{digest}?size=#{size}x#{size}"
@@ -22,6 +24,6 @@ module ApplicationHelper
   end
 
   def brand_title
-    ENV.fetch("ELOVATION_TITLE", "Elovation")
+    ENV.fetch('ELOVATION_TITLE', 'Elovation')
   end
 end

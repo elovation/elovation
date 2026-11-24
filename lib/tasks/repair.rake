@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :repair do
   desc 'Rebuild every game\'s ratings from its results'
   task ratings: :environment do

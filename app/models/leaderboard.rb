@@ -8,6 +8,7 @@
 #   leaderboard.retract(result)   # remove the latest result and undo its ratings
 #   leaderboard.rebuild           # recompute every rating from the results
 #   leaderboard.preview(system)   # what ratings would be under any rating system (no writes)
+#   leaderboard.history_by_day    # each player's score at the end of every day played
 #
 # Recording a result is one step of a rebuild, so a rebuild always reproduces
 # the ratings that were recorded live.
@@ -36,8 +37,9 @@ class Leaderboard
   end
 
   # Removes a result and restores its players' previous ratings. Only a result
-  # that is the latest for every one of its players can be retracted.
-  def retract(result)
+  # that is the latest for every one of its players can be retracted. Returns
+  # whether the result was retracted.
+  def retract(result) # rubocop:disable Naming/PredicateMethod
     return false unless result.most_recent?
 
     Rating.transaction do
@@ -59,7 +61,10 @@ class Leaderboard
   # without saving anything. Raises ArgumentError if `system` can't rate this
   # game's format.
   def preview(system = game.rating_system)
-    raise ArgumentError, "#{system.name} can only be used with #{system.supported_format.summary}" unless system.supported_format.supports?(game)
+    unless system.supported_format.supports?(game)
+      raise ArgumentError,
+            "#{system.name} can only be used with #{system.supported_format.summary}"
+    end
 
     replay = RatingSystems::Replay.new(system)
     game.results.reorder(:id).includes(teams: :players).each { |result| replay.play(placings(result)) }
@@ -67,6 +72,20 @@ class Leaderboard
     replay.states
           .map { |player_id, state| Entry.new(player_id: player_id, score: system.score(state), state: state) }
           .sort_by { |entry| -entry.score }
+  end
+
+  # Each rated player's score at the end of every day the game was played,
+  # best player first, as [player, [[day, score], ...]]. A player's score is
+  # nil on days before their first result.
+  def history_by_day
+    ratings = game.ratings.includes(:player, :history_events).order(value: :desc, id: :asc)
+    scores = ratings.to_h { |rating| [rating.player, end_of_day_scores(rating)] }
+    days = scores.values.flat_map(&:keys).uniq.sort
+
+    scores.map do |player, by_day|
+      score = nil
+      [player, days.map { |day| [day, score = by_day.fetch(day, score)] }]
+    end
   end
 
   private
@@ -77,6 +96,12 @@ class Leaderboard
     result.teams.sort_by(&:id).map do |team|
       RatingSystems::Placing.new(rank: team.rank, participants: team.players.map(&:id))
     end
+  end
+
+  def end_of_day_scores(rating)
+    rating.history_events
+          .sort_by { |event| [event.created_at, event.id] }
+          .to_h { |event| [event.created_at.to_date.to_s, event.value] }
   end
 
   def rewind(rating)

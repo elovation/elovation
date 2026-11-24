@@ -15,11 +15,11 @@ describe ResultService do
         }
       )
 
-      response.should be_success
+      expect(response).to be_success
       result = response.result
-      result.winners.should == [player1]
-      result.losers.should == [player2]
-      result.game.should == game
+      expect(result.winners).to eq([player1])
+      expect(result.losers).to eq([player2])
+      expect(result.game).to eq(game)
     end
 
     it "returns success as false if there are validation errors" do
@@ -34,7 +34,7 @@ describe ResultService do
         }
       )
 
-      response.should_not be_success
+      expect(response).not_to be_success
     end
 
     it "handles nil winner or loser" do
@@ -49,7 +49,7 @@ describe ResultService do
         }
       )
 
-      response.should_not be_success
+      expect(response).not_to be_success
 
       response = ResultService.create(
         game,
@@ -59,7 +59,7 @@ describe ResultService do
         }
       )
 
-      response.should_not be_success
+      expect(response).not_to be_success
     end
 
     it "is successful on trailing empty teams" do
@@ -76,11 +76,11 @@ describe ResultService do
         }
       )
 
-      response.should be_success
+      expect(response).to be_success
       result = response.result
-      result.winners.should == [player1]
-      result.losers.should == [player2]
-      result.game.should == game
+      expect(result.winners).to eq([player1])
+      expect(result.losers).to eq([player2])
+      expect(result.game).to eq(game)
     end
 
     it "fails on skipped teams" do
@@ -97,7 +97,7 @@ describe ResultService do
         }
       )
 
-      response.should_not be_success
+      expect(response).not_to be_success
     end
 
     it "doesn't need the players in an array" do
@@ -113,11 +113,11 @@ describe ResultService do
         }
       )
 
-      response.should be_success
+      expect(response).to be_success
       result = response.result
-      result.winners.should == [player1]
-      result.losers.should == [player2]
-      result.game.should == game
+      expect(result.winners).to eq([player1])
+      expect(result.losers).to eq([player2])
+      expect(result.game).to eq(game)
     end
 
     it "works with ties" do
@@ -133,9 +133,9 @@ describe ResultService do
         }
       )
 
-      response.should be_success
+      expect(response).to be_success
       result = response.result
-      result.winners.should == [player1, player2]
+      expect(result.winners).to eq([player1, player2])
     end
 
     context "ratings" do
@@ -155,11 +155,11 @@ describe ResultService do
         rating1 = player1.ratings.where(game_id: game.id).first
         rating2 = player2.ratings.where(game_id: game.id).first
 
-        rating1.should_not be_nil
-        rating1.value.should > game.rating_system.score(game.rating_system.initial_state)
+        expect(rating1).not_to be_nil
+        expect(rating1.value).to be > game.rating_system.score(game.rating_system.initial_state)
 
-        rating2.should_not be_nil
-        rating2.value.should < game.rating_system.score(game.rating_system.initial_state)
+        expect(rating2).not_to be_nil
+        expect(rating2.value).to be < game.rating_system.score(game.rating_system.initial_state)
       end
     end
   end
@@ -180,8 +180,8 @@ describe ResultService do
 
       response = ResultService.destroy(result)
 
-      response.should be_success
-      Result.find_by_id(result.id).should be_nil
+      expect(response).to be_success
+      expect(Result.find_by_id(result.id)).to be_nil
     end
 
     it "returns an unsuccessful response and does not destroy the result if it is not the most recent for both players" do
@@ -195,8 +195,8 @@ describe ResultService do
 
       response = ResultService.destroy(old_result)
 
-      response.should_not be_success
-      Result.find_by_id(old_result.id).should_not be_nil
+      expect(response).not_to be_success
+      expect(Result.find_by_id(old_result.id)).not_to be_nil
     end
   end
 end

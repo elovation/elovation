@@ -9,11 +9,11 @@ RSpec.describe Rating, type: :model do
       teams = [ FactoryBot.create(:team, rank: 1, players: [player]),
                 FactoryBot.create(:team, rank: 2) ]
       result = FactoryBot.create(:result, teams: teams, game: game, created_at: 5.weeks.ago)
-      rating.active?.should == false
+      expect(rating.active?).to eq(false)
       teams = [ FactoryBot.create(:team, rank: 1, players: [player]),
                 FactoryBot.create(:team, rank: 2) ]
       result = FactoryBot.create(:result, teams: teams, game: game, created_at: 4.weeks.ago + 1.hour)
-      rating.active?.should == true
+      expect(rating.active?).to eq(true)
     end
   end
 
@@ -22,13 +22,13 @@ RSpec.describe Rating, type: :model do
       player = FactoryBot.build(:player, name: "John")
       rating = FactoryBot.build(:rating, value: 1000, player: player)
 
-      rating.as_json.should == {
+      expect(rating.as_json).to eq({
         player: {
           name: player.name,
           email: player.email
         },
         value: 1000
-      }
+      })
     end
   end
 
@@ -42,19 +42,19 @@ RSpec.describe Rating, type: :model do
                                                           FactoryBot.create(:team, rank: 2)],
                                               game: game,
                                               created_at: 5.weeks.ago)
-      rating.most_recent_result.should == result_5_weeks_ago
+      expect(rating.most_recent_result).to eq(result_5_weeks_ago)
       result_4_weeks_ago = FactoryBot.create(:result,
                                               teams: [ FactoryBot.create(:team, rank: 2, players: [player]),
                                                           FactoryBot.create(:team, rank: 1)],
                                               game: game,
                                               created_at: 4.weeks.ago)
-      rating.most_recent_result.should == result_4_weeks_ago
+      expect(rating.most_recent_result).to eq(result_4_weeks_ago)
       result_6_weeks_ago = FactoryBot.create(:result,
                                               teams: [ FactoryBot.create(:team, rank: 1, players: [player]),
                                                           FactoryBot.create(:team, rank: 2)],
                                               game: game,
                                               created_at: 6.weeks.ago)
-      rating.most_recent_result.should == result_4_weeks_ago
+      expect(rating.most_recent_result).to eq(result_4_weeks_ago)
     end
   end
 
@@ -65,7 +65,7 @@ RSpec.describe Rating, type: :model do
 
       rating.destroy
 
-      RatingHistoryEvent.find_by_id(history_event.id).should be_nil
+      expect(RatingHistoryEvent.find_by_id(history_event.id)).to be_nil
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ResultService
   Response = Data.define(:success, :result) do
     def initialize(success:, result: nil) = super
@@ -6,34 +8,33 @@ class ResultService
 
   def self.create(game, params)
     result = game.results.build
-
-    next_rank = Team::FIRST_PLACE_RANK
-    teams = (params[:teams] || {}).values.each.with_object([]) do |team, acc|
-      players = Array.wrap(team[:players]).delete_if(&:blank?)
-      acc << { rank: next_rank, players: players }
-
-      next_rank = next_rank + 1 if team[:relation] != "ties"
+    placings(params[:teams]).each do |rank, player_ids|
+      result.teams.build(rank: rank, player_ids: player_ids)
     end
+    return Response.new(success: false, result: result) unless result.valid?
 
-    teams = teams.reverse.drop_while{ |team| team[:players].empty? }.reverse
-
-    teams.each do |team|
-      result.teams.build rank: team[:rank], player_ids: team[:players]
+    Result.transaction do
+      result.save!
+      game.leaderboard.record(result)
     end
-
-    if result.valid?
-      Result.transaction do
-        result.save!
-        game.leaderboard.record(result)
-
-        Response.new(success: true, result: result)
-      end
-    else
-      Response.new(success: false, result: result)
-    end
+    Response.new(success: true, result: result)
   end
 
   def self.destroy(result)
     Response.new(success: result.game.leaderboard.retract(result))
   end
+
+  # The form's teams, in order, as [rank, player_ids] pairs. Each team ranks
+  # below the one before it unless that one "ties" with it. Trailing teams
+  # with no players are dropped.
+  def self.placings(teams)
+    rank = Team::FIRST_PLACE_RANK
+    placings = (teams || {}).values.map do |team|
+      placing = [rank, Array.wrap(team[:players]).compact_blank]
+      rank += 1 if team[:relation] != 'ties'
+      placing
+    end
+    placings.reverse.drop_while { |_, player_ids| player_ids.empty? }.reverse
+  end
+  private_class_method :placings
 end

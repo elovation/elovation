@@ -2,7 +2,7 @@
 
 Guidance for AI coding agents (and humans) working on Elovation: a small Rails app that tracks game results and rates players with Elo (1v1) or TrueSkill (teams).
 
-Stack: Ruby 4.0, Rails 8.1, PostgreSQL 17, Sprockets with importmap, Turbo/Stimulus, and RSpec.
+Stack: Ruby 4.0, Rails 8.1, PostgreSQL 17, Propshaft with importmap, Turbo/Stimulus, and RSpec.
 
 ## Fast local loop (preferred)
 
@@ -43,11 +43,11 @@ Read `CONTEXT.md` first. It defines the domain terms used in code and specs: rat
 - `app/services/result_service.rb`: turns the result form into a Result, then records it on the game's leaderboard. Only a result that is the latest for all its players can be deleted.
 - `vendor/trueskill/`: the vendored, unmaintained `saulabs/trueskill` library, loaded only by `RatingSystems::TrueSkill`. See `VENDORED.md` there before changing it.
 - `config/ci.rb`: the steps `bin/ci` runs, locally and in GitHub Actions.
-- `spec/`: RSpec suite (models, controllers, helpers, services) using FactoryBot. The `test/` directory is unused Rails scaffolding.
+- `spec/`: RSpec suite (models, controllers, helpers, services, requests) using FactoryBot.
 
 ## Conventions
 
-- Write new specs with `expect` syntax. Legacy specs use `should`; both are enabled in `spec/spec_helper.rb`.
+- Write specs with `expect` syntax. The `should` syntax is disabled in `spec/spec_helper.rb`.
 - Use `travel_to` (ActiveSupport) for time-dependent tests. Don't add Timecop.
 - Each example runs in a transaction (`use_transactional_fixtures`), so don't add DatabaseCleaner.
 - Ratings are derived from results. Write them only through `Leaderboard`, and don't add cascading deletes that remove results without retracting them.
