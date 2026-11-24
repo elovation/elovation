@@ -13,6 +13,18 @@ RSpec.describe "Player listings", type: :request do
     expect(response.body).to include("Newcomer")
   end
 
+  # A player's latest rating could be from any game, mixing Elo and TrueSkill
+  # numbers, so the listings don't show one.
+  it "doesn't show a rating from an arbitrary game next to each player" do
+    FactoryBot.create(:rating, player: regular, value: 4321)
+
+    get root_path
+    expect(response.body).not_to include("4321")
+
+    get players_path
+    expect(response.body).not_to include("4321")
+  end
+
   it "shows the players page when a player hasn't played yet" do
     get players_path
 

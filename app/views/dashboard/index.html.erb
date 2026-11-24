@@ -55,7 +55,7 @@
               <li>
                 <%= link_to player_path(player) do %>
                   <%= image_tag(avatar_url(player, size: 24)) %>
-                  <%= player.name %><% if (rating = player.ratings.last) %> - <%= rating.value %><% end %>
+                  <%= player.name %>
                 <% end %>
               </li>
             <% end %>
