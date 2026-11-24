@@ -41,7 +41,8 @@ gem 'bootsnap', require: false
 
 # https://github.com/saulabs/trueskill
 # Vendored: upstream is unmaintained and incompatible with RubyGems 4 (see vendor/trueskill/VENDORED.md)
-gem 'trueskill', path: 'vendor/trueskill', require: 'saulabs/trueskill'
+# Loaded only by RatingSystems::TrueSkill (app/models/rating_systems/true_skill.rb)
+gem 'trueskill', path: 'vendor/trueskill', require: false
 
 # https://chartkick.com/
 gem 'chartkick'

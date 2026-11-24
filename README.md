@@ -45,9 +45,30 @@ Suitable for:
 - Table Tennis
 - Foosball
 
+#### Trying a different rating system
+Ratings are always derived from a game's results, so you can see what any game's leaderboard would look like under another rating system without changing anything:
+
+```bash
+bin/rails "ratings:preview[GAME_ID,trueskill]"
+```
+
+To recompute every game's ratings from its results, run `bin/rails repair:ratings`.
+
+#### Adding a rating system
+Each rating system is a small, self-contained module in `app/models/rating_systems/`. It turns one result's standings into new rating states and never touches the database. The interface is documented in `app/models/rating_systems.rb`. To add one:
+
+1. Create `app/models/rating_systems/<name>.rb` with `key`, `name`, `description`, `supported_format`, `initial_state`, `score(state)` and `rate(standings)`.
+2. Register it in `RatingSystems.all`.
+3. Add a spec that includes `it_behaves_like "a rating system"` (see `spec/support/rating_system_contract.rb`), plus tests for its own maths.
+4. Try it against real games with `ratings:preview`.
+
+No migration is needed: each rating system's state is stored as JSON that only it reads.
+
 Caution
 -------
 If you intend to use this software commercially, you must remove the Trueskill implementation as it is patented by Microsoft.
+
+TrueSkill is used only by `app/models/rating_systems/true_skill.rb`, which loads the vendored library in `vendor/trueskill`. Removing it means deleting that file, its spec, its entry in `RatingSystems.all`, the `trueskill` line in the `Gemfile` and `vendor/trueskill`. Any existing TrueSkill games would first need a different rating system that supports their format.
 
 Contributing & Development
 --------------------------

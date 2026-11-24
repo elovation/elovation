@@ -35,10 +35,13 @@ If tests fail with "has already been taken" or unexpected record counts, the tes
 
 ## Layout
 
-- `app/models/rater.rb`: the rating algorithms (`EloRater`, `TrueSkillRater`). This is the core domain logic.
-- `app/services/result_service.rb`: creating and deleting results. Only a game's most recent result can be deleted, and deleting it rewinds ratings.
-- `app/models/game.rb`: games, their rater, and `recalculate_ratings!`.
-- `vendor/trueskill/`: the vendored, unmaintained `saulabs/trueskill` library. See `VENDORED.md` there before changing it.
+Read `CONTEXT.md` first. It defines the domain terms used in code and specs: rating system, rating state, standing, leaderboard, replay.
+
+- `app/models/rating_systems.rb`: the rating-system interface (and `Standing`, `Placing`, `Format`).
+- `app/models/rating_systems/`: one pure module per rating system (`Elo`, `TrueSkill`), plus `Replay`. No database access. Tested in `spec/models/rating_systems/` against the shared contract in `spec/support/rating_system_contract.rb`.
+- `app/models/leaderboard.rb`: the only code that writes ratings (`record`, `retract`, `rebuild`, `preview`). Recording a result is one step of a rebuild.
+- `app/services/result_service.rb`: turns the result form into a Result, then records it on the game's leaderboard. Only a result that is the latest for all its players can be deleted.
+- `vendor/trueskill/`: the vendored, unmaintained `saulabs/trueskill` library, loaded only by `RatingSystems::TrueSkill`. See `VENDORED.md` there before changing it.
 - `config/ci.rb`: the steps `bin/ci` runs, locally and in GitHub Actions.
 - `spec/`: RSpec suite (models, controllers, helpers, services) using FactoryBot. The `test/` directory is unused Rails scaffolding.
 
@@ -47,7 +50,9 @@ If tests fail with "has already been taken" or unexpected record counts, the tes
 - Write new specs with `expect` syntax. Legacy specs use `should`; both are enabled in `spec/spec_helper.rb`.
 - Use `travel_to` (ActiveSupport) for time-dependent tests. Don't add Timecop.
 - Each example runs in a transaction (`use_transactional_fixtures`), so don't add DatabaseCleaner.
-- Deleting results must keep ratings consistent. Don't add cascading deletes that remove results without rewinding or recalculating ratings.
+- Ratings are derived from results. Write them only through `Leaderboard`, and don't add cascading deletes that remove results without retracting them.
+- Rating changes must not move existing numbers unintentionally. `spec/models/rating_golden_spec.rb` pins live ratings recorded from the original implementation; if it fails, treat it as a behaviour change and call it out.
+- To add a rating system, follow "Adding a rating system" in the README.
 - Only the Rails frameworks the app uses are loaded (see `config/application.rb`). Active Storage, Action Mailbox and Action Text are deliberately excluded.
 - Run `bin/ci` before pushing. CI fails on any Rubocop offense.
 

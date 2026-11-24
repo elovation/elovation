@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# The vendored TrueSkill library is used only here, so removing this rating
+# system removes it entirely (see vendor/trueskill/VENDORED.md).
+require 'saulabs/trueskill'
+
 module RatingSystems
   # TrueSkill for any number of teams of any size (via vendor/trueskill).
   #
