@@ -5,10 +5,10 @@ RSpec.describe Player, type: :model do
     it "returns the json representation of the player" do
       player = FactoryBot.build(:player, name: "John Doe", email: "foo@example.com")
 
-      player.as_json.should == {
+      expect(player.as_json).to eq({
         name: "John Doe",
         email: "foo@example.com"
-      }
+      })
     end
   end
   describe "validations" do
@@ -16,33 +16,33 @@ RSpec.describe Player, type: :model do
       it "is required" do
         player = FactoryBot.build(:player, name: nil)
 
-        player.should_not be_valid
-        player.errors[:name].should == ["can't be blank"]
+        expect(player).not_to be_valid
+        expect(player.errors[:name]).to eq(["can't be blank"])
       end
 
       it "must be unique" do
         FactoryBot.create(:player, name: "Drew")
         player = FactoryBot.build(:player, name: "Drew")
 
-        player.should_not be_valid
-        player.errors[:name].should == ["has already been taken"]
+        expect(player).not_to be_valid
+        expect(player.errors[:name]).to eq(["has already been taken"])
       end
     end
 
     context "email" do
       it "can be blank" do
         player = FactoryBot.build(:player, email: "")
-        player.should be_valid
+        expect(player).to be_valid
       end
 
       it "must be a valid email format" do
         player = Player.new
         player.email = "invalid-email-address"
-        player.should_not be_valid
-        player.errors[:email].should == ["expected an @ character"]
+        expect(player).not_to be_valid
+        expect(player.errors[:email]).to eq(["expected an @ character"])
         player.email = "valid@example.com"
         player.valid?
-        player.errors[:email].should == []
+        expect(player.errors[:email]).to eq([])
       end
     end
   end
@@ -51,7 +51,7 @@ RSpec.describe Player, type: :model do
     it "has a name" do
       player = FactoryBot.create(:player, name: "Drew")
 
-      player.name.should == "Drew"
+      expect(player.name).to eq("Drew")
     end
   end
 
@@ -62,7 +62,7 @@ RSpec.describe Player, type: :model do
 
       10.times { FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)]) }
 
-      player.recent_results.size.should == 5
+      expect(player.recent_results.size).to eq(5)
     end
 
     it "returns the 5 most recently created results" do
@@ -78,7 +78,7 @@ RSpec.describe Player, type: :model do
         newer_results = 5.times.map { FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)]) }
       end
 
-      player.recent_results.sort.should == newer_results.sort
+      expect(player.recent_results.sort).to eq(newer_results.sort)
     end
 
     it "orders results by created_at, descending" do
@@ -94,7 +94,7 @@ RSpec.describe Player, type: :model do
         new = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)])
       end
 
-      player.recent_results.should == [new, old]
+      expect(player.recent_results).to eq([new, old])
     end
   end
 
@@ -106,8 +106,8 @@ RSpec.describe Player, type: :model do
 
       player.destroy
 
-      Rating.find_by_id(rating.id).should be_nil
-      Result.find_by_id(result.id).should be_nil
+      expect(Rating.find_by_id(rating.id)).to be_nil
+      expect(Result.find_by_id(result.id)).to be_nil
     end
   end
 
@@ -120,7 +120,7 @@ RSpec.describe Player, type: :model do
 
         expect do
           found_rating = player.ratings.find_or_create(game)
-          found_rating.should == rating
+          expect(found_rating).to eq(rating)
         end.to_not change { player.ratings.count }
       end
 
@@ -129,7 +129,7 @@ RSpec.describe Player, type: :model do
         game = FactoryBot.create(:game)
 
         expect do
-          player.ratings.find_or_create(game).should_not be_nil
+          expect(player.ratings.find_or_create(game)).not_to be_nil
         end.to change { player.ratings.count }.by(1)
       end
     end
@@ -148,9 +148,9 @@ RSpec.describe Player, type: :model do
       win = FactoryBot.create(:result, game: game, teams: [player1WinTeam, FactoryBot.create(:team, players: [player2], rank: 2)])
       loss = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 2, players: [player1]), player2WinTeam])
 
-      player1.results.for_game(game).size.should == 2
-      player1.total_wins(game).should == 1
-      player1.wins(game, player2).should == 1
+      expect(player1.results.for_game(game).size).to eq(2)
+      expect(player1.total_wins(game)).to eq(1)
+      expect(player1.wins(game, player2)).to eq(1)
     end
   end
 
@@ -165,9 +165,9 @@ RSpec.describe Player, type: :model do
       game = FactoryBot.create(:game)
       tie = FactoryBot.create(:result, game: game, teams: [player1WinTeam, player2WinTeam])
 
-      player1.results.for_game(game).size.should == 1
-      player1.total_ties(game).should == 1
-      player1.ties(game, player2).should == 1
+      expect(player1.results.for_game(game).size).to eq(1)
+      expect(player1.total_ties(game)).to eq(1)
+      expect(player1.ties(game, player2)).to eq(1)
     end
   end
 
@@ -177,8 +177,8 @@ RSpec.describe Player, type: :model do
       game = FactoryBot.create(:game)
       win = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)])
       loss = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 2, players: [player]), FactoryBot.create(:team, rank: 1)])
-      player.results.for_game(game).size.should == 2
-      player.results.for_game(game).losses.should == [loss]
+      expect(player.results.for_game(game).size).to eq(2)
+      expect(player.results.for_game(game).losses).to eq([loss])
     end
   end
 
@@ -194,8 +194,8 @@ RSpec.describe Player, type: :model do
       opponent2_game_against_different_player = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1), FactoryBot.create(:team, rank: 2, players: [opponent2])])
       win_with_opponent1 = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player, opponent1]), FactoryBot.create(:team, rank: 2)])
 
-      player.results.for_game(game).against(opponent1).sort_by(&:id).should match_array [win_against_opponent1, loss_against_opponent1]
-      player.results.for_game(game).against(opponent2).sort_by(&:id).should match_array [win_against_opponent2]
+      expect(player.results.for_game(game).against(opponent1).sort_by(&:id)).to match_array [win_against_opponent1, loss_against_opponent1]
+      expect(player.results.for_game(game).against(opponent2).sort_by(&:id)).to match_array [win_against_opponent2]
     end
   end
 end

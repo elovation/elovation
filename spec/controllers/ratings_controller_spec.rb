@@ -8,8 +8,8 @@ describe RatingsController, :type => :controller do
 
       get :index, params: {game_id: game}
 
-      assigns(:game).should == game
-      response.should render_template(:index)
+      expect(assigns(:game)).to eq(game)
+      expect(response).to render_template (:index)
     end
   end
 end

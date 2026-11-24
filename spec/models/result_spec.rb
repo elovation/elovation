@@ -20,11 +20,11 @@ RSpec.describe Result, type: :model do
       loser = FactoryBot.build(:team, rank: 2)
       result = FactoryBot.build(:result, teams: [winner, loser], created_at: created_at)
 
-      result.as_json.should == {
+      expect(result.as_json).to eq({
         winner: winner.players.first.name,
         loser: loser.players.first.name,
         created_at: created_at.utc.to_s
-      }
+      })
     end
   end
 
@@ -35,8 +35,8 @@ RSpec.describe Result, type: :model do
       game2 = FactoryBot.create(:game)
       result_for_game1 = FactoryBot.create(:result, game: game1, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)])
       result_for_game2 = FactoryBot.create(:result, game: game2, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)])
-      player.results.for_game(game1).should == [result_for_game1]
-      player.results.for_game(game2).should == [result_for_game2]
+      expect(player.results.for_game(game1)).to eq([result_for_game1])
+      expect(player.results.for_game(game2)).to eq([result_for_game2])
     end
   end
 
@@ -48,7 +48,7 @@ RSpec.describe Result, type: :model do
 
       result = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player_1]), FactoryBot.create(:team, rank: 2, players: [player_2])])
 
-      result.should be_most_recent
+      expect(result).to be_most_recent
     end
 
     it "returns false if the result is not the most recent for both players" do
@@ -60,15 +60,15 @@ RSpec.describe Result, type: :model do
       old_result = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player_1]), FactoryBot.create(:team, rank: 2, players: [player_2])])
       FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player_1]), FactoryBot.create(:team, rank: 2, players: [player_3])])
 
-      old_result.should_not be_most_recent
+      expect(old_result).not_to be_most_recent
     end
   end
 
   describe "players" do
     it "has the winners and losers" do
       result = FactoryBot.create(:result)
-      result.players.should include(result.winners.first)
-      result.players.should include(result.losers.first)
+      expect(result.players).to include (result.winners.first)
+      expect(result.players).to include (result.losers.first)
     end
   end
 
@@ -90,7 +90,7 @@ RSpec.describe Result, type: :model do
       result.teams.build rank: 2, players: [player5, player6]
       result.teams.build rank: 3, players: [player7, player7]
 
-      result.winners.should == [player1, player2, player3, player4]
+      expect(result.winners).to eq([player1, player2, player3, player4])
     end
   end
 
@@ -112,7 +112,7 @@ RSpec.describe Result, type: :model do
       result.teams.build rank: 2, players: [player5, player6]
       result.teams.build rank: 3, players: [player7, player8]
 
-      result.losers.should == [player5, player6, player7, player8]
+      expect(result.losers).to eq([player5, player6, player7, player8])
     end
   end
 
@@ -125,8 +125,8 @@ RSpec.describe Result, type: :model do
         result.teams.build rank: 2, players: [player1]
         result.teams.build rank: 3, players: [player2]
 
-        result.should_not be_valid
-        result.errors[:teams].should include("must have a winner")
+        expect(result).not_to be_valid
+        expect(result.errors[:teams]).to include ("must have a winner")
       end
 
       it "doesn't allow the same player twice" do
@@ -136,15 +136,15 @@ RSpec.describe Result, type: :model do
         result.teams.build rank: 1, players: [player]
         result.teams.build rank: 2, players: [player]
 
-        result.should_not be_valid
-        result.errors[:teams].should include("must have unique players")
+        expect(result).not_to be_valid
+        expect(result.errors[:teams]).to include ("must have unique players")
       end
 
       it "does not complain about similarity when both winner and loser are nil" do
         result = Result.new game: FactoryBot.create(:game)
 
-        result.should_not be_valid
-        result.errors[:base].should_not == ["Winner and loser can't be the same player"]
+        expect(result).not_to be_valid
+        expect(result.errors[:base]).not_to eq(["Winner and loser can't be the same player"])
       end
 
       it "cannot have less teams than allowed by the game" do
@@ -159,8 +159,8 @@ RSpec.describe Result, type: :model do
         result.teams.build rank: 2, players: [player2]
         result.teams.build rank: 2, players: [player3]
 
-        result.should_not be_valid
-        result.errors[:teams].should == ["must have at least 4 teams"]
+        expect(result).not_to be_valid
+        expect(result.errors[:teams]).to eq(["must have at least 4 teams"])
       end
 
       it "cannot have more teams than allowed by the game" do
@@ -179,8 +179,8 @@ RSpec.describe Result, type: :model do
         result.teams.build rank: 3, players: [player4]
         result.teams.build rank: 2, players: [player5]
 
-        result.should_not be_valid
-        result.errors[:teams].should == ["must have at most 4 teams"]
+        expect(result).not_to be_valid
+        expect(result.errors[:teams]).to eq(["must have at most 4 teams"])
       end
 
       it "can have any number of teams if not specified by the game" do
@@ -201,7 +201,7 @@ RSpec.describe Result, type: :model do
         result.teams.build rank: 2, players: [player5]
         result.teams.build rank: 4, players: [player6]
 
-        result.should be_valid
+        expect(result).to be_valid
       end
 
       it "cannot have ties if not allowed by the game" do
@@ -214,8 +214,8 @@ RSpec.describe Result, type: :model do
         result.teams.build rank: 1, players: [player1]
         result.teams.build rank: 1, players: [player2]
 
-        result.should_not be_valid
-        result.errors[:teams].should == ["game does not allow ties"]
+        expect(result).not_to be_valid
+        expect(result.errors[:teams]).to eq(["game does not allow ties"])
       end
 
       describe "teams" do
@@ -230,8 +230,8 @@ RSpec.describe Result, type: :model do
           result.teams.build rank: 1, players: [player1]
           result.teams.build rank: 2, players: [player2, player3]
 
-          result.should_not be_valid
-          result.errors[:teams].should == ["must have at least 2 players per team"]
+          expect(result).not_to be_valid
+          expect(result.errors[:teams]).to eq(["must have at least 2 players per team"])
         end
 
         it "cannot have more players than allowed by the game" do
@@ -248,8 +248,8 @@ RSpec.describe Result, type: :model do
           result.teams.build rank: 1, players: [player1, player2]
           result.teams.build rank: 2, players: [player3, player4, player5, player6]
 
-          result.should_not be_valid
-          result.errors[:teams].should == ["must have at most 3 players per team"]
+          expect(result).not_to be_valid
+          expect(result.errors[:teams]).to eq(["must have at most 3 players per team"])
         end
 
         it "can have any number of players if not specified by the game" do
@@ -266,7 +266,7 @@ RSpec.describe Result, type: :model do
           result.teams.build rank: 1, players: [player1]
           result.teams.build rank: 2, players: [player2, player3, player4, player5, player6]
 
-          result.should be_valid
+          expect(result).to be_valid
         end
       end
     end

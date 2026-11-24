@@ -6,8 +6,8 @@ RSpec.describe Team, type: :model do
       it "requires a rank" do
         team = Team.new(rank: nil)
 
-        team.should_not be_valid
-        team.errors[:rank].should == ["can't be blank"]
+        expect(team).not_to be_valid
+        expect(team.errors[:rank]).to eq(["can't be blank"])
       end
     end
   end

@@ -47,7 +47,7 @@ Read `CONTEXT.md` first. It defines the domain terms used in code and specs: rat
 
 ## Conventions
 
-- Write new specs with `expect` syntax. Legacy specs use `should`; both are enabled in `spec/spec_helper.rb`.
+- Write specs with `expect` syntax. The `should` syntax is disabled in `spec/spec_helper.rb`.
 - Use `travel_to` (ActiveSupport) for time-dependent tests. Don't add Timecop.
 - Each example runs in a transaction (`use_transactional_fixtures`), so don't add DatabaseCleaner.
 - Ratings are derived from results. Write them only through `Leaderboard`, and don't add cascading deletes that remove results without retracting them.
