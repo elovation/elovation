@@ -10,12 +10,17 @@ RSpec.describe "Retracting a result", type: :request do
 
   # Regression: the link used rails-ujs's method: :delete, which Turbo ignores,
   # so clicking Delete sent a GET and returned 404.
-  it "offers a Delete link that Turbo sends as a DELETE" do
-    get game_path(game)
+  [
+    ["the game page", -> { game_path(game) }],
+    ["the player's page for the game", -> { player_game_path(winner, game) }]
+  ].each do |page, path|
+    it "offers a Delete link on #{page} that Turbo sends as a DELETE" do
+      get instance_exec(&path)
 
-    link = response.body[%r{<a [^>]*href="#{game_result_path(game, result)}"[^>]*>Delete</a>}]
+      link = response.body[%r{<a [^>]*href="#{game_result_path(game, result)}"[^>]*>Delete</a>}]
 
-    expect(link).to include('data-turbo-method="delete"')
+      expect(link).to include('data-turbo-method="delete"')
+    end
   end
 
   it "retracts the result and redirects with 303 so the browser follows up with a GET" do

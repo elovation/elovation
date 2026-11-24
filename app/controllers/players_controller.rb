@@ -28,10 +28,7 @@ class PlayersController < ApplicationController
     # results without recalculating ratings, so only allow it with no results.
     @player.destroy if @player.results.empty?
 
-    respond_to do |f|
-      f.turbo_stream { render turbo_stream: turbo_stream.remove(@player) }
-      f.html { redirect_to players_path }
-    end
+    redirect_to players_path, status: :see_other
   end
 
   def edit
