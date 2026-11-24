@@ -23,10 +23,7 @@ RSpec.describe Rating, type: :model do
       rating = FactoryBot.build(:rating, value: 1000, player: player)
 
       expect(rating.as_json).to eq({
-        player: {
-          name: player.name,
-          email: player.email
-        },
+        player: { name: player.name },
         value: 1000
       })
     end

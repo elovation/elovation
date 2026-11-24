@@ -2,13 +2,10 @@ require "rails_helper"
 
 RSpec.describe Player, type: :model do
   describe "as_json" do
-    it "returns the json representation of the player" do
+    it "returns the player's name but not their private email" do
       player = FactoryBot.build(:player, name: "John Doe", email: "foo@example.com")
 
-      expect(player.as_json).to eq({
-        name: "John Doe",
-        email: "foo@example.com"
-      })
+      expect(player.as_json).to eq({ name: "John Doe" })
     end
   end
   describe "validations" do

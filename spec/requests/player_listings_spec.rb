@@ -25,6 +25,14 @@ RSpec.describe "Player listings", type: :request do
     expect(response.body).not_to include("4321")
   end
 
+  it "doesn't show players' email addresses" do
+    regular.update!(email: "regular@example.com")
+
+    get players_path
+
+    expect(response.body).not_to include("regular@example.com")
+  end
+
   it "shows the players page when a player hasn't played yet" do
     get players_path
 

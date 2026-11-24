@@ -3,7 +3,6 @@
     <%= link_to player_path(player), data: { turbo: false } do %>
       <%= image_tag(avatar_url(player, size: 80)) %>
       <h3> <%= player.name %> </h3>
-      <p> <%= player.email %> </p>
     <% end %>
   </li>
 <% end %>
