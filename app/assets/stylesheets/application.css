@@ -481,3 +481,9 @@ select {
     padding: 0 !important; }
   #games-list .game-list-item a {
       min-height: initial; } }
+
+.form-errors, .field-errors {
+  color: #c00; }
+
+.form-errors {
+  margin-block-end: 1em; }

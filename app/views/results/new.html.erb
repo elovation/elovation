@@ -4,15 +4,22 @@
   <h2 style="margin-top:0;">Team Results</h2>
   <p>
   This game supports team results. This means that you can either select a singular player per team, or multiple. 
-  There is a known issue with this form. If you attempt to submit and nothing happens, it is likely that you have selected the same player in multiple teams. 
   To select multiple players per team, use "shift + click", or "cmd + click" on mac, or "ctrl + click" on windows machines.
-  <% if @result.teams.length > 2 %>You do not need to fill in every team, start on the far left and move towards the right, the minimum requirement is the first two, then the rest are optional.<% end %>
+  <% if @team_count > 2 %>You do not need to fill in every team, start on the far left and move towards the right, the minimum requirement is the first two, then the rest are optional.<% end %>
   </p>
 <% end %>
 
 <%= form_for [@game, @result], html: {id: "form-results"} do |f| %>
+  <% if @result.errors.any? %>
+    <div class="form-errors" role="alert">
+      <% @result.errors.full_messages.each do |message| %>
+        <p><%= message %></p>
+      <% end %>
+    </div>
+  <% end %>
   <div class='form-fields'>
-    <% @result.teams.each.with_index do |team, index| %>
+    <% @team_count.times do |index| %>
+      <% submitted = @submitted_teams[index.to_s] || {} %>
       <div>
       <small>
         <% if index == 0 %>
@@ -21,11 +28,11 @@
           Loser<% if @team_game %>/s<% end %>
         <% end %>
       </small>
-      <%= select "result[teams][#{index}]", "players", player_options, {include_blank: ''}, class: "players", multiple: @team_game, "data-placeholder" => "Team #{index + 1}" %>
+      <%= select "result[teams][#{index}]", "players", player_options, {include_blank: '', selected: Array.wrap(submitted[:players])}, class: "players", multiple: @team_game, "data-placeholder" => "Team #{index + 1}" %>
       </div>
-      <% if index != @result.teams.size - 1 %>
+      <% if index != @team_count - 1 %>
         <% if @game.allow_ties %>
-          <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {} %>
+          <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {selected: submitted[:relation]} %>
         <% else %>
           <%= hidden_field_tag "result[teams][#{index}][relation]", :defeats, {} %>
           Defeats:

@@ -5,6 +5,7 @@
       <div class="controls">
         <%= f.text_field :name, class: "input-xlarge" %>
       </div>
+      <%= errors_for game, :name %>
     </div>
     <div class="control-group">
       <span class="control-label">Rating type</span>
@@ -18,6 +19,7 @@
           <%= f.number_field :max_number_of_players_per_team, class: "input-mini", data: { 'game-target': 'maxPlayers' } %>
           <span class="help-inline">Set to blank for no restriction</span>
         </div>
+        <%= errors_for game, :max_number_of_players_per_team %>
       </div>
     <% end %>
     <% unless format.fixed_teams %>
@@ -27,6 +29,7 @@
           <%= f.number_field :max_number_of_teams, class: "input-mini" %>
           <span class="help-inline">Set to blank for no restriction</span>
         </div>
+        <%= errors_for game, :max_number_of_teams %>
       </div>
     <% end %>
     <div class="control-group">

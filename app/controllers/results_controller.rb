@@ -10,7 +10,8 @@ class ResultsController < ApplicationController
       redirect_to game_path(@game)
     else
       @result = response.result
-      render :new
+      prepare_form(params.dig(:result, :teams))
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -24,11 +25,18 @@ class ResultsController < ApplicationController
 
   def new
     @result = Result.new
-    (@game.max_number_of_teams || 20).times { |i| @result.teams.build rank: i }
-    @team_game = @game.max_number_of_players_per_team != 1
+    prepare_form
   end
 
   private
+
+  # The form has a slot per team the game allows, prefilled with what was
+  # submitted when it's shown again.
+  def prepare_form(submitted_teams = nil)
+    @team_count = @game.max_number_of_teams || 20
+    @team_game = @game.max_number_of_players_per_team != 1
+    @submitted_teams = submitted_teams || {}
+  end
 
   def set_game
     @game = Game.find(params[:game_id])

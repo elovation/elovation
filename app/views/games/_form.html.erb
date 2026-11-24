@@ -7,12 +7,14 @@
       <div class="controls">
         <%= f.text_field :name, class: "input-xlarge" %>
       </div>
+      <%= errors_for game, :name %>
     </div>
     <div class="control-group">
       <%= f.label :rating_type, class: "control-label" %>
       <div>
         <%= f.select :rating_type, RatingSystems.all.map { |system| [system.description, system.key, { data: { fixed_teams: system.supported_format.fixed_teams, fixed_players_per_team: system.supported_format.fixed_players_per_team } }] }, {}, class: "input-xlarge", data: { action: 'change->game#handleRatingChange', 'game-target': 'rating' } %>
       </div>
+      <%= errors_for game, :rating_type %>
     </div>
     <div class="control-group" data-game-target="maxPlayersGroup">
       <%= f.label :max_number_of_players_per_team, 'Maximum number of players per team', class: "control-label" %>
@@ -20,6 +22,7 @@
         <%= f.number_field :max_number_of_players_per_team, class: "input-mini", data: { 'game-target': 'maxPlayers' } %>
         <span class="help-inline">Set to blank for no restriction</span>
       </div>
+      <%= errors_for game, :max_number_of_players_per_team %>
     </div>
     <div class="control-group" data-game-target="maxTeamsGroup">
       <%= f.label :max_number_of_teams, 'Maximum number of teams', class: "control-label" %>
@@ -27,6 +30,7 @@
         <%= f.number_field :max_number_of_teams, class: "input-mini", data: { 'game-target': 'maxTeams' } %>
         <span class="help-inline">Set to blank for no restriction</span>
       </div>
+      <%= errors_for game, :max_number_of_teams %>
     </div>
     <div class="control-group">
       <div class="controls">

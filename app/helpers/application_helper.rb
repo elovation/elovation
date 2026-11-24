@@ -2,9 +2,8 @@
 
 module ApplicationHelper
   def errors_for(model, key)
-    tag.div do
-      model.errors.messages_for(key).join(', ')
-    end
+    messages = model.errors.messages_for(key)
+    tag.div(messages.join(', '), class: 'field-errors') if messages.any?
   end
 
   def format_time(time)
