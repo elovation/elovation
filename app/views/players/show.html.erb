@@ -1,5 +1,5 @@
 <h1>
-  <%= image_tag(gravatar_url(@player, size: 80)) %>
+  <%= image_tag(avatar_url(@player, size: 80)) %>
   <%= @player.name %>
 </h1>
 <%= turbo_frame_tag dom_id(@player), target: "_top" do %>
