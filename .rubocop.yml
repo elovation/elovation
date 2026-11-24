@@ -1,6 +1,8 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
+  SuggestExtensions: false
+  NewCops: disable
   Exclude:
     - 'bin/**/*'
     - 'vendor/**/*'
@@ -8,4 +10,4 @@ AllCops:
     - 'db/**/*'
     - 'test/**/*'
     - 'spec/**/*'
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 4.0

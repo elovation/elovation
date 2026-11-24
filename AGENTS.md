@@ -2,27 +2,31 @@
 
 Guidance for AI coding agents (and humans) working on Elovation: a small Rails app that tracks game results and rates players with Elo (1v1) or TrueSkill (teams).
 
-## Fast test loop (preferred)
+Stack: Ruby 4.0, Rails 8.1, PostgreSQL 17, Sprockets with importmap, Turbo/Stimulus, and RSpec.
 
-Ruby on the host via [asdf](https://asdf-vm.com), Postgres in Docker. A full run takes about 5 seconds.
+## Fast local loop (preferred)
+
+Ruby on the host via [asdf](https://asdf-vm.com), Postgres in Docker. Running all the checks takes about 10 seconds.
 
 One-time setup:
 
 ```bash
 asdf plugin add ruby
 RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@3)" asdf install   # reads .tool-versions
-gem install bundler -v "$(tail -1 Gemfile.lock | tr -d ' ')"
 bundle install
 docker compose up -d db
-PGHOST=localhost RAILS_ENV=test bin/rails db:create db:schema:load
+PGHOST=localhost bin/rails db:prepare                 # development database
+PGHOST=localhost RAILS_ENV=test bin/rails db:prepare  # test database
 ```
 
 Every time:
 
 ```bash
-docker compose up -d db                       # if not already running
-PGHOST=localhost bundle exec rspec            # whole suite
-PGHOST=localhost bundle exec rspec spec/models/rater_spec.rb:59   # one example
+docker compose up -d db                                          # if not already running
+PGHOST=localhost bin/ci                                          # everything CI runs: rubocop, importmap audit, rspec
+PGHOST=localhost bundle exec rspec                               # just the specs
+PGHOST=localhost bundle exec rspec spec/models/rater_spec.rb:59  # one example
+PGHOST=localhost bin/dev                                         # app on http://localhost:3000
 ```
 
 `PGHOST=localhost` is required because `config/database.yml` defaults the host to `db`, the Compose service name used inside containers.
@@ -34,6 +38,8 @@ If tests fail with "has already been taken" or unexpected record counts, the tes
 - `app/models/rater.rb`: the rating algorithms (`EloRater`, `TrueSkillRater`). This is the core domain logic.
 - `app/services/result_service.rb`: creating and deleting results. Only a game's most recent result can be deleted, and deleting it rewinds ratings.
 - `app/models/game.rb`: games, their rater, and `recalculate_ratings!`.
+- `vendor/trueskill/`: the vendored, unmaintained `saulabs/trueskill` library. See `VENDORED.md` there before changing it.
+- `config/ci.rb`: the steps `bin/ci` runs, locally and in GitHub Actions.
 - `spec/`: RSpec suite (models, controllers, helpers, services) using FactoryBot. The `test/` directory is unused Rails scaffolding.
 
 ## Conventions
@@ -42,10 +48,11 @@ If tests fail with "has already been taken" or unexpected record counts, the tes
 - Use `travel_to` (ActiveSupport) for time-dependent tests. Don't add Timecop.
 - Each example runs in a transaction (`use_transactional_fixtures`), so don't add DatabaseCleaner.
 - Deleting results must keep ratings consistent. Don't add cascading deletes that remove results without rewinding or recalculating ratings.
-- Run `bundle exec rubocop` before pushing. CI fails on any offense.
+- Only the Rails frameworks the app uses are loaded (see `config/application.rb`). Active Storage, Action Mailbox and Action Text are deliberately excluded.
+- Run `bin/ci` before pushing. CI fails on any Rubocop offense.
 
 ## CI
 
-`.github/workflows/ci.yml` runs RSpec and Rubocop against Postgres 17 on every push and pull request to `main`. A failing test or a Rubocop offense fails the build.
+`.github/workflows/ci.yml` runs `bin/ci` against Postgres 17 on every push and pull request to `main`. A failing step fails the build. To add a check, add it to `config/ci.rb` rather than the workflow, so local runs and CI stay identical.
 
-SonarCloud analysis is not part of this workflow. The SonarCloud GitHub app runs it automatically (Automatic Analysis) and reports a "SonarCloud Code Analysis" check on each pull request. Don't add a scanner step to CI: SonarCloud rejects CI-based analysis while Automatic Analysis is enabled.
+SonarCloud analysis is not part of this workflow. The SonarCloud GitHub app runs it automatically (Automatic Analysis) and reports a "SonarCloud Code Analysis" check on each pull request. Don't add a scanner step to CI: SonarCloud rejects CI-based analysis while Automatic Analysis is enabled. Configure analysis (for example, exclusions) in `.sonarcloud.properties`. Generated (`public/`) and vendored (`vendor/`) code is excluded.

@@ -1,4 +1,9 @@
 class ResultService
+  Response = Data.define(:success, :result) do
+    def initialize(success:, result: nil) = super
+    def success? = success
+  end
+
   def self.create(game, params)
     result = game.results.build
 
@@ -22,21 +27,15 @@ class ResultService
 
         result.save!
 
-        OpenStruct.new(
-          success?: true,
-          result: result
-        )
+        Response.new(success: true, result: result)
       end
     else
-      OpenStruct.new(
-        success?: false,
-        result: result
-      )
+      Response.new(success: false, result: result)
     end
   end
 
   def self.destroy(result)
-    return OpenStruct.new(success?: false) unless result.most_recent?
+    return Response.new(success: false) unless result.most_recent?
 
     Result.transaction do
       result.players.each do |player|
@@ -45,7 +44,7 @@ class ResultService
 
       result.destroy
 
-      OpenStruct.new(success?: true)
+      Response.new(success: true)
     end
   end
 end
