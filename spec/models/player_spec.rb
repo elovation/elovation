@@ -39,7 +39,7 @@ RSpec.describe Player, type: :model do
         player = Player.new
         player.email = "invalid-email-address"
         player.should_not be_valid
-        player.errors[:email].should == ["is invalid"]
+        player.errors[:email].should == ["expected an @ character"]
         player.email = "valid@example.com"
         player.valid?
         player.errors[:email].should == []
@@ -70,11 +70,11 @@ RSpec.describe Player, type: :model do
       game = FactoryBot.create(:game)
       player = FactoryBot.create(:player)
 
-      Timecop.freeze(3.days.ago) do
+      travel_to(3.days.ago) do
         5.times { FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)]) }
       end
 
-      Timecop.freeze(1.day.ago) do
+      travel_to(1.day.ago) do
         newer_results = 5.times.map { FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)]) }
       end
 
@@ -86,11 +86,11 @@ RSpec.describe Player, type: :model do
       player = FactoryBot.create(:player)
       old = new = nil
 
-      Timecop.freeze(2.days.ago) do
+      travel_to(2.days.ago) do
         old = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)])
       end
 
-      Timecop.freeze(1.days.ago) do
+      travel_to(1.days.ago) do
         new = FactoryBot.create(:result, game: game, teams: [FactoryBot.create(:team, rank: 1, players: [player]), FactoryBot.create(:team, rank: 2)])
       end
 

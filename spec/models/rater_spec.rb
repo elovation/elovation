@@ -70,7 +70,7 @@ RSpec.describe Rater, type: :model do
           pro: false
         )
 
-        Rater::EloRater.any_instance.stubs(:to_elo).returns(Elo::Player.new(pro: true))
+        allow_any_instance_of(Rater::EloRater).to receive(:to_elo).and_return(Elo::Player.new(pro: true))
 
         game.rater.update_ratings(game, [team1, team2])
 

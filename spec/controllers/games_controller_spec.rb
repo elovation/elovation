@@ -38,7 +38,7 @@ describe GamesController, :type => :controller do
       end
 
       it "protects against mass assignment" do
-        Timecop.freeze(Time.now) do
+        travel_to(Time.now) do
           game_attributes = FactoryBot.attributes_for(:game, created_at: 3.days.ago)
           post :create, params: {game: game_attributes}
 
@@ -63,7 +63,7 @@ describe GamesController, :type => :controller do
 
       delete :destroy, params: {id: game}
 
-      response.should redirect_to(dashboard_path)
+      response.should redirect_to(root_path)
       Game.find_by_id(game.id).should be_nil
     end
 
@@ -73,7 +73,7 @@ describe GamesController, :type => :controller do
 
       delete :destroy, params: {id: game}
 
-      response.should redirect_to(dashboard_path)
+      response.should redirect_to(root_path)
       Game.find_by_id(game.id).should == game
     end
   end
@@ -97,7 +97,7 @@ describe GamesController, :type => :controller do
       end
 
       it "protects against mass assignment" do
-        Timecop.freeze(Time.now) do
+        travel_to(Time.now) do
           game = FactoryBot.create(:game, name: "First name")
 
           put :update, params: {id: game, game: {created_at: 3.days.ago}}
@@ -128,7 +128,7 @@ describe GamesController, :type => :controller do
     end
 
     it "returns a json response" do
-      Timecop.freeze(Time.now) do
+      travel_to(Time.now) do
         game = FactoryBot.create(:game)
 
         player1 = FactoryBot.create(:player)
