@@ -316,13 +316,6 @@ fieldset {
 
 #results .new {
   background-color: #FFE; }
-  #results .new .btn {
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    -webkit-transition: opacity 0.2s ease;
-    -moz-transition: opacity 0.2s ease; }
-  #results .new:hover .btn {
-    opacity: 1; }
 
 #results time {
   margin-left: 20px; }
