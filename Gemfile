@@ -86,10 +86,8 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
 
-  # https://github.com/simplecov-ruby/simplecov
-  gem 'simplecov'
-  # https://github.com/codeclimate-community/simplecov_json_formatter
-  gem 'simplecov_json_formatter'
+  # Coverage report in coverage/index.html
+  gem 'simplecov', require: false
 end
 
 gem 'sentry-ruby', '>= 5.11'

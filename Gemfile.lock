@@ -306,7 +306,6 @@ GEM
       concurrent-ruby (~> 1.0, >= 1.0.2)
       logger
     simplecov (1.3.2)
-    simplecov_json_formatter (0.1.4)
     sprockets (4.4.1)
       concurrent-ruby (~> 1.1)
       logger
@@ -368,7 +367,6 @@ DEPENDENCIES
   sentry-rails (>= 5.11)
   sentry-ruby (>= 5.11)
   simplecov
-  simplecov_json_formatter
   sprockets-rails
   stimulus-rails
   trueskill!

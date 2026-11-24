@@ -1,9 +1,5 @@
 require 'simplecov'
-require 'simplecov_json_formatter'
-SimpleCov.formatter = SimpleCov::Formatter::JSONFormatter
-SimpleCov.start('rails') do
-  skip ['/channels/', '/jobs/', '/mailers/']
-end
+SimpleCov.start('rails')
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
