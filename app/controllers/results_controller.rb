@@ -11,7 +11,7 @@ class ResultsController < ApplicationController
     else
       @result = response.result
       prepare_form(params.dig(:result, :teams))
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

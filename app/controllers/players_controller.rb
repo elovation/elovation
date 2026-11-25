@@ -13,7 +13,7 @@ class PlayersController < ApplicationController
     if @player.save
       redirect_to players_path
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -21,7 +21,7 @@ class PlayersController < ApplicationController
     if @player.update(player_params)
       redirect_to player_path(@player)
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

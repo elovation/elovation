@@ -13,7 +13,7 @@ class GamesController < ApplicationController
     if @game.save
       redirect_to game_path(@game)
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -50,7 +50,7 @@ class GamesController < ApplicationController
     if @game.update(game_update_params)
       redirect_to game_path(@game)
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

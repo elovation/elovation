@@ -17,7 +17,7 @@ RSpec.describe "Submitting an invalid form", type: :request do
     end
 
     it "responds 422 so Turbo shows the form again" do
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "says what's wrong" do
@@ -39,7 +39,7 @@ RSpec.describe "Submitting an invalid form", type: :request do
     before { patch game_path(game), params: { game: { name: "" } } }
 
     it "says what's wrong" do
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include("can&#39;t be blank")
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe "Submitting an invalid form", type: :request do
     before { post games_path, params: { game: { name: "", rating_type: "elo", min_number_of_teams: 2, min_number_of_players_per_team: 1 } } }
 
     it "responds 422 so Turbo shows the form again" do
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "says what's wrong" do
