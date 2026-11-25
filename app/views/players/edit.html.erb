@@ -1,3 +1,10 @@
+<% content_for :title, "Edit #{@player.name}" %>
+<header class="page-header">
+  <div class="title">
+    <p class="eyebrow"><%= link_to @player.name, player_path(@player) %></p>
+    <h1>Edit player</h1>
+  </div>
+</header>
 <%= turbo_frame_tag @player do %>
   <%= render "form", player: @player %>
 <% end %>

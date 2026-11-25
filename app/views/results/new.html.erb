@@ -1,39 +1,59 @@
+<% content_for :title, "Add a #{@game.name} result" %>
+<header class="page-header">
+  <div class="title">
+    <p class="eyebrow"><%= link_to @game.name, game_path(@game) %></p>
+    <h1>Add result</h1>
+  </div>
+</header>
 
-
-<% if @team_game %> 
-  <h2 style="margin-top:0;">Team Results</h2>
-  <p>
-  This game supports team results. This means that you can either select a singular player per team, or multiple. 
-  There is a known issue with this form. If you attempt to submit and nothing happens, it is likely that you have selected the same player in multiple teams. 
-  To select multiple players per team, use "shift + click", or "cmd + click" on mac, or "ctrl + click" on windows machines.
-  <% if @result.teams.length > 2 %>You do not need to fill in every team, start on the far left and move towards the right, the minimum requirement is the first two, then the rest are optional.<% end %>
-  </p>
-<% end %>
-
-<%= form_for [@game, @result], html: {id: "form-results"} do |f| %>
-  <div class='form-fields'>
-    <% @result.teams.each.with_index do |team, index| %>
-      <div>
-      <small>
-        <% if index == 0 %>
-          Winner<% if @team_game %>/s<% end %>
-        <% else %>
-          Loser<% if @team_game %>/s<% end %>
-        <% end %>
-      </small>
-      <%= select "result[teams][#{index}]", "players", player_options, {include_blank: ''}, class: "players", multiple: @team_game, "data-placeholder" => "Team #{index + 1}" %>
-      </div>
-      <% if index != @result.teams.size - 1 %>
-        <% if @game.allow_ties %>
-          <%= select "result[teams][#{index}]", :relation, ["defeats", "ties"], {} %>
-        <% else %>
-          <%= hidden_field_tag "result[teams][#{index}][relation]", :defeats, {} %>
-          Defeats:
-        <% end %>
+<div class="form-panel">
+  <% if @team_game || @team_count > 2 %>
+    <div class="form-intro">
+      <% if @team_game %>
+        <p>Pick one or more players for each team. To pick several, hold Shift, or Cmd on a Mac (Ctrl on Windows), while you click.</p>
       <% end %>
+      <% if @team_count > 2 %>
+        <p>Enter finishers from first place on. Only the first two are required. If two finish level, choose "ties" between them and they share the place.</p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= form_for [@game, @result], html: { id: "form-results", class: "form" } do |f| %>
+    <% if @result.errors.any? %>
+      <div class="form-errors" role="alert">
+        <% @result.errors.full_messages.each do |message| %>
+          <p><%= message %></p>
+        <% end %>
+      </div>
     <% end %>
-  </div>
-  <div class='form-actions'>
-    <%= f.submit class: "btn btn-primary", value: 'Save Result' %>
-  </div>
-<% end %>
+    <ol class="result-slots">
+      <% @team_count.times do |index| %>
+        <% submitted = @submitted_teams[index.to_s] || {} %>
+        <li class="field">
+          <label for="result_teams_<%= index %>_players">
+            <% if @team_count > 2 %>
+              <%= (index + 1).ordinalize %>
+            <% elsif index.zero? %>
+              <%= @team_game ? "Winners" : "Winner" %>
+            <% else %>
+              <%= @team_game ? "Losers" : "Loser" %>
+            <% end %>
+          </label>
+          <%= select "result[teams][#{index}]", "players", player_options, { include_blank: !@team_game, selected: Array.wrap(submitted[:players]) }, multiple: @team_game, size: (@team_game ? 8 : nil) %>
+          <% if index != @team_count - 1 %>
+            <% if @game.allow_ties %>
+              <%= select "result[teams][#{index}]", :relation, [["defeats", "defeats"], ["ties", "ties"]], { selected: submitted[:relation] }, class: "relation", aria: { label: "Result between #{(index + 1).ordinalize} and #{(index + 2).ordinalize}" } %>
+            <% else %>
+              <%= hidden_field_tag "result[teams][#{index}][relation]", :defeats, id: nil %>
+              <span class="relation" aria-hidden="true">defeats</span>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+    <div class="form-actions">
+      <%= f.submit "Save result", class: "btn btn-primary" %>
+      <%= link_to "Cancel", game_path(@game), class: "btn btn-warning" %>
+    </div>
+  <% end %>
+</div>

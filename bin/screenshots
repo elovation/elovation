@@ -1,0 +1,122 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Captures desktop and mobile screenshots of the main pages into
+# docs/screenshots/, for the README gallery and for reviewing UI changes in
+# pull requests (regenerate them in any PR that changes how pages look).
+#
+#   bin/screenshots              # reseed the screenshots database, then capture
+#   bin/screenshots --skip-seed  # capture from the existing screenshots database
+#
+# Uses its own database (elovation_screenshots) seeded from db/seeds.rb, so
+# your development data is untouched, and drives your local Chrome through
+# Ferrum. Postgres must be running (docker compose up -d db).
+
+require 'bundler/setup'
+require 'ferrum'
+require 'fileutils'
+require 'net/http'
+
+ROOT = File.expand_path('..', __dir__)
+PORT = 3998
+OUTPUT = File.join(ROOT, 'docs/screenshots')
+
+VIEWPORTS = {
+  'desktop' => { width: 1280, height: 800, scale_factor: 1, mobile: false, scheme: 'light' },
+  'mobile' => { width: 390, height: 844, scale_factor: 1, mobile: true, scheme: 'light' },
+  'desktop-dark' => { width: 1280, height: 800, scale_factor: 1, mobile: false, scheme: 'dark',
+                      pages: %w[01-home 02-game-1v1 03-game-teams 04-game-chess 04-game-free-for-all 12-player] }
+}.freeze
+
+# The seed creates these records in this order, so the ids are stable.
+PAGES = {
+  '01-home' => '/',
+  '02-game-1v1' => '/games/1',
+  '03-game-teams' => '/games/2',
+  '04-game-free-for-all' => '/games/5',
+  '04-game-chess' => '/games/3',
+  '05-game-no-results' => '/games/8',
+  '06-ratings' => '/games/1/ratings',
+  '07-new-result-1v1' => '/games/1/results/new',
+  '08-new-result-teams' => '/games/2/results/new',
+  '09-new-result-free-for-all' => '/games/5/results/new',
+  '10-new-game' => '/games/new',
+  '11-players' => '/players',
+  '12-player' => '/players/1',
+  '13-player-game' => '/players/1/games/1'
+}.freeze
+
+ENV['RAILS_ENV'] = 'development'
+# Seed and serve as if it were this moment, so nothing changes from day to day.
+ENV['SCREENSHOT_TIME'] = '2026-11-20 18:00:00 UTC'
+ENV['DATABASE_URL'] = "postgres://postgres:password@#{ENV.fetch('PGHOST', 'localhost')}/elovation_screenshots"
+
+def run(*command)
+  system(*command, chdir: ROOT, exception: true)
+end
+
+def wait_for_server
+  60.times do
+    return if Net::HTTP.get_response(URI("http://localhost:#{PORT}/up")).is_a?(Net::HTTPSuccess)
+  rescue SystemCallError
+    sleep 0.5
+  end
+  abort "The app didn't start on port #{PORT}. See log/screenshots-server.log."
+end
+
+# Turns off chart animation, so a chart is never captured mid-frame.
+NO_CHART_ANIMATION = <<~JS
+  let chart;
+  Object.defineProperty(window, 'Chart', {
+    configurable: true,
+    get: () => chart,
+    set: (value) => { chart = value; chart.defaults.animation = false; }
+  });
+JS
+
+# Waits for the page's images and fonts to load.
+def settle(page)
+  unless page.network.wait_idle(timeout: 15)
+    warn "  #{page.url}: some requests didn't finish (often avatars from robohash.org)"
+  end
+  page.evaluate('document.fonts.ready.then(() => true)')
+  sleep 0.5
+end
+
+unless ARGV.include?('--skip-seed')
+  puts 'Seeding the screenshots database...'
+  run({ 'DISABLE_DATABASE_ENVIRONMENT_CHECK' => '1' }, 'bin/rails', 'db:drop', 'db:create', 'db:schema:load', 'db:seed')
+end
+
+FileUtils.mkdir_p(File.join(ROOT, 'log'))
+server = Process.spawn('bin/rails', 'server', '-p', PORT.to_s, '-P', 'tmp/pids/screenshots.pid',
+                       chdir: ROOT, out: File.join(ROOT, 'log/screenshots-server.log'), err: %i[child out])
+begin
+  wait_for_server
+  browser = Ferrum::Browser.new(window_size: [1280, 800], timeout: 30)
+
+  VIEWPORTS.each do |name, options|
+    directory = File.join(OUTPUT, name)
+    FileUtils.rm_rf(directory)
+    FileUtils.mkdir_p(directory)
+    viewport = options.except(:scheme, :pages)
+
+    PAGES.slice(*options.fetch(:pages, PAGES.keys)).each do |page_name, path|
+      page = browser.create_page
+      page.set_viewport(**viewport)
+      # Light or dark mode, whatever the machine running this prefers.
+      page.command('Emulation.setEmulatedMedia', features: [{ name: 'prefers-color-scheme', value: options[:scheme] }])
+      page.evaluate_on_new_document(NO_CHART_ANIMATION)
+      page.go_to("http://localhost:#{PORT}#{path}")
+      settle(page)
+      file = File.join(directory, "#{page_name}.png")
+      page.screenshot(path: file, full: true)
+      page.close
+      puts "  #{file.delete_prefix("#{ROOT}/")}"
+    end
+  end
+ensure
+  browser&.quit
+  Process.kill('TERM', server)
+  Process.wait(server)
+end

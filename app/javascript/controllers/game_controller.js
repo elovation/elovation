@@ -26,10 +26,10 @@ export default class extends Controller {
   applyLimit(fixed, input, group) {
     if (fixed) {
       input.value = fixed
-      group.style.display = 'none'
+      group.hidden = true
     } else {
-      if (group.style.display === 'none') input.value = 2
-      group.style.display = 'block'
+      if (group.hidden) input.value = 2
+      group.hidden = false
     }
   }
 }

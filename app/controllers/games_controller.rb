@@ -13,7 +13,7 @@ class GamesController < ApplicationController
     if @game.save
       redirect_to game_path(@game)
     else
-      render :new
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -34,11 +34,9 @@ class GamesController < ApplicationController
   end
 
   def show
-    @chart_data = @game.leaderboard.history_by_day.map do |player, scores|
-      { name: player.name, data: scores }
-    end
-
     @ratings = @game.all_ratings
+    @active_ratings = @ratings.select(&:active?)
+    @history = @game.leaderboard.history_by_day
 
     respond_to do |format|
       format.html
@@ -52,7 +50,7 @@ class GamesController < ApplicationController
     if @game.update(game_update_params)
       redirect_to game_path(@game)
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -65,7 +63,7 @@ class GamesController < ApplicationController
   # Limits the rating system fixes (e.g. Elo's 1v1) can't be edited.
   def game_update_params
     format = @game.rating_system.supported_format
-    permitted = %i[name allow_ties]
+    permitted = %i[name allow_ties theme]
     permitted << :max_number_of_teams unless format.fixed_teams
     permitted << :max_number_of_players_per_team unless format.fixed_players_per_team
     params.require(:game).permit(*permitted)
@@ -78,6 +76,7 @@ class GamesController < ApplicationController
                                  :max_number_of_teams,
                                  :min_number_of_players_per_team,
                                  :max_number_of_players_per_team,
-                                 :allow_ties)
+                                 :allow_ties,
+                                 :theme)
   end
 end

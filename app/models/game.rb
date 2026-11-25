@@ -7,6 +7,7 @@ class Game < ApplicationRecord
   has_many :results, dependent: :destroy
 
   validates :name, presence: true
+  validates :theme, inclusion: { in: Theme.keys }, allow_blank: true
   validates :rating_type, inclusion: { in: ->(_game) { RatingSystems.keys }, message: 'must be a valid rating type' }
   validate do
     if rating_system && !rating_system.supported_format.supports?(self)
@@ -29,7 +30,7 @@ class Game < ApplicationRecord
   validates :allow_ties, inclusion: { in: [true, false], message: 'must be selected' }
 
   def all_ratings
-    ratings.order(value: :desc)
+    ratings.order(value: :desc, id: :asc)
   end
 
   def as_json(_options = {})
@@ -49,11 +50,16 @@ class Game < ApplicationRecord
   end
 
   def top_ratings
-    ratings.order('value DESC').limit(5)
+    ratings.order(value: :desc, id: :asc).limit(5)
   end
 
   def rating_system
     RatingSystems.fetch(rating_type)
+  end
+
+  # The theme its pages use: its own, or the site's.
+  def look
+    theme.presence || Theme.site
   end
 
   # This game's ratings: record, retract, rebuild and preview them.

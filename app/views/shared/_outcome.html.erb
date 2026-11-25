@@ -1,0 +1,13 @@
+<%# Who beat whom in a result. Two teams read as a sentence ("A defeats B");
+    more read as placings ("1st A, 2nd B, 3rd C"), where tied teams share a
+    place. Teammates are joined with "&". %>
+<% teams = result.teams.sort_by { |team| [team.rank, team.id] } %>
+<% if teams.size > 2 %>
+  <% teams.each do |team| %>
+    <span class="placing"><span class="place"><%= team.rank.ordinalize %></span> <%= render "shared/team", team: team, links: links %></span>
+  <% end %>
+<% else %>
+  <%= render "shared/team", team: teams.first, links: links %>
+  <span class="separator"><%= teams.first.rank == teams.last.rank ? (past ? "tied with" : "ties") : (past ? "defeated" : "defeats") %></span>
+  <%= render "shared/team", team: teams.last, links: links %>
+<% end %>

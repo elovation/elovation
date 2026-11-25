@@ -56,6 +56,22 @@ Read `CONTEXT.md` first. It defines the domain terms used in code and specs: rat
 - Only the Rails frameworks the app uses are loaded (see `config/application.rb`). Active Storage, Action Mailbox and Action Text are deliberately excluded.
 - Run `bin/ci` before pushing. CI fails on any Rubocop offense.
 
+## Screenshots
+
+`docs/screenshots/` holds desktop and mobile screenshots of the main pages in light mode, plus a few desktop pages in dark mode. The README gallery uses them, and they serve as a lightweight visual regression check: a pull request that changes how pages look regenerates them, and reviewers compare the images in the pull request diff.
+
+```bash
+docker compose up -d db
+bin/screenshots              # reseed the screenshots database, then capture (about 2 minutes)
+bin/screenshots --skip-seed  # capture again from the same data
+```
+
+- It uses its own database (`elovation_screenshots`), seeded by `db/seeds.rb`, so development data is untouched. It needs Chrome installed.
+- The clock is frozen at `SCREENSHOT_TIME` (see `config/initializers/screenshot_time.rb`), so a run produces identical images on any day. An image that changes is a real change.
+- To capture a new page, add it to `PAGES` in `bin/screenshots`. The seed creates records in a fixed order, so ids are stable.
+- Avatars load from robohash.org. If it doesn't respond, the script warns and that page's avatars are missing; run it again.
+- `bin/rails db:seed` loads the same demo data into your development database (it refuses if there are already results).
+
 ## CI
 
 `.github/workflows/ci.yml` runs `bin/ci` against Postgres 17 on every push and pull request to `main`. A failing step fails the build. To add a check, add it to `config/ci.rb` rather than the workflow, so local runs and CI stay identical.

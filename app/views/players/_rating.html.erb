@@ -1,1 +1,4 @@
-<li><%= link_to rating.game.name, player_game_path(@player, rating.game) %> - <%= rating.value %></li>
+<tr>
+  <th scope="row"><%= link_to rating.game.name, player_game_path(@player, rating.game) %></th>
+  <td class="number rating"><%= rating.value %></td>
+</tr>

@@ -30,11 +30,9 @@ class Player < ApplicationRecord
   validates :name, uniqueness: true, presence: true
   validates :email, allow_blank: true, format: { with: /@/, message: 'expected an @ character' }
 
+  # The email is private: it's only used to look up the player's avatar.
   def as_json
-    {
-      name: name,
-      email: email
-    }
+    { name: name }
   end
 
   def recent_results

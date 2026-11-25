@@ -1,28 +1,44 @@
-<h1>
-  <%= image_tag(avatar_url(@player, size: 80)) %>
-  <%= @player.name %>
-</h1>
-<%= turbo_frame_tag dom_id(@player), target: "_top" do %>
-  <section class="action-buttons">
-    <span><%= link_to 'Edit Player', edit_player_path(@player), data: { turbo_frame: dom_id(@player) }, class: "btn" %></span>
+<% content_for :title, @player.name %>
+<header class="page-header page-header-with-avatar">
+  <%= avatar(@player, size: 64) %>
+  <div class="title">
+    <h1><%= @player.name %></h1>
+  </div>
+  <div class="actions">
+    <%= link_to "Edit", edit_player_path(@player), data: { turbo_frame: dom_id(@player) }, class: "btn" %>
     <% if @player.results.empty? %>
-      <span><%= link_to "Delete", player_path(@player), class: "btn btn-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %></span>
+      <%= link_to "Delete", player_path(@player), class: "btn btn-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+    <% end %>
+  </div>
+</header>
+<%= turbo_frame_tag dom_id(@player), target: "_top" %>
+
+<div class="columns">
+  <section class="column-side" aria-labelledby="ratings-heading">
+    <h2 id="ratings-heading">Ratings</h2>
+    <% if @player.ratings.any? %>
+      <table class="leaderboard">
+        <thead>
+          <tr>
+            <th scope="col">Game</th>
+            <th scope="col" class="number">Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render partial: "rating", collection: @player.ratings.includes(:game).sort_by { |rating| rating.game.name } %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="empty">No ratings yet.</p>
     <% end %>
   </section>
-<% end %>
-<div class="row-fluid">
-  <div class="span8">
-    <h2>Recent Results</h2>
+
+  <section class="column-main" aria-labelledby="results-heading">
+    <h2 id="results-heading">Recent results</h2>
     <% if @player.recent_results.any? %>
-      <%= render partial: 'shared/results', object: @player.recent_results, locals: {show_game: true} %>
+      <%= render partial: "shared/results", object: @player.recent_results, locals: { show_game: true } %>
     <% else %>
-      <span>No results, play some games!</span>
+      <p class="empty">No results yet. Play some games!</p>
     <% end %>
-  </div>
-  <div class="span4">
-    <h2>Ratings</h2>
-    <ol>
-      <%= render partial: 'rating', collection: @player.ratings %>
-    </ol>
-  </div>
+  </section>
 </div>

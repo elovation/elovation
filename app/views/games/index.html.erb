@@ -1,10 +1,17 @@
-<div class="games-header">
-  <h1>Games</h1>
-  <div><%= link_to "New game", new_game_path, data: { turbo_frame: "new_game" } %></div>
-</div>
+<% content_for :title, "Games" %>
+<header class="page-header">
+  <div class="title">
+    <h1>Games</h1>
+  </div>
+  <div class="actions">
+    <%= link_to "New game", new_game_path, data: { turbo_frame: "new_game" }, class: "btn btn-primary" %>
+  </div>
+</header>
 
 <%= turbo_frame_tag "new_game", target: "_top" %>
 
-<div id="games">
-  <%= render @games %>
-</div>
+<ul class="game-tiles" id="games">
+  <% @games.each do |game| %>
+    <li class="game-tile" id="<%= dom_id(game) %>"><%= render game %></li>
+  <% end %>
+</ul>

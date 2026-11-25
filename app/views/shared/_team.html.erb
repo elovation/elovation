@@ -1,0 +1,1 @@
+<span class="team<%= " is-winner" if team.rank == Team::FIRST_PLACE_RANK %>"><% team.players.each_with_index do |player, index| %><%= " & " if index.positive? %><% if links %><%= link_to player, class: "player" do %><%= avatar(player, size: 20) %><span><%= player.name %></span><% end %><% else %><span class="player"><%= player.name %></span><% end %><% end %></span>

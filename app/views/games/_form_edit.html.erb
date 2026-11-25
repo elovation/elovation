@@ -1,43 +1,44 @@
-<div class="form-well game-card" data-controller="game">
-  <%= form_with model: game do |f| %>
-    <div class="control-group">
-      <%= f.label :name, class: "control-label" %>
-      <div class="controls">
-        <%= f.text_field :name, class: "input-xlarge" %>
-      </div>
+<div class="form-panel" data-controller="game">
+  <%= form_with model: game, class: "form" do |f| %>
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name, required: true %>
+      <%= errors_for game, :name %>
     </div>
-    <div class="control-group">
-      <span class="control-label">Rating type</span>
+    <div class="field">
+      <span class="label">Rating system</span>
       <p><%= game.rating_system.description %></p>
     </div>
     <% format = game.rating_system.supported_format %>
     <% unless format.fixed_players_per_team %>
-      <div class="control-group" data-game-target="maxPlayersGroup">
-        <%= f.label :max_number_of_players_per_team, 'Maximum number of players per team', class: "control-label" %>
-        <div class="controls">
-          <%= f.number_field :max_number_of_players_per_team, class: "input-mini", data: { 'game-target': 'maxPlayers' } %>
-          <span class="help-inline">Set to blank for no restriction</span>
-        </div>
+      <div class="field">
+        <%= f.label :max_number_of_players_per_team, "Maximum players per team" %>
+        <%= f.number_field :max_number_of_players_per_team, min: 1, class: "input-short", aria: { describedby: "max-players-help" } %>
+        <p class="help" id="max-players-help">Leave blank for no limit.</p>
+        <%= errors_for game, :max_number_of_players_per_team %>
       </div>
     <% end %>
     <% unless format.fixed_teams %>
-      <div class="control-group" data-game-target="maxTeamsGroup">
-        <%= f.label :max_number_of_teams, 'Maximum number of teams', class: "control-label" %>
-        <div class="controls">
-          <%= f.number_field :max_number_of_teams, class: "input-mini" %>
-          <span class="help-inline">Set to blank for no restriction</span>
-        </div>
+      <div class="field">
+        <%= f.label :max_number_of_teams, "Maximum teams" %>
+        <%= f.number_field :max_number_of_teams, min: 2, class: "input-short", aria: { describedby: "max-teams-help" } %>
+        <p class="help" id="max-teams-help">Leave blank for no limit.</p>
+        <%= errors_for game, :max_number_of_teams %>
       </div>
     <% end %>
-    <div class="control-group">
-      <div class="controls">
-        <%= f.check_box :allow_ties, class: "input-mini" %>
-        <%= f.label :allow_ties, class: "control-label" %>
-      </div>
+    <div class="field">
+      <%= f.label :theme %>
+      <%= f.select :theme, Theme.options, { include_blank: "Site theme (#{Theme::NAMES.fetch(Theme.site)})" }, aria: { describedby: "theme-help" } %>
+      <p class="help" id="theme-help">How this game's pages look, for everyone.</p>
+      <%= errors_for game, :theme %>
+    </div>
+    <div class="field field-checkbox">
+      <%= f.check_box :allow_ties %>
+      <%= f.label :allow_ties, "Allow ties" %>
     </div>
     <div class="form-actions">
-      <%= f.button class: "btn btn-primary" %>
-      <%= button_to "Cancel", game_path(game), class: "btn btn-warning" %>
+      <%= f.button "Save game", class: "btn btn-primary" %>
+      <%= link_to "Cancel", game_path(game), class: "btn btn-warning" %>
     </div>
   <% end %>
 </div>

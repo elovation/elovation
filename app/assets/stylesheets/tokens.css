@@ -1,0 +1,93 @@
+/*
+ * Design tokens.
+ *
+ * Fixed tokens (fonts, the type and space scale, focus and tap-target sizes)
+ * keep every theme legible, so themes never override them. Theme tokens
+ * (colours, display type, motifs, corners) are the generic "scoreboard"
+ * theme here; themes.css overrides the same names per game theme.
+ *
+ * Every colour holds its light and dark value with light-dark(), so the
+ * scheme follows the visitor's system setting. Each text colour meets WCAG
+ * AA (4.5:1) on every surface, and lines, accents and focus rings meet 3:1.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Fixed: fonts */
+  --font-text: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --font-numeric: "Archivo", var(--font-text);
+
+  /* Fixed: one fluid scale for type and space (18px to 20px body). */
+  --narrow: 20;
+  --wide: 77.5;
+  --size-narrow: 1.0625;
+  --size-wide: 1.125;
+  --ratio-narrow: 1.2;
+  --ratio-wide: 1.25;
+
+  --fluid: clamp(0rem, (100vw - var(--narrow) * 1rem) / (var(--wide) - var(--narrow)), 1rem);
+  --at-narrow: calc(var(--size-narrow) * (1rem - var(--fluid)));
+  --at-wide: calc(var(--size-wide) * var(--fluid));
+
+  --step--1: max(0.9375rem, calc(var(--step-0) / var(--ratio-narrow)));
+  --step-0: calc(var(--at-narrow) + var(--at-wide));
+  --step-1: calc(var(--at-narrow) * var(--ratio-narrow) + var(--at-wide) * var(--ratio-wide));
+  --step-2: calc(var(--at-narrow) * pow(var(--ratio-narrow), 2) + var(--at-wide) * pow(var(--ratio-wide), 2));
+  --step-3: calc(var(--at-narrow) * pow(var(--ratio-narrow), 3) + var(--at-wide) * pow(var(--ratio-wide), 3));
+  --step-4: calc(var(--at-narrow) * pow(var(--ratio-narrow), 4) + var(--at-wide) * pow(var(--ratio-wide), 4));
+
+  --space-2xs: calc(0.25 * var(--step-0));
+  --space-xs: calc(0.5 * var(--step-0));
+  --space-s: var(--step-0);
+  --space-m: calc(1.5 * var(--step-0));
+  --space-l: calc(2 * var(--step-0));
+  --space-s-l: calc(var(--at-narrow) + 2 * var(--at-wide));
+
+  /* Fixed: interaction */
+  --focus-width: 3px;
+  --focus-offset: 2px;
+  --hit-min: 2.75rem;
+  --measure: 65ch;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Theme: surfaces and text */
+  --surface-page: light-dark(oklch(97.5% 0.004 90), oklch(17% 0.008 265));
+  --surface-raised: light-dark(oklch(100% 0 none), oklch(21% 0.01 265));
+  --surface-sunken: light-dark(oklch(94% 0.006 90), oklch(14% 0.008 265));
+  --surface-highlight: light-dark(oklch(95% 0.04 95), oklch(26% 0.04 75));
+  --text: light-dark(oklch(21% 0.012 265), oklch(95% 0.006 90));
+  --text-muted: light-dark(oklch(45% 0.012 265), oklch(76% 0.01 265));
+  --line: light-dark(oklch(88% 0.006 90), oklch(30% 0.01 265));
+  --line-strong: oklch(58% 0.01 265);
+
+  /* Theme: accent, links, focus, outcomes */
+  --accent: light-dark(oklch(50% 0.18 32), oklch(82% 0.15 75));
+  --on-accent: light-dark(oklch(99% 0 none), oklch(18% 0.01 265));
+  --link: light-dark(oklch(45% 0.15 32), oklch(84% 0.13 75));
+  --focus: var(--accent);
+  --win: light-dark(oklch(45% 0.12 150), oklch(80% 0.14 150));
+  --loss: light-dark(oklch(48% 0.17 28), oklch(75% 0.15 28));
+
+  /* Theme: colours of the first six players' chart lines, and of the rest */
+  --chart-1: light-dark(oklch(50% 0.18 32), oklch(82% 0.15 75));
+  --chart-2: light-dark(oklch(45% 0.13 255), oklch(74% 0.12 250));
+  --chart-3: light-dark(oklch(52% 0.12 150), oklch(76% 0.14 150));
+  --chart-4: light-dark(oklch(55% 0.11 75), oklch(72% 0.15 28));
+  --chart-5: light-dark(oklch(45% 0.16 320), oklch(75% 0.13 320));
+  --chart-6: light-dark(oklch(40% 0.02 265), oklch(88% 0.01 265));
+  --chart-muted: light-dark(oklch(82% 0.005 265), oklch(38% 0.01 265));
+
+  /* Theme: display type (headings only) */
+  --font-display: var(--font-numeric);
+  --display-stretch: 75%;
+  --display-weight: 800;
+  --display-case: uppercase;
+  --display-tracking: 0.02em;
+
+  /* Theme: shape and motif. A motif is decorative: never put text on it. */
+  --radius: 2px;
+  --avatar-radius: 4px;
+  --motif-band: repeating-linear-gradient(90deg, var(--text) 0 0.5rem, transparent 0.5rem 0.75rem);
+  --motif-band-size: 0.25rem;
+}

@@ -1,0 +1,43 @@
+/*
+ * Self-hosted fonts (latin subset), all under the SIL Open Font License; the
+ * licences sit beside the files in app/assets/fonts. A browser only downloads
+ * a face that text on the page uses, so the theme-only faces cost nothing
+ * elsewhere.
+ */
+
+/* Text: designed for legibility (distinct Il1 and 0O). */
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("/atkinson-hyperlegible-next.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Headings and numbers: condensed for the scoreboard, wide for table tennis. */
+@font-face {
+  font-family: "Archivo";
+  src: url("/archivo.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Chess theme headings. */
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("/source-serif-4.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Foosball theme headings. */
+@font-face {
+  font-family: "Big Shoulders";
+  src: url("/big-shoulders.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}

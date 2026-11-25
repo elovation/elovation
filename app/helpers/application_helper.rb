@@ -2,9 +2,8 @@
 
 module ApplicationHelper
   def errors_for(model, key)
-    tag.div do
-      model.errors.messages_for(key).join(', ')
-    end
+    messages = model.errors.messages_for(key)
+    tag.div(messages.join(', '), class: 'field-errors') if messages.any?
   end
 
   def format_time(time)
@@ -21,6 +20,33 @@ module ApplicationHelper
       digest = Digest::MD5.hexdigest(player.email)
       "https://robohash.org/#{digest}?gravatar=hashed&size=#{size}x#{size}"
     end
+  end
+
+  NAV_SECTIONS = {
+    games: %w[dashboard games results ratings],
+    players: %w[players player_games]
+  }.freeze
+
+  # A main navigation link, marked as the current page while viewing any page
+  # in its section.
+  def nav_link(name, path, section:)
+    current = NAV_SECTIONS.fetch(section).include?(controller_name)
+    link_to name, path, aria: { current: current ? 'page' : nil }
+  end
+
+  # An avatar shown beside the player's name, so it's decorative (empty alt).
+  AVATAR_SIZES = [20, 24, 48, 64].freeze
+
+  def avatar(player, size: 24)
+    raise ArgumentError, "avatar size must be one of #{AVATAR_SIZES}" unless AVATAR_SIZES.include?(size)
+
+    image_tag avatar_url(player, size: size * 2), alt: '', width: size, height: size, class: "avatar avatar-#{size}"
+  end
+
+  # The theme for this page: the game's when there is one, otherwise the
+  # site's.
+  def current_theme
+    @game ? @game.look : Theme.site
   end
 
   def brand_title

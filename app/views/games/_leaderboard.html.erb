@@ -1,0 +1,13 @@
+<table class="leaderboard">
+  <thead>
+    <tr>
+      <th scope="col"><abbr title="Rank">#</abbr></th>
+      <th scope="col">Player</th>
+      <th scope="col" class="number">Rating</th>
+      <th scope="col" class="number"><abbr title="<%= @game.allow_ties ? "Wins, losses and ties" : "Wins and losses" %>"><%= @game.allow_ties ? "W–L–T" : "W–L" %></abbr></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render partial: "games/rating", collection: ratings, locals: { swatches: swatches } %>
+  </tbody>
+</table>

@@ -1,25 +1,10 @@
-<li class="<%= 'new' if result.most_recent? -%>">
-  <% result.teams.each_with_index do |team, i| %>
-    <% team.players.each do |winner| %>
-      <%= link_to winner, class: 'player' do %>
-        <%= image_tag(avatar_url(winner, size: 16)) %>
-        <strong> <%= winner.name %></strong>
-      <% end %>
-    <% end %>
-    <% if i == 0 %>
-      <% if result.tie? %>
-        <small>ties</small>
-      <% else %>
-        <small>defeats</small>
-      <% end %>
-    <% end %>
-  <% end %>
-  <% if show_game %>
-    in
-    <strong><%= link_to result.game.name, result.game %></strong>
-  <% end %>
-  <time><%= format_time(result.created_at) %></time>
-  <% if result.most_recent? -%>
+<p class="outcome">
+  <%= render "shared/outcome", result: result, links: true, past: false %>
+  <% if show_game %><span class="in-game">in <%= link_to result.game.name, result.game %></span><% end %>
+</p>
+<p class="result-meta">
+  <time datetime="<%= result.created_at.iso8601 %>"><%= format_time(result.created_at) %></time>
+  <% if deletable %>
     <%= link_to "Delete", game_result_path(result.game, result), class: "btn btn-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
-  <% end -%>
-</li>
+  <% end %>
+</p>

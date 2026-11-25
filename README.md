@@ -7,6 +7,31 @@ At Braintree, we play ping pong in the office. We wanted a way to track results 
 
 This also supports individual player rankings within multi-player teams, using the [Trueskill ranking system](http://research.microsoft.com/en-us/projects/trueskill/)
 
+Screenshots
+-----------
+
+<table>
+  <tr><th>Desktop</th><th>Mobile</th></tr>
+  <tr>
+    <td><img src="docs/screenshots/desktop/01-home.png" alt="Home page: games and players" width="600"></td>
+    <td><img src="docs/screenshots/mobile/01-home.png" alt="Home page on a phone" width="200"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/desktop/02-game-1v1.png" alt="Ping pong in the table tennis theme: leaderboard, recent results and rating history" width="600"></td>
+    <td><img src="docs/screenshots/mobile/02-game-1v1.png" alt="Ping pong on a phone" width="200"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/desktop/04-game-chess.png" alt="Chess in the chess theme" width="600"></td>
+    <td><img src="docs/screenshots/mobile/04-game-chess.png" alt="Chess on a phone" width="200"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/desktop-dark/03-game-teams.png" alt="Foosball, a team game, in the foosball theme in dark mode" width="600"></td>
+    <td><img src="docs/screenshots/mobile/03-game-teams.png" alt="Foosball on a phone" width="200"></td>
+  </tr>
+</table>
+
+Every page is in [docs/screenshots](docs/screenshots). They show the demo data from `db/seeds.rb`: six months of office play across eight games, with the chess, foosball and table tennis themes.
+
 Deploy yourself with Fly.io for free
 -------------------------------------
 The root of this directory is setup with a Dockerfile ready to deploy to [fly.io](https://fly.io).
@@ -18,6 +43,16 @@ Once you have installed and signed up to fly.io (you can skip the suggested exam
 To do this, run `fly launch --dockerfile Dockerfile`, you will be prompted to generate a new project, with a new name. When prompted to setup a postgres database, select yes. You do not need to setup redis, so skip that step.
 
 It should "just work", if it doesn't, please file an issue.
+
+Customising
+-----------
+
+Set these environment variables where the app runs (for example with `fly secrets set`):
+
+- `ELOVATION_TITLE`: the name shown in the header and page titles. Defaults to "Elovation".
+- `ELOVATION_THEME`: the look of every page: `generic` (the default), `chess`, `foosball` or `table-tennis`.
+
+Each game can also have its own theme, chosen on its form, which its pages use for everyone. Themes only change colours, heading type and decoration, so every theme is equally legible, in light and dark mode. Light or dark follows each visitor's system setting.
 
 Game Options
 ------------

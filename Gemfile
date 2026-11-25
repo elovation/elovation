@@ -73,6 +73,9 @@ group :development do
 
   # https://github.com/fly-apps/dockerfile-rails
   gem 'dockerfile-rails', '>= 1.5'
+
+  # Drives a local Chrome for bin/screenshots [https://github.com/rubycdp/ferrum]
+  gem 'ferrum', require: false
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
 

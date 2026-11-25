@@ -1,5 +1,9 @@
-<h1>New Player</h1>
-
+<% content_for :title, "New player" %>
+<header class="page-header">
+  <div class="title">
+    <h1>New player</h1>
+  </div>
+</header>
 <%= turbo_frame_tag @player do %>
   <%= render "form", player: @player %>
 <% end %>
