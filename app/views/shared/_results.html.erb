@@ -1,3 +1,8 @@
 <ol class="results" id="results">
-  <%= render partial: "shared/result", collection: results, locals: { show_game: show_game } %>
+  <% results.each do |result| %>
+    <% deletable = result.most_recent? %>
+    <li class="result<%= " is-latest" if deletable %>">
+      <%= render "shared/result", result: result, show_game: show_game, deletable: deletable %>
+    </li>
+  <% end %>
 </ol>

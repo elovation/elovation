@@ -11,5 +11,7 @@
 <%= turbo_frame_tag "new_game", target: "_top" %>
 
 <ul class="game-tiles" id="games">
-  <%= render @games %>
+  <% @games.each do |game| %>
+    <li class="game-tile" id="<%= dom_id(game) %>"><%= render game %></li>
+  <% end %>
 </ul>

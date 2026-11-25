@@ -11,5 +11,7 @@
 <%= turbo_frame_tag "new_player", target: "_top" %>
 
 <ul class="player-cards" id="players">
-  <%= render @players %>
+  <% @players.each do |player| %>
+    <li class="player-card" id="<%= dom_id(player) %>"><%= render player %></li>
+  <% end %>
 </ul>

@@ -1,4 +1,2 @@
-<li class="game-tile" id="<%= dom_id(game) %>">
-  <h2><%= link_to game.name, game_path(game), class: "tile-link" %></h2>
-  <p class="meta"><%= game.rating_system.name %></p>
-</li>
+<h2><%= link_to game.name, game_path(game), class: "tile-link" %></h2>
+<p class="meta"><%= game.rating_system.name %></p>

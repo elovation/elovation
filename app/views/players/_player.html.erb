@@ -1,4 +1,2 @@
-<li class="player-card" id="<%= dom_id(player) %>">
-  <%= avatar(player, size: 48) %>
-  <%= link_to player.name, player_path(player), class: "tile-link" %>
-</li>
+<%= avatar(player, size: 48) %>
+<%= link_to player.name, player_path(player), class: "tile-link" %>
