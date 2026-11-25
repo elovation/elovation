@@ -5,6 +5,10 @@
 #
 #   bin/rails db:seed
 #
+# Development only: db:prepare runs this file whenever it creates a database,
+# so outside development (a fresh test database, or a first deploy) it does
+# nothing.
+#
 # The data is deterministic: the same players play the same results every
 # time, at the same offsets from the moment it's seeded (or from SCREENSHOT_TIME,
 # which bin/screenshots sets). Results are recorded through
@@ -149,4 +153,4 @@ module DemoData
   end
 end
 
-DemoData.run
+DemoData.run if Rails.env.development?
